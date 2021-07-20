@@ -1,4 +1,53 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class Scanner2 {
+    File inputFile;
+    ArrayList<String> inputStrings = new ArrayList<String>();
+
+    BufferedReader bReader;
+    FileReader fileR;
+
+    BufferedWriter bWriter;
+    FileWriter fileW;
+
+    StringBuilder sb = new StringBuilder();
+    StringBuilder result = new StringBuilder();
+
+    //ArrayList<Token> tokenList = new ArrayList<Token>();
+
+    public Scanner2(){
+        this.inputFile = new File("inputfile.pas");
+    }
+
+    int read_line(File inputFile, int lineNum){
+        int result = 0;
+
+        try{
+            this.fileR = new FileReader(inputFile);
+
+            this.bReader = new BufferedReader(fileR);
+
+            for(int i=0; i<lineNum-1; i++){
+                this.bReader.readLine();
+            }
+            sb.append(this.bReader.readLine());
+        }catch(IOException e){
+            e.printStackTrace();
+
+            result = 0;
+        }
+
+        System.out.println("Result: "+ result);
+        System.out.println("Output: "+sb);
+
+        return result;
+    }
     
 }
 
