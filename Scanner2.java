@@ -57,7 +57,7 @@ public class Scanner2 {
     }
 
     /*  Returns all lexemes from line.
-        @param {char*} line - A line of code.
+        @param {String[]} line - A line of code.
     */
     String[] get_lexeme(String line){
 
@@ -67,9 +67,14 @@ public class Scanner2 {
     }
 
     /*  Returns the token class of a lexeme.
-        @param {char*} lexeme 
+        @param {String[]} lexeme 
     */
-    //char* classify_lexeme( char* lexeme );
+    String classify_lexeme(String lexeme){
+
+        String tokenType;
+
+        return tokenType;
+    }
 
     /*  Write token on standard console.
         @param {char*} lexeme
