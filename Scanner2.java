@@ -20,10 +20,11 @@ public class Scanner2 {
     StringBuilder result = new StringBuilder();
 
     //ArrayList<Token> tokenList = new ArrayList<Token>();
-    ArrayList<String> lexemeType;
+    public ArrayList<String> tokenType;
 
     public Scanner2(){
         this.inputFile = new File("inputfile.pas");
+
     }
 
 
@@ -55,8 +56,8 @@ public class Scanner2 {
         return result;
     }
 
-    /*  Returns a lexeme from line.
-    @param {char*} line - A line of code.
+    /*  Returns all lexemes from line.
+        @param {char*} line - A line of code.
     */
     String[] get_lexeme(String line){
 
@@ -65,38 +66,35 @@ public class Scanner2 {
         return lexemes;
     }
 
+    /*  Returns the token class of a lexeme.
+        @param {char*} lexeme 
+    */
+    //char* classify_lexeme( char* lexeme );
 
-    
+    /*  Write token on standard console.
+        @param {char*} lexeme
+        @param {char*} token_class
+    */
+    //int console_dump( char* lexeme, char* token_class );
 
+    /*  Write token to output file.
+        @param {FILE*} outputFile@param {char*} lexeme
+        @param {char*} token_class
+    */
+    //int file_dump( FILE* outputFile, char* lexeme, char* token_class, char* );
+
+    /*  Displays error on standard console. Error codes and descriptions are 
+        retrieved from error.txt.
+        @param code - An integer corresponding to appropriate error.
+    */
+    //void print_error( code );
 
     
 }
 
 
 
-/*
-Returns the token class of a lexeme.
-@param {char*} lexeme 
-*/
-//char* classify_lexeme( char* lexeme );
 
-/* 
-Write token on standard console.
-@param {char*} lexeme
-@param {char*} token_class
-*/
-//int console_dump( char* lexeme, char* token_class );
 
-/*
-Write token to output file.
-@param {FILE*} outputFile@param {char*} lexeme
-@param {char*} token_class
-*/
-//int file_dump( FILE* outputFile, char* lexeme, char* token_class, char* );
 
-/* 
-Displays error on standard console. Error codes and descriptions are 
-retrieved from error.txt.
-@param code - An integer corresponding to appropriate error.
-*/
-//void print_error( code );
+
