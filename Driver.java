@@ -8,6 +8,7 @@ public class Driver {
 
         Scanner2 scanner = new Scanner2();
 
-        scanner.read_line(inputFile, 2);
+        scanner.read_line(inputFile, 3);
+        scanner.get_lexeme("var x , y , sum : integer ;");
     }
 }

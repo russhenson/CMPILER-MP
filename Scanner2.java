@@ -20,23 +20,29 @@ public class Scanner2 {
     StringBuilder result = new StringBuilder();
 
     //ArrayList<Token> tokenList = new ArrayList<Token>();
+    ArrayList<String> lexemeType;
 
     public Scanner2(){
         this.inputFile = new File("inputfile.pas");
     }
 
+
+    /*  Returns 1 if success, 0 otherwise.
+        @param {FILE*} inputFile - Source code character stream.
+        @param {char*} line - One line of source code.
+    */
     int read_line(File inputFile, int lineNum){
         int result = 0;
 
         try{
             this.fileR = new FileReader(inputFile);
-
             this.bReader = new BufferedReader(fileR);
 
             for(int i=0; i<lineNum-1; i++){
                 this.bReader.readLine();
             }
             sb.append(this.bReader.readLine());
+
         }catch(IOException e){
             e.printStackTrace();
 
@@ -44,26 +50,29 @@ public class Scanner2 {
         }
 
         System.out.println("Result: "+ result);
-        System.out.println("Output: "+sb);
+        System.out.println("Output: "+ sb);
 
         return result;
     }
+
+    /*  Returns a lexeme from line.
+    @param {char*} line - A line of code.
+    */
+    String[] get_lexeme(String line){
+
+        String[] lexemes = line.split("[\\s,]+");
+
+        return lexemes;
+    }
+
+
+    
+
+
     
 }
 
 
-/*
-Returns 1 if success, 0 otherwise.
-@param {FILE*} inputFile - Source code character stream.
-@param {char*} line - One line of source code.
-*/
-//int read_line( FILE* inputFile, char* line );
-
-/*
-Returns a lexeme from line.
-@param {char*} line - A line of code.
-*/
-// char* get_lexeme( char* line );
 
 /*
 Returns the token class of a lexeme.
