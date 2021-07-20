@@ -28,10 +28,12 @@ public class Scanner2 {
     }
 
 
-    /*  Returns 1 if success, 0 otherwise.
-        @param {FILE*} inputFile - Source code character stream.
-        @param {char*} line - One line of source code.
-    */
+    /**
+     * Returns 1 if success, 0 otherwise.
+     * @param {FILE*} inputFile - Source code character stream.
+     * @param {char*} line - One line of source code.
+     */
+    
     int read_line(File inputFile, int lineNum){
         int result = 1;
 
@@ -56,9 +58,9 @@ public class Scanner2 {
         return result;
     }
 
-    /*  Returns all lexemes from line.
-        @param {String[]} line - A line of code.
-    */
+    /**
+     *  Returns all lexemes from line.
+     * @param {String[]} line - A line of code. */
     String[] get_lexeme(String line){
 
         String[] lexemes = line.split("[\\s,]+");
@@ -66,9 +68,9 @@ public class Scanner2 {
         return lexemes;
     }
 
-    /*  Returns the token class of a lexeme.
-        @param {String[]} lexeme 
-    */
+    /**
+     * Returns the token class of a lexeme.
+     * @param {String} lexeme */  
     String classify_lexeme(String lexeme){
 
         String tokenType;
@@ -76,16 +78,16 @@ public class Scanner2 {
         return tokenType;
     }
 
-    /*  Write token on standard console.
-        @param {char*} lexeme
-        @param {char*} token_class
-    */
+    /**
+     * Write token on standard console.
+     * @param {char*} lexeme
+     * @param {char*} token_class */  
     //int console_dump( char* lexeme, char* token_class );
 
-    /*  Write token to output file.
-        @param {FILE*} outputFile@param {char*} lexeme
-        @param {char*} token_class
-    */
+    /**
+     * Write token to output file.
+     * @param {FILE*} outputFile@param {char*} lexeme
+     * @param {char*} token_class */  
     //int file_dump( FILE* outputFile, char* lexeme, char* token_class, char* );
 
     /*  Displays error on standard console. Error codes and descriptions are 
@@ -93,6 +95,28 @@ public class Scanner2 {
         @param code - An integer corresponding to appropriate error.
     */
     //void print_error( code );
+
+    //TOKEN TYPE
+    /**
+     * RESERVED - program | begin | end | function | procedure |
+     *            and | or | not | var | const |
+     *            for | to | downto | repeat | until |
+     *            while | do | mod | div | return
+     * 
+     * IDENTIFIERS - [a-zA-Z][a-zA-z0-9]*
+     * 
+     * PREDECLARED - boolean | real | true | read | write |
+     *               char | integer | false | readln | writeln | string
+     * 
+     * COMMA - \,
+     * 
+     * SEMICOLON - \;
+     * 
+     * COLON - \:
+     * 
+     *
+     * 
+     */
 
     
 }
