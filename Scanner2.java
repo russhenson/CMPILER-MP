@@ -26,7 +26,7 @@ public class Scanner2 {
     }
 
     int read_line(File inputFile, int lineNum){
-        int result = 0;
+        int result = 1;
 
         try{
             this.fileR = new FileReader(inputFile);
