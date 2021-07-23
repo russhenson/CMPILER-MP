@@ -85,12 +85,8 @@ public class Scanner2 {
      * Write token on standard console.
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
-    void console_dump(String line, String[] lexemesPerLine){
-
-        for(int i = 0; i < lexemesPerLine.length; i++){
-            System.out.println(lexemesPerLine[i] + " " + classify_lexeme(lexemesPerLine[i]) + "\n");
-        }
-        
+    void console_dump(String line, String lexeme){
+        System.out.println(lexeme + " " + classify_lexeme(lexeme) + "\n");
     }
 
     /**

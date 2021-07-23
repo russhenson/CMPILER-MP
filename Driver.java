@@ -11,11 +11,19 @@ public class Driver {
         File errorFile = new File("error.txt");
         Scanner2 scanner = new Scanner2();
 
+
         try(BufferedReader br = new BufferedReader(new FileReader(inputFile))){
             String line;
-            int lineNum = 0;
-            while((line = br.readLine())!=null){
+            int lineNum = 1;
+            while((line = br.readLine())!= null){
                 scanner.read_line(inputFile, lineNum);
+                String oneLine = scanner.get_line();
+                String[] lexemesPerLine = scanner.get_lexeme(oneLine);
+                
+                for(int i = 0; i < lexemesPerLine.length; i++){
+                    scanner.console_dump(oneLine, lexemesPerLine[i]);
+                }
+                
                 lineNum++;
             }
         } catch (IOException e) {
@@ -25,10 +33,7 @@ public class Driver {
 
         
         
-        String line = scanner.get_line();
-        String[] lexemesPerLine = scanner.get_lexeme(line);
-
-        scanner.console_dump(line, lexemesPerLine);
+        
         //scanner.get_lexeme("var x , y , sum : integer ;");
         //System.out.println(scanner.classify_lexeme("{0123asd}"));
 
