@@ -52,10 +52,15 @@ public class Scanner2 {
             result = 0;
         }
 
-        System.out.println("Result: "+ result);
-        System.out.println("Output: "+ sb);
+        //System.out.println("Result: "+ result);
+        //System.out.println("Output: "+ sb);
 
         return result;
+    }
+
+    String get_line(){
+
+        return sb.toString();
     }
 
     /**
@@ -78,9 +83,15 @@ public class Scanner2 {
 
     /**
      * Write token on standard console.
-     * @param {char*} lexeme
-     * @param {char*} token_class */  
-    //int console_dump( char* lexeme, char* token_class );
+     * @param {String} line
+     * @param {String[]} lexemesPerLine */  
+    void console_dump(String line, String[] lexemesPerLine){
+
+        for(int i = 0; i < lexemesPerLine.length; i++){
+            System.out.println(lexemesPerLine[i] + " " + classify_lexeme(lexemesPerLine[i]) + "\n");
+        }
+        
+    }
 
     /**
      * Write token to output file.
