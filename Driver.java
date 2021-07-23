@@ -8,7 +8,8 @@ public class Driver {
 
         Scanner2 scanner = new Scanner2();
 
-        scanner.read_line(inputFile, 3);
-        scanner.get_lexeme("var x , y , sum : integer ;");
+        //scanner.read_line(inputFile, 3);
+        //scanner.get_lexeme("var x , y , sum : integer ;");
+        System.out.println(scanner.classify_lexeme("{0123asd}"));
     }
 }

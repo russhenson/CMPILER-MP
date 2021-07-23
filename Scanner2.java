@@ -72,10 +72,8 @@ public class Scanner2 {
      * Returns the token class of a lexeme.
      * @param {String} lexeme */  
     String classify_lexeme(String lexeme){
-
-        String tokenType;
-
-        return tokenType;
+        TokenType tokenType = new TokenType(lexeme);
+        return tokenType.getTokenType();
     }
 
     /**
