@@ -102,6 +102,9 @@ public class Scanner2 {
 
             bWriter.write(outputLine);
 
+            bWriter.close();  
+            System.out.println("Success");  
+
         }catch(IOException e){
             e.printStackTrace();
 
