@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Scanner2 {
-    File inputFile;
+    File inputFile, outputFile;
     ArrayList<String> inputStrings = new ArrayList<String>();
 
     BufferedReader bReader;
@@ -24,6 +24,7 @@ public class Scanner2 {
 
     public Scanner2(){
         this.inputFile = new File("inputfile.pas");
+        this.outputFile = new File("outputfile.tok");
 
     }
 
@@ -91,9 +92,22 @@ public class Scanner2 {
 
     /**
      * Write token to output file.
-     * @param {FILE*} outputFile@param {char*} lexeme
+     * @param {FILE*} outputFile
+     * @param {char*} lexeme
      * @param {char*} token_class */  
-    //int file_dump( FILE* outputFile, char* lexeme, char* token_class, char* );
+    void file_dump(File outputFile, String outputLine){
+        try{
+            this.fileW = new FileWriter(outputFile);
+            this.bWriter = new BufferedWriter(fileW);
+
+            bWriter.write(outputLine);
+
+        }catch(IOException e){
+            e.printStackTrace();
+
+
+        }
+    }
 
     /*  Displays error on standard console. Error codes and descriptions are 
         retrieved from error.txt.
