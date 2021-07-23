@@ -41,11 +41,12 @@ public class Scanner2 {
         try{
             this.fileR = new FileReader(inputFile);
             this.bReader = new BufferedReader(fileR);
+            this.sb.delete(0, this.sb.length());
 
             for(int i=0; i<lineNum-1; i++){
                 this.bReader.readLine();
             }
-            sb.append(this.bReader.readLine());
+            this.sb.append(this.bReader.readLine());
 
         }catch(IOException e){
             e.printStackTrace();
@@ -61,7 +62,7 @@ public class Scanner2 {
 
     String get_line(){
 
-        return sb.toString();
+        return this.sb.toString();
     }
 
     /**
