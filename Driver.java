@@ -8,8 +8,8 @@ public class Driver {
 
         Scanner2 scanner = new Scanner2();
 
+        
         scanner.read_line(inputFile, 2);
-
         String line = scanner.get_line();
         String[] lexemesPerLine = scanner.get_lexeme(line);
 
