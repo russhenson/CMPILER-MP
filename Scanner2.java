@@ -31,7 +31,7 @@ public class Scanner2 {
     /**
      * Returns 1 if success, 0 otherwise.
      * @param {FILE*} inputFile - Source code character stream.
-     * @param {char*} line - One line of source code.
+     * @param {int} lineNum - The line number
      */
     
     int read_line(File inputFile, int lineNum){
