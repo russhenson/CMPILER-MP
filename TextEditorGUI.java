@@ -5,6 +5,14 @@ import java.io.*;
 import java.awt.event.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.text.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 class TextEditorGUI extends JFrame implements ActionListener {
 
 	JTextArea t;
@@ -66,18 +74,23 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		m2.add(mi5);
 		m2.add(mi6);
 
+        JMenuItem m3 = new JMenuItem("Run");
+
+        m3.addActionListener(this);
+
 		mb.add(m1);
 		mb.add(m2);
+        mb.add(m3);
 
 		f.setJMenuBar(mb);
 		f.add(t);
 		f.setSize(500, 500);
-		f.show();
+		f.setVisible(true);
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	// If a button is pressed
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e){
 		String s = e.getActionCommand();
 
 		if (s.equals("cut")) {
@@ -166,6 +179,35 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		else if (s.equals("New")) {
 			t.setText("");
 		}
+        else if(s.equals("Run")) {
+            System.out.println("running");
+
+            File inputFile = new File("inputfile.pas");
+            File outputFile = new File("outputfile.tok");
+            File errorFile = new File("error.txt");
+            Scanner2 scanner = new Scanner2();
+
+            try(BufferedReader br = new BufferedReader(new FileReader(inputFile))){
+                String line;
+                int lineNum = 1;
+                while((line = br.readLine())!= null){
+                    scanner.read_line(inputFile, lineNum);
+                    String oneLine = scanner.get_line();
+                    ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
+                    
+                    for(int i = 0; i < lexemesPerLine.size(); i++){
+                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
+                        scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i)));
+                    }
+                    
+                    lineNum++;
+                }
+            } catch (IOException error) {
+                // TODO Auto-generated catch block
+                error.printStackTrace();
+            }
+
+        }
 	}
 
 }

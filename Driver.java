@@ -1,13 +1,8 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+
 
 public class Driver {
-    public static void main(String[] args) throws FileNotFoundException{
-        File inputFile = new File("inputfile.pas");
+    public static void main(String[] args)/*  throws FileNotFoundException */{
+        /* File inputFile = new File("inputfile.pas");
         File outputFile = new File("outputfile.tok");
         File errorFile = new File("error.txt");
         Scanner2 scanner = new Scanner2();
@@ -31,7 +26,7 @@ public class Driver {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+ */
         
         TextEditorGUI editor = new TextEditorGUI();
         
