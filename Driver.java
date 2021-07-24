@@ -12,7 +12,6 @@ public class Driver {
         File errorFile = new File("error.txt");
         Scanner2 scanner = new Scanner2();
 
-
         try(BufferedReader br = new BufferedReader(new FileReader(inputFile))){
             String line;
             int lineNum = 1;
@@ -33,12 +32,8 @@ public class Driver {
             e.printStackTrace();
         }
 
-
-
-    
-        //scanner.get_lexeme("var x , y , sum : integer ;");
-        //System.out.println(scanner.classify_lexeme("{0123asd}"));
-
+        
+        TextEditorGUI editor = new TextEditorGUI();
         
 
     }
