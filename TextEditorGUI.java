@@ -14,7 +14,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	public TextEditorGUI()
 	{
 		// Create a frame
-		f = new JFrame("editor");
+		f = new JFrame("PASCAL SCANNER");
 
 		try {
 			// Set metal look and feel
