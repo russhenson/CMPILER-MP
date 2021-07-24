@@ -68,9 +68,19 @@ public class Scanner2 {
     /**
      *  Returns all lexemes from line.
      * @param {String[]} line - A line of code. */
-    String[] get_lexeme(String line){
+    ArrayList<String> get_lexeme(String line){
 
-        String[] lexemes = line.split("[\\s,]+");
+        String[] lexemesTmp = line.split("\\s+");
+        ArrayList<String> lexemes = new ArrayList<>();
+
+        for(int i = 0; i < lexemesTmp.length; i++){
+            lexemes.add(lexemesTmp[i]);
+        }
+        for(int i = 0; i < lexemes.size(); i++){
+            if(lexemes.get(i).length() == 0){
+                lexemes.remove(i);
+            }
+        }
 
         return lexemes;
     }
@@ -88,7 +98,7 @@ public class Scanner2 {
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
     String console_dump(String line, String lexeme){
-        String output = lexeme + " " + classify_lexeme(lexeme) + "\n";
+        String output = lexeme + "  " + classify_lexeme(lexeme) + "\n";
         return output;
     }
 
@@ -105,7 +115,7 @@ public class Scanner2 {
             bWriter.write(outputLine);
 
             bWriter.close();  
-            System.out.println("Success");  
+            //System.out.println("Success");  
 
         }catch(IOException e){
             e.printStackTrace();

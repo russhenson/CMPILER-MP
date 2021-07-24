@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Driver {
     public static void main(String[] args) throws FileNotFoundException{
@@ -18,10 +19,10 @@ public class Driver {
             while((line = br.readLine())!= null){
                 scanner.read_line(inputFile, lineNum);
                 String oneLine = scanner.get_line();
-                String[] lexemesPerLine = scanner.get_lexeme(oneLine);
+                ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
                 
-                for(int i = 0; i < lexemesPerLine.length; i++){
-                    System.out.print(scanner.console_dump(oneLine, lexemesPerLine[i]));
+                for(int i = 0; i < lexemesPerLine.size(); i++){
+                    System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
                 }
                 
                 lineNum++;

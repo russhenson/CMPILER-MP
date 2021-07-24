@@ -4,5 +4,5 @@ begin
     readln ( x ) ;
     readln ( y ) ;
     sum := x + y ;
-    writeln ( ‘ Sum = ‘ , sum ) ;
+    writeln ( ' Sum = ‘ , sum ) ;
 end .

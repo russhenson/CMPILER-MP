@@ -30,6 +30,8 @@ public class TokenType {
         LESS_EQUAL,
         DOUBLE_PERIOD,
         HAT,
+        SINGLE_QUOTE,
+        DOUBLE_QUOTE,
         ERROR
     }
 
@@ -102,6 +104,10 @@ public class TokenType {
             token = Type.IDENTIFIER;
         else if(lexeme.matches("\\{[a-zA-Z0-9]*\\}"))
             token = Type.COMMENT;
+        else if(lexeme.equals("‘") | lexeme.equals("\'"))
+            token = Type.SINGLE_QUOTE;
+        else if(lexeme.equals("\""))
+            token = Type.DOUBLE_QUOTE;
         else
             token = Type.ERROR;
 
