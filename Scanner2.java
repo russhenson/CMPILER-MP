@@ -98,7 +98,7 @@ public class Scanner2 {
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
     String console_dump(String line, String lexeme){
-        String output = lexeme + "  " + classify_lexeme(lexeme) + "\n";
+        String output = lexeme + "\t" + classify_lexeme(lexeme) + "\n";
         return output;
     }
 
@@ -109,7 +109,7 @@ public class Scanner2 {
      * @param {char*} token_class */  
     void file_dump(File outputFile, String outputLine){
         try{
-            this.fileW = new FileWriter(outputFile);
+            this.fileW = new FileWriter(outputFile, true);
             this.bWriter = new BufferedWriter(fileW);
 
             bWriter.write(outputLine);
@@ -124,10 +124,9 @@ public class Scanner2 {
         }
     }
 
-    /*  Displays error on standard console. Error codes and descriptions are 
+    /** Displays error on standard console. Error codes and descriptions are 
         retrieved from error.txt.
-        @param code - An integer corresponding to appropriate error.
-    */
+        @param code - An integer corresponding to appropriate error. */
     //void print_error( code );
  
 
