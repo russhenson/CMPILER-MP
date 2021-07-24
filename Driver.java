@@ -21,7 +21,7 @@ public class Driver {
                 String[] lexemesPerLine = scanner.get_lexeme(oneLine);
                 
                 for(int i = 0; i < lexemesPerLine.length; i++){
-                    scanner.console_dump(oneLine, lexemesPerLine[i]);
+                    System.out.print(scanner.console_dump(oneLine, lexemesPerLine[i]));
                 }
                 
                 lineNum++;
