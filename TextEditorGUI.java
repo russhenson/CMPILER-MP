@@ -58,8 +58,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		outputBox.setPreferredSize(new Dimension(500, 300));
 		errorBox.setPreferredSize(new Dimension(500, 300));
 
-		panel.add(topPanel);
-		panel.add(bottomPanel, BorderLayout.SOUTH);
+		panel.add(topPanel, BorderLayout.NORTH);
+		panel.add(bottomPanel, BorderLayout.CENTER);
 
 		// Create a menubar
 		JMenuBar mb = new JMenuBar();
