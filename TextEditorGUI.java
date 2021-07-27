@@ -50,7 +50,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		outputBox.setBorder(new LineBorder(Color.DARK_GRAY, 1));
 		errorBox.setBorder(new LineBorder(Color.red, 1));
 
-		topPanel.add(sourceCodeTextArea, BorderLayout.NORTH);
+		topPanel.add(sourceCodeTextArea);
 		bottomPanel.add(outputBox);
 		bottomPanel.add(errorBox, BorderLayout.EAST);
 
