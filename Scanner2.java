@@ -1,9 +1,11 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Scanner2 {
@@ -25,7 +27,17 @@ public class Scanner2 {
     public Scanner2(){
         this.inputFile = new File("inputfile.pas");
         this.outputFile = new File("outputfile.tok");
+        clearOutputFile();
+    }
 
+    void clearOutputFile(){
+        PrintWriter pw;
+        try{
+            pw = new PrintWriter(this.outputFile);
+            pw.close();
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -109,7 +121,7 @@ public class Scanner2 {
      * @param {char*} token_class */  
     void file_dump(File outputFile, String outputLine){
         try{
-            this.fileW = new FileWriter(outputFile);
+            this.fileW = new FileWriter(outputFile, true);
             this.bWriter = new BufferedWriter(fileW);
 
             bWriter.write(outputLine);
