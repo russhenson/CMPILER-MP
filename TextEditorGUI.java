@@ -15,7 +15,8 @@ import java.util.ArrayList;
 
 class TextEditorGUI extends JFrame implements ActionListener {
 
-	JTextArea t;
+	JTextArea t, error, output;
+	JPanel textareas, textareas2, inputarea;
 	JFrame f;
 
 	// Constructor
@@ -23,7 +24,14 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	{
 		// Create a frame
 		f = new JFrame("PASCAL SCANNER");
-
+		textareas = new JPanel();
+		textareas2 = new JPanel();
+		inputarea = new JPanel();
+		inputarea = new JPanel();
+		inputarea.setLayout(new BorderLayout(10, 10));
+		textareas.setLayout(new BorderLayout(10, 10));
+		textareas2.setLayout(new BorderLayout(10, 10));
+		
 		try {
 			// Set metal look and feel
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -36,6 +44,9 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
 		// Text component
 		t = new JTextArea();
+		output = new JTextArea();
+		error = new JTextArea();
+		
 
 		// Create a menubar
 		JMenuBar mb = new JMenuBar();
@@ -64,7 +75,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		JMenuItem mi4 = new JMenuItem("cut");
 		JMenuItem mi5 = new JMenuItem("copy");
 		JMenuItem mi6 = new JMenuItem("paste");
-
+		
+		
 		// Add action listener
 		mi4.addActionListener(this);
 		mi5.addActionListener(this);
@@ -73,7 +85,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		m2.add(mi4);
 		m2.add(mi5);
 		m2.add(mi6);
-
+		textareas2.add(output, BorderLayout.WEST);
+		//textareas2.add(error, BorderLayout.EAST);
         JMenuItem m3 = new JMenuItem("Run");
 
         m3.addActionListener(this);
@@ -81,9 +94,22 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		mb.add(m1);
 		mb.add(m2);
         mb.add(m3);
-
+        //t.setText("Hello");
+        textareas.setPreferredSize(new Dimension(500, 500));
+        t.setPreferredSize(new Dimension(500, 150));
+        textareas2.setPreferredSize(new Dimension(1000, 250));
+        output.setPreferredSize(new Dimension(230, 115));
+        error.setPreferredSize(new Dimension(230, 115));
+        
+        //output.setText("Output");
+        //error.setText("Error");
+        //inputarea.add(t, BorderLayout.NORTH);
+        textareas.add(t, BorderLayout.NORTH);
+        textareas2.add(output, BorderLayout.WEST);
+        textareas2.add(error, BorderLayout.EAST);
+        textareas.add(textareas2, BorderLayout.SOUTH);
 		f.setJMenuBar(mb);
-		f.add(t);
+		f.add(textareas);
 		f.setSize(500, 500);
 		f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -181,7 +207,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		}
         else if(s.equals("Run")) {
             System.out.println("running");
-
+            ArrayList<String> errlist;
             File inputFile = new File("inputfile.pas");
             File outputFile = new File("outputfile.tok");
             File errorFile = new File("error.txt");
@@ -193,15 +219,29 @@ class TextEditorGUI extends JFrame implements ActionListener {
                 while((line = br.readLine())!= null){
                     scanner.read_line(inputFile, lineNum);
                     String oneLine = scanner.get_line();
+                    //System.out.println("Checking " + oneLine);
                     ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
-                    
+                    //System.out.println("Size is " + lexemesPerLine.size());
                     for(int i = 0; i < lexemesPerLine.size(); i++){
-                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
+                    	System.out.println("Buzz");
+                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)) + " at line no: " + lineNum + "\n");
                         scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i)));
+                        scanner.lex_error(lexemesPerLine.get(i));
                     }
+                    //System.out.println("Size now is " + lexemesPerLine.size());
+                    //System.out.println("Printing errors");
+                    
                     
                     lineNum++;
                 }
+                errlist = scanner.acquire_errorlist();
+                for (int i = 0; i < errlist.size(); i++ ) {
+                	scanner.file_dump(errorFile, errlist.get(i));
+                }
+                System.out.println("Printing the errors ");
+                scanner.print_error("error.txt");
+                
+                
             } catch (IOException error) {
                 // TODO Auto-generated catch block
                 error.printStackTrace();

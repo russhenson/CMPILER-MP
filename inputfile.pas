@@ -1,6 +1,7 @@
 program sample ;
-var x , y , sum : integer ;
+?var x , y , sum : integer ;
 begin
+	% ;
     readln ( x ) ;
     readln ( y ) ;
     sum := x + y ;

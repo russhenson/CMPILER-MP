@@ -5,9 +5,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Scanner2 {
-    File inputFile, outputFile;
+    File inputFile, outputFile, errFile;
     ArrayList<String> inputStrings = new ArrayList<String>();
 
     BufferedReader bReader;
@@ -18,6 +19,7 @@ public class Scanner2 {
 
     StringBuilder sb = new StringBuilder();
     StringBuilder result = new StringBuilder();
+    ErrorScanner errs;
 
     //ArrayList<Token> tokenList = new ArrayList<Token>();
     public ArrayList<String> tokenType;
@@ -25,7 +27,7 @@ public class Scanner2 {
     public Scanner2(){
         this.inputFile = new File("inputfile.pas");
         this.outputFile = new File("outputfile.tok");
-
+        this.errs = new ErrorScanner();
     }
 
 
@@ -127,7 +129,28 @@ public class Scanner2 {
     /** Displays error on standard console. Error codes and descriptions are 
         retrieved from error.txt.
         @param code - An integer corresponding to appropriate error. */
-    //void print_error( code );
+    void print_error(String outputfile)
+    {
+    	try {
+    		File myobj = new File(outputfile);
+    		Scanner myreader = new Scanner(myobj);
+    		while(myreader.hasNextLine()) {
+    			String texter = myreader.nextLine().trim();
+    			System.out.println(texter);
+    		}
+    	}
+    	catch (Exception e) {
+    		
+    	}
+    	//System.out.print
+    }
+    void lex_error(String lex) {
+    	errs.error_checker(lex);
+    }
+    ArrayList<String> acquire_errorlist()
+    {
+    	return errs.listval();
+    }
  
 
     

@@ -36,7 +36,7 @@ public class TokenType {
     }
 
     String[] reserved = {"program", "begin", "end", "function", "procedure", "and", "or", "not", "var", "const", "for", "to", "downto", "repeat", "until", "while",
-                        "do", "mod", "div", "return"};
+                        "do", "mod", "div", "return", "array", "of", "if", "then", "else"};
 
     String[] predeclared = {"boolean", "real", "true", "read", "write", "char", "integer", "false", "readln", "writeln", "string"};
 
