@@ -1,2 +1,4 @@
 1 ?var is an invalid identifier
 2 % is an invalid symbol
+1 ?var is an invalid identifier
+2 % is an invalid symbol

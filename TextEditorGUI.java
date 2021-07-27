@@ -1,37 +1,31 @@
 // Java Program to create a text editor using java
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+
 import java.io.*;
+import java.util.ArrayList;
 import java.awt.event.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.text.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
 class TextEditorGUI extends JFrame implements ActionListener {
 
-	JTextArea t, error, output;
-	JPanel textareas, textareas2, inputarea;
+	JTextArea sourceCodeTextArea, outputBox, errorBox;
 	JFrame f;
+	JPanel panel, topPanel, bottomPanel;
+	JLabel outputLabel, errorLabel;
 
 	// Constructor
 	public TextEditorGUI()
 	{
 		// Create a frame
-		f = new JFrame("PASCAL SCANNER");
-		textareas = new JPanel();
-		textareas2 = new JPanel();
-		inputarea = new JPanel();
-		inputarea = new JPanel();
-		inputarea.setLayout(new BorderLayout(10, 10));
-		textareas.setLayout(new BorderLayout(10, 10));
-		textareas2.setLayout(new BorderLayout(10, 10));
+		f = new JFrame("editor");
+
 		
+		panel = new JPanel(new BorderLayout());
+		topPanel = new JPanel();
+		bottomPanel = new JPanel(new BorderLayout());	
+
 		try {
 			// Set metal look and feel
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -43,10 +37,29 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		}
 
 		// Text component
-		t = new JTextArea();
-		output = new JTextArea();
-		error = new JTextArea();
-		
+		sourceCodeTextArea = new JTextArea();
+		outputBox = new JTextArea();
+		errorBox = new JTextArea();
+		outputLabel = new JLabel("Output:");
+		errorLabel = new JLabel("Errors: ");
+
+		outputBox.setEditable(false);
+		errorBox.setEditable(false);
+
+		sourceCodeTextArea.setBorder(new LineBorder(Color.GREEN, 1));
+		outputBox.setBorder(new LineBorder(Color.DARK_GRAY, 1));
+		errorBox.setBorder(new LineBorder(Color.red, 1));
+
+		topPanel.add(sourceCodeTextArea, BorderLayout.NORTH);
+		bottomPanel.add(outputBox);
+		bottomPanel.add(errorBox, BorderLayout.EAST);
+
+		sourceCodeTextArea.setPreferredSize(new Dimension(1000,350));
+		outputBox.setPreferredSize(new Dimension(500, 300));
+		errorBox.setPreferredSize(new Dimension(500, 300));
+
+		panel.add(topPanel);
+		panel.add(bottomPanel, BorderLayout.SOUTH);
 
 		// Create a menubar
 		JMenuBar mb = new JMenuBar();
@@ -75,8 +88,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		JMenuItem mi4 = new JMenuItem("cut");
 		JMenuItem mi5 = new JMenuItem("copy");
 		JMenuItem mi6 = new JMenuItem("paste");
-		
-		
+
 		// Add action listener
 		mi4.addActionListener(this);
 		mi5.addActionListener(this);
@@ -85,48 +97,36 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		m2.add(mi4);
 		m2.add(mi5);
 		m2.add(mi6);
-		textareas2.add(output, BorderLayout.WEST);
-		//textareas2.add(error, BorderLayout.EAST);
-        JMenuItem m3 = new JMenuItem("Run");
 
-        m3.addActionListener(this);
+		JMenuItem m3 = new JMenuItem("Run");
+
+		m3.addActionListener(this);
 
 		mb.add(m1);
 		mb.add(m2);
-        mb.add(m3);
-        //t.setText("Hello");
-        textareas.setPreferredSize(new Dimension(500, 500));
-        t.setPreferredSize(new Dimension(500, 150));
-        textareas2.setPreferredSize(new Dimension(1000, 250));
-        output.setPreferredSize(new Dimension(230, 115));
-        error.setPreferredSize(new Dimension(230, 115));
-        
-        //output.setText("Output");
-        //error.setText("Error");
-        //inputarea.add(t, BorderLayout.NORTH);
-        textareas.add(t, BorderLayout.NORTH);
-        textareas2.add(output, BorderLayout.WEST);
-        textareas2.add(error, BorderLayout.EAST);
-        textareas.add(textareas2, BorderLayout.SOUTH);
+		mb.add(m3);
+
 		f.setJMenuBar(mb);
-		f.add(textareas);
-		f.setSize(500, 500);
+		f.add(panel);
+		//f.add(sourceCodeTextArea);
+		f.setMinimumSize(new Dimension(1000, 700));
 		f.setVisible(true);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	// If a button is pressed
-	public void actionPerformed(ActionEvent e){
+	public void actionPerformed(ActionEvent e)
+	{
 		String s = e.getActionCommand();
 
 		if (s.equals("cut")) {
-			t.cut();
+			sourceCodeTextArea.cut();
 		}
 		else if (s.equals("copy")) {
-			t.copy();
+			sourceCodeTextArea.copy();
 		}
 		else if (s.equals("paste")) {
-			t.paste();
+			sourceCodeTextArea.paste();
 		}
 		else if (s.equals("Save")) {
 			// Create an object of JFileChooser class
@@ -148,7 +148,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 					BufferedWriter w = new BufferedWriter(wr);
 
 					// Write
-					w.write(t.getText());
+					w.write(sourceCodeTextArea.getText());
 
 					w.flush();
 					w.close();
@@ -192,7 +192,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 					}
 
 					// Set the text
-					t.setText(sl);
+					sourceCodeTextArea.setText(sl);
 				}
 				catch (Exception evt) {
 					JOptionPane.showMessageDialog(f, evt.getMessage());
@@ -202,11 +202,9 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			else
 				JOptionPane.showMessageDialog(f, "the user cancelled the operation");
 		}
-		else if (s.equals("New")) {
-			t.setText("");
-		}
-        else if(s.equals("Run")) {
-            System.out.println("running");
+		else if (s.equals("Run")) {
+			System.out.println("running");
+			sourceCodeTextArea.setText("running");
             ArrayList<String> errlist;
             File inputFile = new File("inputfile.pas");
             File outputFile = new File("outputfile.tok");
