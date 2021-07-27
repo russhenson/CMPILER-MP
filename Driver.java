@@ -32,7 +32,6 @@ public class Driver {
         }
         
         // TextEditorGUI editor = new TextEditorGUI();
-        
 
     }
 }
