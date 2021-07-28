@@ -205,6 +205,28 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			else
 				JOptionPane.showMessageDialog(f, "the user cancelled the operation");
 		}
+		else if (s.equals("New")) {
+            sourceCodeTextArea.setText("");
+			File inputFile = new File("inputfile.pas");
+			File outputFile = new File("outputfile.tok");
+
+			// reset input and output files
+			try {
+				this.fileW = new FileWriter(inputFile);
+            	this.bWriter = new BufferedWriter(fileW);
+				bWriter.write(sourceCodeTextArea.getText());
+
+				this.fileW = new FileWriter(outputFile);
+				this.bWriter = new BufferedWriter(fileW);
+				bWriter.write(sourceCodeTextArea.getText());
+
+				bWriter.close(); 
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+        }
 		else if (s.equals("Run")) {
             ArrayList<String> errlist;
             File inputFile = new File("inputfile.pas");
