@@ -64,6 +64,11 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		panel.add(topPanel, BorderLayout.NORTH);
 		panel.add(bottomPanel, BorderLayout.CENTER);
 
+		// Add padding on all textareas
+		sourceCodeTextArea.setBorder(BorderFactory.createCompoundBorder(sourceCodeTextArea.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		outputBox.setBorder(BorderFactory.createCompoundBorder(outputBox.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		errorBox.setBorder(BorderFactory.createCompoundBorder(errorBox.getBorder(), BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+
 		// Create a menubar
 		JMenuBar mb = new JMenuBar();
 
@@ -73,16 +78,16 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		// Create menu items
 		JMenuItem mi1 = new JMenuItem("New");
 		JMenuItem mi2 = new JMenuItem("Open");
-		JMenuItem mi3 = new JMenuItem("Save");
+		//JMenuItem mi3 = new JMenuItem("Save");
 
 		// Add action listener
 		mi1.addActionListener(this);
 		mi2.addActionListener(this);
-		mi3.addActionListener(this);
+		//mi3.addActionListener(this);
 
 		m1.add(mi1);
 		m1.add(mi2);
-		m1.add(mi3);
+		//m1.add(mi3);
 
 		// Create amenu for menu
 		JMenu m2 = new JMenu("Edit");
@@ -207,6 +212,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		}
 		else if (s.equals("New")) {
             sourceCodeTextArea.setText("");
+			outputBox.setText("");
 			File inputFile = new File("inputfile.pas");
 			File outputFile = new File("outputfile.tok");
 
@@ -218,7 +224,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
 				this.fileW = new FileWriter(outputFile);
 				this.bWriter = new BufferedWriter(fileW);
-				bWriter.write(sourceCodeTextArea.getText());
+				bWriter.write(outputBox.getText());
 
 				bWriter.close(); 
 			} catch (IOException e1) {
