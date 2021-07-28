@@ -14,6 +14,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	JFrame f;
 	JPanel panel, topPanel, bottomPanel;
 	JLabel outputLabel, errorLabel;
+	JScrollPane outputScrollPane, errorScrollPane;
+	JScrollBar scrollBar;
 
 	BufferedWriter bWriter;
     FileWriter fileW;
@@ -22,9 +24,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	public TextEditorGUI()
 	{
 		// Create a frame
-		f = new JFrame("editor");
+		f = new JFrame("PASCAL LEXICAL ANALYZER");
 
-		
 		panel = new JPanel(new BorderLayout());
 		topPanel = new JPanel();
 		bottomPanel = new JPanel(new BorderLayout());	
@@ -43,6 +44,10 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		sourceCodeTextArea = new JTextArea();
 		outputBox = new JTextArea();
 		errorBox = new JTextArea();
+
+		outputScrollPane = new JScrollPane(outputBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
+		errorScrollPane = new JScrollPane(errorBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 		outputLabel = new JLabel("Output:");
 		errorLabel = new JLabel("Errors: ");
 
@@ -54,12 +59,12 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		errorBox.setBorder(new LineBorder(Color.red, 1));
 
 		topPanel.add(sourceCodeTextArea);
-		bottomPanel.add(outputBox);
-		bottomPanel.add(errorBox, BorderLayout.EAST);
+		bottomPanel.add(outputScrollPane);
+		bottomPanel.add(errorScrollPane, BorderLayout.EAST);
 
 		sourceCodeTextArea.setPreferredSize(new Dimension(1000,350));
-		outputBox.setPreferredSize(new Dimension(500, 300));
-		errorBox.setPreferredSize(new Dimension(500, 300));
+		outputBox.setMinimumSize(new Dimension(500, 300));
+		errorBox.setPreferredSize(new Dimension(500, 280));
 
 		panel.add(topPanel, BorderLayout.NORTH);
 		panel.add(bottomPanel, BorderLayout.CENTER);
@@ -116,7 +121,6 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
 		f.setJMenuBar(mb);
 		f.add(panel);
-		//f.add(sourceCodeTextArea);
 		f.setMinimumSize(new Dimension(1000, 700));
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
