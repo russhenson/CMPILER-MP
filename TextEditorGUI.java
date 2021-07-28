@@ -9,7 +9,7 @@ import java.awt.event.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.text.*;
 class TextEditorGUI extends JFrame implements ActionListener {
-
+	//int counter = 0;
 	JTextArea sourceCodeTextArea, outputBox, errorBox;
 	JFrame f;
 	JPanel panel, topPanel, bottomPanel;
@@ -243,6 +243,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
             File outputFile = new File("outputfile.tok");
             File errorFile = new File("error.txt");
             Scanner2 scanner = new Scanner2();
+            int counter = 0;
 
 			// write to inputfile.pas
 			try {
@@ -265,19 +266,27 @@ class TextEditorGUI extends JFrame implements ActionListener {
                     for(int i = 0; i < lexemesPerLine.size(); i++){
                         System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
                         scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i)));
-                        scanner.lex_error(lexemesPerLine.get(i));
+                        String result = scanner.get_tokenresult();
+                        if (result.equals("ERROR")) {
+                        	counter++;
+                        	scanner.lex_error(lexemesPerLine.get(i), "error.txt", counter);
+                        }
+                        
                     }
                     
                     
                     lineNum++;
                 }
 
-                /* errlist = scanner.acquire_errorlist();
-                for (int i = 0; i < errlist.size(); i++ ) {
-                	scanner.file_dump(errorFile, errlist.get(i));
-                }
+                errlist = scanner.acquire_errorlist();
+                
                 System.out.println("Printing the errors ");
-                scanner.print_error("error.txt"); */
+                errorBox.setText("");
+                for (int i = 0; i < errlist.size(); i++ ) {
+                	System.out.println(errlist.get(i));
+                	errorBox.append(errlist.get(i));
+                }
+               
                 
                 
             } catch (IOException error) {
@@ -293,6 +302,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			//printing the errors 
+			
 
         }
 	}

@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Scanner2 {
     File inputFile, outputFile, errFile;
     ArrayList<String> inputStrings = new ArrayList<String>();
-
+    private String tokenresult = "";
     BufferedReader bReader;
     FileReader fileR;
 
@@ -100,7 +100,9 @@ public class Scanner2 {
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
     String console_dump(String line, String lexeme){
-        String output = lexeme + "\t" + classify_lexeme(lexeme) + "\n";
+    	String result = classify_lexeme(lexeme);
+    	this.tokenresult = result;
+        String output = lexeme + "\t" + result + "\n";
         return output;
     }
 
@@ -144,14 +146,16 @@ public class Scanner2 {
     	}
     	//System.out.print
     }
-    void lex_error(String lex) {
-    	errs.error_checker(lex);
+    void lex_error(String lex, String filecatch, int counter) {
+    	errs.error_checker(lex, filecatch, counter);
     }
     ArrayList<String> acquire_errorlist()
     {
     	return errs.listval();
     }
- 
+    String get_tokenresult() {
+    	return this.tokenresult;
+    }
 
     
 }
