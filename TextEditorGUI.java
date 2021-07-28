@@ -15,6 +15,9 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	JPanel panel, topPanel, bottomPanel;
 	JLabel outputLabel, errorLabel;
 
+	BufferedWriter bWriter;
+    FileWriter fileW;
+
 	// Constructor
 	public TextEditorGUI()
 	{
@@ -203,13 +206,22 @@ class TextEditorGUI extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(f, "the user cancelled the operation");
 		}
 		else if (s.equals("Run")) {
-			System.out.println("running");
-			sourceCodeTextArea.setText("running");
             ArrayList<String> errlist;
             File inputFile = new File("inputfile.pas");
             File outputFile = new File("outputfile.tok");
             File errorFile = new File("error.txt");
             Scanner2 scanner = new Scanner2();
+
+			// write to inputfile.pas
+			try {
+				this.fileW = new FileWriter(inputFile);
+            	this.bWriter = new BufferedWriter(fileW);
+				bWriter.write(sourceCodeTextArea.getText());
+				bWriter.close(); 
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
             try(BufferedReader br = new BufferedReader(new FileReader(inputFile))){
                 String line;
@@ -217,33 +229,39 @@ class TextEditorGUI extends JFrame implements ActionListener {
                 while((line = br.readLine())!= null){
                     scanner.read_line(inputFile, lineNum);
                     String oneLine = scanner.get_line();
-                    //System.out.println("Checking " + oneLine);
                     ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
-                    //System.out.println("Size is " + lexemesPerLine.size());
                     for(int i = 0; i < lexemesPerLine.size(); i++){
                     	System.out.println("Buzz");
-                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)) + " at line no: " + lineNum + "\n");
+                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
                         scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i)));
                         scanner.lex_error(lexemesPerLine.get(i));
                     }
-                    //System.out.println("Size now is " + lexemesPerLine.size());
-                    //System.out.println("Printing errors");
                     
                     
                     lineNum++;
                 }
-                errlist = scanner.acquire_errorlist();
+
+                /* errlist = scanner.acquire_errorlist();
                 for (int i = 0; i < errlist.size(); i++ ) {
                 	scanner.file_dump(errorFile, errlist.get(i));
                 }
                 System.out.println("Printing the errors ");
-                scanner.print_error("error.txt");
+                scanner.print_error("error.txt"); */
                 
                 
             } catch (IOException error) {
                 // TODO Auto-generated catch block
                 error.printStackTrace();
             }
+
+			// print output to output textarea
+			try {
+				outputBox.read(new InputStreamReader(
+					getClass().getResourceAsStream("outputfile.tok")), null);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
         }
 	}
