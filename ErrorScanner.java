@@ -53,6 +53,7 @@ public class ErrorScanner {
 			
 		}
 		else {
+			
 			String msg = "" + counter + " " + lex + " " + " " + errlist.get(1) + "\n";
 			errorlist.add(msg);
 			
