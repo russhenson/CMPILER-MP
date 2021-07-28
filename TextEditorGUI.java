@@ -1,4 +1,5 @@
 // Java Program to create a text editor using java
+// Source: https://www.geeksforgeeks.org/java-swing-create-a-simple-text-editor/
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
