@@ -231,7 +231,6 @@ class TextEditorGUI extends JFrame implements ActionListener {
                     String oneLine = scanner.get_line();
                     ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
                     for(int i = 0; i < lexemesPerLine.size(); i++){
-                    	System.out.println("Buzz");
                         System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
                         scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i)));
                         scanner.lex_error(lexemesPerLine.get(i));
