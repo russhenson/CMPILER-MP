@@ -218,6 +218,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		else if (s.equals("New")) {
             sourceCodeTextArea.setText("");
 			outputBox.setText("");
+			errorBox.setText("");
 			File inputFile = new File("inputfile.pas");
 			File outputFile = new File("outputfile.tok");
 
