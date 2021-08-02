@@ -3,6 +3,8 @@ import java.util.Arrays;
 public class TokenType {
     private String lexeme;
     private Type type;
+    private boolean isPrevComment;
+    private boolean isCurrComment;
     enum Type{
         RESERVED,
         IDENTIFIER,
@@ -32,6 +34,13 @@ public class TokenType {
         HAT,
         SINGLE_QUOTE,
         DOUBLE_QUOTE,
+        REAL,
+        INTEGER,
+        OPEN_CURLY_BRACE,
+        CLOSE_CURLY_BRACE,
+        BOOL_AND,
+        BOOL_OR,
+        BOOL_NOT,
         ERROR
     }
 
@@ -100,14 +109,33 @@ public class TokenType {
             token = Type.DOUBLE_PERIOD;
         else if(lexeme.equals("^"))
             token = Type.HAT;
-        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*"))
+        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && this.isPrevComment == false)
             token = Type.IDENTIFIER;
-        else if(lexeme.matches("\\{[a-zA-Z0-9]*\\}"))
+        else if(lexeme.matches("\\{") && this.isPrevComment == false){
+            token = Type.OPEN_CURLY_BRACE;
+            this.isCurrComment = true;
+            System.out.println("reached in here "+this.isCurrComment);
+        }
+        else if(lexeme.matches("\\}") && this.isPrevComment == true){
+            token = Type.CLOSE_CURLY_BRACE;
+            this.isCurrComment = false;
+        }
+        else if(lexeme.matches("[a-zA-Z0-9\\.,!@#$%^&*\\(\\)\\{\\}]*") && this.isPrevComment == true)
             token = Type.COMMENT;
         else if(lexeme.equals("‘") | lexeme.equals("\'"))
             token = Type.SINGLE_QUOTE;
         else if(lexeme.equals("\""))
             token = Type.DOUBLE_QUOTE;
+        else if(lexeme.matches("[0-9]+"))
+            token = Type.INTEGER;
+        else if(lexeme.matches("[0-9]*.[0-9]+"))
+            token = Type.REAL;
+        else if(lexeme.matches("and:"))
+            token = Type.BOOL_AND;
+        else if(lexeme.matches("or:"))
+            token = Type.BOOL_OR;
+        else if(lexeme.matches("not:"))
+            token = Type.BOOL_NOT;
         else
             token = Type.ERROR;
 
@@ -120,6 +148,10 @@ public class TokenType {
 
     public String getTokenType(){
         return this.type.name();
+    }
+
+    public boolean getIsComment(){
+        return this.isCurrComment;
     }
 }
 //TOKEN TYPE
