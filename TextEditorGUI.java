@@ -14,8 +14,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	JTextArea sourceCodeTextArea, outputBox, errorBox;
 	JFrame f;
 	JPanel panel, topPanel, bottomPanel;
-	JLabel outputLabel, errorLabel;
-	JScrollPane outputScrollPane, errorScrollPane;
+	JScrollPane outputScrollPane, errorScrollPane, sourceCodeScrollPane;
 	JScrollBar scrollBar;
 
 	BufferedWriter bWriter;
@@ -46,11 +45,9 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		outputBox = new JTextArea();
 		errorBox = new JTextArea();
 
+		sourceCodeScrollPane = new JScrollPane(sourceCodeTextArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
 		outputScrollPane = new JScrollPane(outputBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); 
 		errorScrollPane = new JScrollPane(errorBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		outputLabel = new JLabel("Output:");
-		errorLabel = new JLabel("Errors: ");
 
 		outputBox.setEditable(false);
 		errorBox.setEditable(false);
@@ -59,11 +56,13 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		outputBox.setBorder(new LineBorder(Color.DARK_GRAY, 1));
 		errorBox.setBorder(new LineBorder(Color.red, 1));
 
-		topPanel.add(sourceCodeTextArea);
+		//topPanel.add(sourceCodeTextArea);
+		topPanel.add(sourceCodeScrollPane);
 		bottomPanel.add(outputScrollPane);
 		bottomPanel.add(errorScrollPane, BorderLayout.EAST);
 
-		sourceCodeTextArea.setPreferredSize(new Dimension(1000,350));
+		sourceCodeScrollPane.setPreferredSize(new Dimension(1000, 350));
+		sourceCodeTextArea.setMinimumSize(new Dimension(1000, 350));
 		outputBox.setMinimumSize(new Dimension(500, 300));
 		errorBox.setPreferredSize(new Dimension(500, 280));
 
