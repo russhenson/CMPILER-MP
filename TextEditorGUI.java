@@ -308,5 +308,6 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
         }
 	}
+	
 
 }

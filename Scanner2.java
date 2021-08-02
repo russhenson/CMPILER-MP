@@ -20,6 +20,7 @@ public class Scanner2 {
     StringBuilder sb = new StringBuilder();
     StringBuilder result = new StringBuilder();
     ErrorScanner errs;
+    Boolean isComment;
 
     //ArrayList<Token> tokenList = new ArrayList<Token>();
     public ArrayList<String> tokenType;
@@ -28,6 +29,7 @@ public class Scanner2 {
         this.inputFile = new File("inputfile.pas");
         this.outputFile = new File("outputfile.tok");
         this.errs = new ErrorScanner();
+        isComment = false;
     }
 
 
@@ -95,12 +97,21 @@ public class Scanner2 {
         return tokenType.getTokenType();
     }
 
+    void setIsComment(boolean isComment){
+        this.isComment = isComment;
+    }
+
+    boolean isComment(){
+        return this.isComment;
+    }
+
     /**
      * Write token on standard console.
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
     String console_dump(String line, String lexeme){
     	String result = classify_lexeme(lexeme);
+        
     	this.tokenresult = result;
         String output = lexeme + "\t" + result + "\n";
         return output;

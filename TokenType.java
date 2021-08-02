@@ -5,6 +5,7 @@ public class TokenType {
     private Type type;
     private boolean isPrevComment;
     private boolean isCurrComment;
+    private Scanner2 lAnalyzer = new Scanner2();
     enum Type{
         RESERVED,
         IDENTIFIER,
@@ -109,18 +110,22 @@ public class TokenType {
             token = Type.DOUBLE_PERIOD;
         else if(lexeme.equals("^"))
             token = Type.HAT;
-        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && this.isPrevComment == false)
+        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && /* this.isPrevComment == false */ !lAnalyzer.isComment) {
             token = Type.IDENTIFIER;
-        else if(lexeme.matches("\\{") && this.isPrevComment == false){
+            System.out.println("isComment - ID : " + lAnalyzer.isComment());
+        }
+        else if(lexeme.equals("{") && /* this.isPrevComment == false */ !lAnalyzer.isComment){
             token = Type.OPEN_CURLY_BRACE;
             this.isCurrComment = true;
-            System.out.println("reached in here "+this.isCurrComment);
+            lAnalyzer.setIsComment(true);
+            System.out.println("isComment - {: " + lAnalyzer.isComment());
         }
-        else if(lexeme.matches("\\}") && this.isPrevComment == true){
+        else if(lexeme.equals("}") && /* this.isPrevComment == true */ lAnalyzer.isComment){
             token = Type.CLOSE_CURLY_BRACE;
             this.isCurrComment = false;
+            lAnalyzer.setIsComment(false);
         }
-        else if(lexeme.matches("[a-zA-Z0-9\\.,!@#$%^&*\\(\\)\\{\\}]*") && this.isPrevComment == true)
+        else if(lexeme.matches("[a-zA-Z0-9\\.,!@#$%^&*\\(\\)]*") && /* this.isPrevComment == true */ lAnalyzer.isComment)
             token = Type.COMMENT;
         else if(lexeme.equals("‘") | lexeme.equals("\'"))
             token = Type.SINGLE_QUOTE;
@@ -154,24 +159,3 @@ public class TokenType {
         return this.isCurrComment;
     }
 }
-//TOKEN TYPE
-    /**
-     * RESERVED - program | begin | end | function | procedure |
-     *            and | or | not | var | const |
-     *            for | to | downto | repeat | until |
-     *            while | do | mod | div | return
-     * 
-     * IDENTIFIERS - [a-zA-Z][a-zA-z0-9]*
-     * 
-     * PREDECLARED - boolean | real | true | read | write |
-     *               char | integer | false | readln | writeln | string
-     * 
-     * COMMA - \,
-     * 
-     * SEMICOLON - \;
-     * 
-     * COLON - \:
-     * 
-     *
-     * 
-     */
