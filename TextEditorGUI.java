@@ -260,17 +260,26 @@ class TextEditorGUI extends JFrame implements ActionListener {
             try(BufferedReader br = new BufferedReader(new FileReader(inputFile))){
                 String line;
                 int lineNum = 1;
+                boolean isnotcomm = true;
                 while((line = br.readLine())!= null){
                     scanner.read_line(inputFile, lineNum);
                     String oneLine = scanner.get_line();
                     ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
                     for(int i = 0; i < lexemesPerLine.size(); i++){
-                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i)));
-                        scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i)));
+                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm));
+                        scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm));
                         String result = scanner.get_tokenresult();
                         if (result.equals("ERROR")) {
                         	counter++;
                         	scanner.lex_error(lexemesPerLine.get(i), "error.txt", counter);
+                        }
+                        //use this else if when having the string with spaces inside the bracket such as {this is a comment} with the 4 texts of code being considered as comments
+                        else if (result.equals("COMMENT")) {
+                        	String snip = lexemesPerLine.get(i);
+                        	isnotcomm = false;
+                        	if (snip.contains("}")) {
+                        		isnotcomm = true;
+                        	}
                         }
                         
                     }

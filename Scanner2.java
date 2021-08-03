@@ -92,8 +92,8 @@ public class Scanner2 {
     /**
      * Returns the token class of a lexeme.
      * @param {String} lexeme */  
-    String classify_lexeme(String lexeme){
-        TokenType tokenType = new TokenType(lexeme);
+    String classify_lexeme(String lexeme, boolean isnotcomm){
+        TokenType tokenType = new TokenType(lexeme, isnotcomm);
         return tokenType.getTokenType();
     }
 
@@ -109,8 +109,8 @@ public class Scanner2 {
      * Write token on standard console.
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
-    String console_dump(String line, String lexeme){
-    	String result = classify_lexeme(lexeme);
+    String console_dump(String line, String lexeme, boolean isnotcomm){
+    	String result = classify_lexeme(lexeme, isnotcomm);
         
     	this.tokenresult = result;
         String output = lexeme + "\t" + result + "\n";

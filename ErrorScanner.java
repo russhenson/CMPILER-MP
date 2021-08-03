@@ -16,8 +16,7 @@ public class ErrorScanner {
 		String output;
 		ArrayList<String> errlist = new ArrayList<>();
 		//from: https://stackoverflow.com/questions/12885821/checking-if-a-character-is-a-special-character-in-java
-		TokenType toktype = new TokenType(lex);
-		String tokname = "" + toktype.getTokenType() + "";
+		
 		//System.out.println("Game");
 	
 		String specialChars = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";

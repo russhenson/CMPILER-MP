@@ -52,98 +52,91 @@ public class TokenType {
 
     String[] dataTypes = {"Character", "String", "Integer", "Real", "Boolean", "Array"};
 
-    public TokenType(String lexeme){
+    public TokenType(String lexeme, boolean isnotcomm){
         this.lexeme = lexeme;
-        this.type = tokenize(this.lexeme);
+        this.type = tokenize(this.lexeme, isnotcomm);
     }
 
-    private Type tokenize(String lexeme){
+    private Type tokenize(String lexeme, boolean isnotcomm){
         Type token = Type.ERROR;
-
-        if(Arrays.asList(reserved).contains(lexeme))
-            token = Type.RESERVED;
-        else if(Arrays.asList(predeclared).contains(lexeme))
-            token = Type.PREDECLARED;
-        else if(Arrays.asList(dataTypes).contains(lexeme))
-            token = Type.DATA_TYPE;
-        else if(lexeme.equals(","))
-            token = Type.COMMA;
-        else if(lexeme.equals(";"))
-            token = Type.SEMICOLON;
-        else if(lexeme.equals(":"))
-            token = Type.COLON;
-        else if(lexeme.equals("+"))
-            token = Type.PLUS;
-        else if(lexeme.equals("-"))
-            token = Type.MINUS;
-        else if(lexeme.equals("*"))
-            token = Type.MULTIPLY;
-        else if(lexeme.equals("/"))
-            token = Type.DIVIDE;
-        else if(lexeme.equals("="))
-            token = Type.EQUALS;
-        else if(lexeme.equals("<"))
-            token = Type.GREATER_THAN;
-        else if(lexeme.equals(">"))
-            token = Type.LESS_THAN;
-        else if(lexeme.equals("*"))
-            token = Type.MULTIPLY;
-        else if(lexeme.equals("["))
-            token = Type.OPEN_BRACKET;
-        else if(lexeme.equals("]"))
-            token = Type.CLOSE_BRACKET;
-        else if(lexeme.equals("."))
-            token = Type.PERIOD;
-        else if(lexeme.equals(":="))
-            token = Type.COLON_EQUALS;
-        else if(lexeme.equals("("))
-            token = Type.OPEN_PAREN;
-        else if(lexeme.equals(")"))
-            token = Type.CLOSE_PAREN;
-        else if(lexeme.equals("<>"))
-            token = Type.NOT_EQUAL;
-        else if(lexeme.equals("<="))
-            token = Type.GREATER_EQUAL;
-        else if(lexeme.equals(">="))
-            token = Type.LESS_EQUAL;
-        else if(lexeme.equals(".."))
-            token = Type.DOUBLE_PERIOD;
-        else if(lexeme.equals("^"))
-            token = Type.HAT;
-        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && /* this.isPrevComment == false */ !lAnalyzer.isComment) {
-            token = Type.IDENTIFIER;
-            System.out.println("isComment - ID : " + lAnalyzer.isComment());
+        if (isnotcomm) {
+	        if(Arrays.asList(reserved).contains(lexeme))
+	            token = Type.RESERVED;
+	        else if(Arrays.asList(predeclared).contains(lexeme))
+	            token = Type.PREDECLARED;
+	        else if(Arrays.asList(dataTypes).contains(lexeme))
+	            token = Type.DATA_TYPE;
+	        else if(lexeme.equals(","))
+	            token = Type.COMMA;
+	        else if(lexeme.equals(";"))
+	            token = Type.SEMICOLON;
+	        else if(lexeme.equals(":"))
+	            token = Type.COLON;
+	        else if(lexeme.equals("+"))
+	            token = Type.PLUS;
+	        else if(lexeme.equals("-"))
+	            token = Type.MINUS;
+	        else if(lexeme.equals("*"))
+	            token = Type.MULTIPLY;
+	        else if(lexeme.equals("/"))
+	            token = Type.DIVIDE;
+	        else if(lexeme.equals("="))
+	            token = Type.EQUALS;
+	        else if(lexeme.equals("<"))
+	            token = Type.GREATER_THAN;
+	        else if(lexeme.equals(">"))
+	            token = Type.LESS_THAN;
+	        else if(lexeme.equals("*"))
+	            token = Type.MULTIPLY;
+	        else if(lexeme.equals("["))
+	            token = Type.OPEN_BRACKET;
+	        else if(lexeme.equals("]"))
+	            token = Type.CLOSE_BRACKET;
+	        else if(lexeme.equals("."))
+	            token = Type.PERIOD;
+	        else if(lexeme.equals(":="))
+	            token = Type.COLON_EQUALS;
+	        else if(lexeme.equals("("))
+	            token = Type.OPEN_PAREN;
+	        else if(lexeme.equals(")"))
+	            token = Type.CLOSE_PAREN;
+	        else if(lexeme.equals("<>"))
+	            token = Type.NOT_EQUAL;
+	        else if(lexeme.equals("<="))
+	            token = Type.GREATER_EQUAL;
+	        else if(lexeme.equals(">="))
+	            token = Type.LESS_EQUAL;
+	        else if(lexeme.equals(".."))
+	            token = Type.DOUBLE_PERIOD;
+	        else if(lexeme.equals("^"))
+	            token = Type.HAT;
+	        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && /* this.isPrevComment == false */ !lAnalyzer.isComment) {
+	            token = Type.IDENTIFIER;
+	            System.out.println("isComment - ID : " + lAnalyzer.isComment());
+	        }
+	        
+	        else if(lexeme.matches("\\{[a-zA-Z0-9\\.,!@#$%^&*\\(\\)]*"))
+	            token = Type.COMMENT;
+	        else if(lexeme.equals("‘") | lexeme.equals("\'"))
+	            token = Type.SINGLE_QUOTE;
+	        else if(lexeme.equals("\""))
+	            token = Type.DOUBLE_QUOTE;
+	        else if(lexeme.matches("[0-9]+"))
+	            token = Type.INTEGER;
+	        else if(lexeme.matches("[0-9]*.[0-9]+"))
+	            token = Type.REAL;
+	        else if(lexeme.matches("and:"))
+	            token = Type.BOOL_AND;
+	        else if(lexeme.matches("or:"))
+	            token = Type.BOOL_OR;
+	        else if(lexeme.matches("not:"))
+	            token = Type.BOOL_NOT;
+	        else
+	            token = Type.ERROR;
         }
-        else if(lexeme.equals("{") && /* this.isPrevComment == false */ !lAnalyzer.isComment){
-            token = Type.OPEN_CURLY_BRACE;
-            this.isCurrComment = true;
-            lAnalyzer.setIsComment(true);
-            System.out.println("isComment - {: " + lAnalyzer.isComment());
+        else {
+        	token = Type.COMMENT;
         }
-        else if(lexeme.equals("}") && /* this.isPrevComment == true */ lAnalyzer.isComment){
-            token = Type.CLOSE_CURLY_BRACE;
-            this.isCurrComment = false;
-            lAnalyzer.setIsComment(false);
-        }
-        else if(lexeme.matches("[a-zA-Z0-9\\.,!@#$%^&*\\(\\)]*") && /* this.isPrevComment == true */ lAnalyzer.isComment)
-            token = Type.COMMENT;
-        else if(lexeme.equals("‘") | lexeme.equals("\'"))
-            token = Type.SINGLE_QUOTE;
-        else if(lexeme.equals("\""))
-            token = Type.DOUBLE_QUOTE;
-        else if(lexeme.matches("[0-9]+"))
-            token = Type.INTEGER;
-        else if(lexeme.matches("[0-9]*.[0-9]+"))
-            token = Type.REAL;
-        else if(lexeme.matches("and:"))
-            token = Type.BOOL_AND;
-        else if(lexeme.matches("or:"))
-            token = Type.BOOL_OR;
-        else if(lexeme.matches("not:"))
-            token = Type.BOOL_NOT;
-        else
-            token = Type.ERROR;
-
         return token;
     }
 
