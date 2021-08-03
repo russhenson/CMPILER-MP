@@ -42,6 +42,7 @@ public class TokenType {
         BOOL_AND,
         BOOL_OR,
         BOOL_NOT,
+		STRING,
         ERROR
     }
 
@@ -52,14 +53,14 @@ public class TokenType {
 
     String[] dataTypes = {"Character", "String", "Integer", "Real", "Boolean", "Array"};
 
-    public TokenType(String lexeme, boolean isnotcomm){
+    public TokenType(String lexeme, boolean isnotcomm, boolean isString){
         this.lexeme = lexeme;
-        this.type = tokenize(this.lexeme, isnotcomm);
+        this.type = tokenize(this.lexeme, isnotcomm, isString);
     }
 
-    private Type tokenize(String lexeme, boolean isnotcomm){
+    private Type tokenize(String lexeme, boolean isnotcomm, boolean isString){
         Type token = Type.ERROR;
-        if (isnotcomm) {
+        if (isnotcomm && !isString) {
 	        if(Arrays.asList(reserved).contains(lexeme))
 	            token = Type.RESERVED;
 	        else if(Arrays.asList(predeclared).contains(lexeme))
@@ -114,9 +115,8 @@ public class TokenType {
 	            token = Type.IDENTIFIER;
 	            System.out.println("isComment - ID : " + lAnalyzer.isComment());
 	        }
-	        
-	        else if(lexeme.matches("\\{[a-zA-Z0-9\\.,!@#$%^&*\\(\\)]*"))
-	            token = Type.COMMENT;
+			else if(lexeme.matches("\\{"))
+				token = Type.OPEN_CURLY_BRACE;
 	        else if(lexeme.equals("‘") | lexeme.equals("\'"))
 	            token = Type.SINGLE_QUOTE;
 	        else if(lexeme.equals("\""))
@@ -134,8 +134,17 @@ public class TokenType {
 	        else
 	            token = Type.ERROR;
         }
+		else if(isString){
+			if(lexeme.matches("\""))
+				token = Type.DOUBLE_QUOTE;
+			else
+				token = Type.STRING;
+		}
         else {
-        	token = Type.COMMENT;
+        	if(lexeme.matches("\\}"))
+				token = Type.CLOSE_CURLY_BRACE;
+			else
+				token = Type.COMMENT;
         }
         return token;
     }

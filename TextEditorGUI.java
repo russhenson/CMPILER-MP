@@ -261,20 +261,22 @@ class TextEditorGUI extends JFrame implements ActionListener {
                 String line;
                 int lineNum = 1;
                 boolean isnotcomm = true;
+				boolean isString = false;
+				boolean isFirstQuote = false;
                 while((line = br.readLine())!= null){
                     scanner.read_line(inputFile, lineNum);
                     String oneLine = scanner.get_line();
                     ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
                     for(int i = 0; i < lexemesPerLine.size(); i++){
-                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm));
-                        scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm));
+                        System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm, isString));
+                        scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm, isString));
                         String result = scanner.get_tokenresult();
                         if (result.equals("ERROR")) {
                         	counter++;
                         	scanner.lex_error(lexemesPerLine.get(i), "error.txt", counter);
                         }
                         //use this else if when having the string with spaces inside the bracket such as {this is a comment} with the 4 texts of code being considered as comments
-                        else if (result.equals("COMMENT")) {
+                        else if (result.equals("COMMENT") || result.equals("OPEN_CURLY_BRACE") || result.equals("CLOSE_CURLY_BRACE")) {
                         	String snip = lexemesPerLine.get(i);
                         	int curlind = 0;
                         	isnotcomm = false;
@@ -300,10 +302,21 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		//if it is not the last index
                         		if (curlind != (len - 1)) {
                         			after = snip.substring(max, len);
-                        			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm));
+                        			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm, isString));
                         		}
                         	}
                         }
+						else if(result.equals("DOUBLE_QUOTE") || result.equals("STRING")){
+							String snip = lexemesPerLine.get(i);
+							if(!isFirstQuote && snip.contains("\"")){
+								isString = true;
+								isFirstQuote = true;
+							}
+							else if(isFirstQuote && snip.contains("\"")){
+								isString = false;
+								isFirstQuote = false;
+							}
+						}
                         
                     }
                     

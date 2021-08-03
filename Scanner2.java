@@ -22,6 +22,7 @@ public class Scanner2 {
     StringBuilder result = new StringBuilder();
     ErrorScanner errs;
     Boolean isComment;
+    boolean isString;
 
     //ArrayList<Token> tokenList = new ArrayList<Token>();
     public ArrayList<String> tokenType;
@@ -93,8 +94,8 @@ public class Scanner2 {
     /**
      * Returns the token class of a lexeme.
      * @param {String} lexeme */  
-    String classify_lexeme(String lexeme, boolean isnotcomm){
-        TokenType tokenType = new TokenType(lexeme, isnotcomm);
+    String classify_lexeme(String lexeme, boolean isnotcomm, boolean isString){
+        TokenType tokenType = new TokenType(lexeme, isnotcomm, isString);
         return tokenType.getTokenType();
     }
 
@@ -110,8 +111,8 @@ public class Scanner2 {
      * Write token on standard console.
      * @param {String} line
      * @param {String[]} lexemesPerLine */  
-    String console_dump(String line, String lexeme, boolean isnotcomm){
-    	String result = classify_lexeme(lexeme, isnotcomm);
+    String console_dump(String line, String lexeme, boolean isnotcomm, boolean isString){
+    	String result = classify_lexeme(lexeme, isnotcomm, isString);
         
     	this.tokenresult = result;
         String output = lexeme + "\t" + result + "\n";
