@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -137,6 +138,23 @@ public class Scanner2 {
 
 
         }
+    }
+    void delete_line(String filename) {
+    	byte b;
+    	try {
+    		RandomAccessFile f = new RandomAccessFile(filename, "rw");
+    		long length = f.length() - 1;
+    		do {                     
+    		  length -= 1;
+    		  f.seek(length);
+    		  b = f.readByte();
+    		} while(b != 10);
+    		f.setLength(length+1);
+    		f.close();
+    	}
+    	catch(Exception e) {
+    		
+    	}
     }
 
     /** Displays error on standard console. Error codes and descriptions are 
