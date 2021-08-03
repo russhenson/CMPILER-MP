@@ -297,7 +297,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		//to here delete if needed
                         		isnotcomm = true;
                         		//comment this one as well if needed
-                        		if (curlind != len) {
+                        		//if it is not the last index
+                        		if (curlind != (len - 1)) {
                         			after = snip.substring(max, len);
                         			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm));
                         		}
