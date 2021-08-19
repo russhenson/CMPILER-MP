@@ -24,7 +24,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 	public TextEditorGUI()
 	{
 		// Create a frame
-		f = new JFrame("PASCAL LEXICAL ANALYZER");
+		f = new JFrame("PASCAL PARSER");
 
 		panel = new JPanel(new BorderLayout());
 		topPanel = new JPanel();
@@ -64,7 +64,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		sourceCodeScrollPane.setPreferredSize(new Dimension(1000, 350));
 		sourceCodeTextArea.setMinimumSize(new Dimension(1000, 350));
 		outputBox.setMinimumSize(new Dimension(500, 300));
-		errorBox.setPreferredSize(new Dimension(500, 280));
+		errorScrollPane.setPreferredSize(new Dimension(500, 280));
+		errorBox.setMinimumSize(new Dimension(500, 280));
 
 		panel.add(topPanel, BorderLayout.NORTH);
 		panel.add(bottomPanel, BorderLayout.CENTER);
@@ -81,18 +82,21 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		JMenu m1 = new JMenu("File");
 
 		// Create menu items
+		JMenuItem mi0 = new JMenuItem("Reset");
 		JMenuItem mi1 = new JMenuItem("New");
 		JMenuItem mi2 = new JMenuItem("Open");
-		//JMenuItem mi3 = new JMenuItem("Save");
+		JMenuItem mi3 = new JMenuItem("Save");
 
 		// Add action listener
+		mi0.addActionListener(this);
 		mi1.addActionListener(this);
 		mi2.addActionListener(this);
-		//mi3.addActionListener(this);
+		mi3.addActionListener(this);
 
+		m1.add(mi0);
 		m1.add(mi1);
 		m1.add(mi2);
-		//m1.add(mi3);
+		m1.add(mi3);
 
 		// Create amenu for menu
 		JMenu m2 = new JMenu("Edit");
@@ -139,6 +143,28 @@ class TextEditorGUI extends JFrame implements ActionListener {
 		}
 		else if (s.equals("paste")) {
 			sourceCodeTextArea.paste();
+		}
+		else if (s.equals("Reset")) {
+			outputBox.setText("");
+			errorBox.setText("");
+			File inputFile = new File("inputfile.pas");
+			File outputFile = new File("outputfile.tok");
+
+			// reset input and output files
+			try {
+				this.fileW = new FileWriter(inputFile);
+            	this.bWriter = new BufferedWriter(fileW);
+				bWriter.write(outputBox.getText());
+
+				this.fileW = new FileWriter(outputFile);
+				this.bWriter = new BufferedWriter(fileW);
+				bWriter.write(outputBox.getText());
+
+				bWriter.close(); 
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		else if (s.equals("Save")) {
 			// Create an object of JFileChooser class
