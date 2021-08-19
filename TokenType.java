@@ -3,7 +3,6 @@ import java.util.Arrays;
 public class TokenType {
     private String lexeme;
     private Type type;
-    private boolean isPrevComment;
     private boolean isCurrComment;
     private Scanner2 lAnalyzer = new Scanner2();
     enum Type{
@@ -43,6 +42,7 @@ public class TokenType {
         BOOL_OR,
         BOOL_NOT,
 		STRING,
+		ARRAY,
         ERROR
     }
 
@@ -109,12 +109,12 @@ public class TokenType {
 	            token = Type.LESS_EQUAL;
 	        else if(lexeme.equals(".."))
 	            token = Type.DOUBLE_PERIOD;
+			else if(lexeme.matches("\\[[0-9]+..[1-9][0-9]*\\]"))
+				token = Type.ARRAY;
 	        else if(lexeme.equals("^"))
 	            token = Type.HAT;
-	        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && /* this.isPrevComment == false */ !lAnalyzer.isComment) {
+	        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && !lAnalyzer.isComment)
 	            token = Type.IDENTIFIER;
-	            System.out.println("isComment - ID : " + lAnalyzer.isComment());
-	        }
 			else if(lexeme.matches("\\{"))
 				token = Type.OPEN_CURLY_BRACE;
 	        else if(lexeme.equals("‘") | lexeme.equals("\'"))
