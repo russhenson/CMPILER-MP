@@ -149,8 +149,13 @@ public class Scanner2 {
     		  length -= 1;
     		  f.seek(length);
     		  b = f.readByte();
-    		} while(b != 10);
-    		f.setLength(length+1);
+    		} while(b != 10 && length > 0);
+    		if (length == 0) { 
+    			f.setLength(length);
+    			}
+    		else {
+    			f.setLength(length + 1);
+    		}
     		f.close();
     	}
     	catch(Exception e) {

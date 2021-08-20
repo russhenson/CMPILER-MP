@@ -115,7 +115,7 @@ public class TokenType {
 	            token = Type.HAT;
 	        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && !lAnalyzer.isComment)
 	            token = Type.IDENTIFIER;
-			else if(lexeme.matches("\\{"))
+			else if(lexeme.matches("\\{") || lexeme.startsWith("{"))
 				token = Type.OPEN_CURLY_BRACE;
 	        else if(lexeme.equals("‘") | lexeme.equals("\'"))
 	            token = Type.SINGLE_QUOTE;

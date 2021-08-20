@@ -265,6 +265,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
         }
 		else if (s.equals("Run")) {
+			String combi = "";
             ArrayList<String> errlist;
             File inputFile = new File("inputfile.pas");
             File outputFile = new File("outputfile.tok");
@@ -303,14 +304,17 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         }
                         //use this else if when having the string with spaces inside the bracket such as {this is a comment} with the 4 texts of code being considered as comments
                         else if (result.equals("COMMENT") || result.equals("OPEN_CURLY_BRACE") || result.equals("CLOSE_CURLY_BRACE")) {
+                        	//deletes last line
+                    		scanner.delete_line("outputfile.tok");
+                    		
                         	String snip = lexemesPerLine.get(i);
                         	int curlind = 0;
                         	isnotcomm = false;
                         	if (snip.contains("}")) {
+                        		
                         		//from here
                         		int len = snip.length();
-                        		//deletes last line
-                        		scanner.delete_line("outputfile.tok");
+                        		
                         		for (int j = 0; j < len; j++) {
                         			String letty = Character.toString(snip.charAt(j));
                         			if (letty.equals("}")) {
@@ -320,7 +324,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		}
                         		int max = curlind + 1;
                         		String before = snip.substring(0, max), after = "";
-                        		String newoutput = before + "\t" + result + "\n";
+                        		String newoutput = combi + before + "\t" + result + "\n";
+                        		combi = "";
                         		scanner.file_dump(outputFile, newoutput);
                         		//to here delete if needed
                         		isnotcomm = true;
@@ -330,6 +335,9 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         			after = snip.substring(max, len);
                         			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm, isString));
                         		}
+                        	}
+                        	else {
+                        		combi = combi + snip + " ";
                         	}
                         }
 						else if(result.equals("DOUBLE_QUOTE") || result.equals("STRING")){
