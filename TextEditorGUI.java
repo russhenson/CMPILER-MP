@@ -341,14 +341,38 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         	}
                         }
 						else if(result.equals("DOUBLE_QUOTE") || result.equals("STRING")){
+							//deletes last line
+                    		scanner.delete_line("outputfile.tok");
 							String snip = lexemesPerLine.get(i);
 							if(!isFirstQuote && snip.contains("\"")){
+								combi = combi + snip + " ";
 								isString = true;
 								isFirstQuote = true;
 							}
 							else if(isFirstQuote && snip.contains("\"")){
-								isString = false;
+								int len = snip.length(), curlind = 0;
+								for (int j = 0; j < len; j++) {
+                        			String letty = Character.toString(snip.charAt(j));
+                        			if (letty.equals("\"")) {
+                        				curlind = j;
+                        				break;
+                        			}
+                        		}
+                        		int max = curlind + 1;
+                        		String before = snip.substring(0, max), after = "";
+                        		String newoutput = combi + before + "\t" + "STRING" + "\n";
+                        		combi = "";
+                        		scanner.file_dump(outputFile, newoutput);
+                        		isString = false;
 								isFirstQuote = false;
+                        		if (curlind != (len - 1)) {
+                        			after = snip.substring(max, len);
+                        			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm, isString));
+                        		}
+								
+							}
+							else {
+								combi = combi + snip + " ";
 							}
 						}
                         
