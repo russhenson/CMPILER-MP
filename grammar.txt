@@ -1,0 +1,48 @@
+<PROGRAM> ::= program <PROGNAME> ;
+
+<STMT> ::= <SIMPLE_STMT> | <STRUCTURED_STMT>
+
+<SIMPLE_STMT> ::= <ASSIGNMENT_STMT> | <READ_STMT> | <WRITE_STMT>
+
+<STRUCTURED_STMT> ::= <COMPOUND_STMT> | <IF_STMT> | <WHILE_STMT>
+
+<COMPOUND_STMT> ::= begin <STMT> end ;
+
+<ASSIGNMENT_STMT> ::= <VARIABLE> := <EXPR>
+
+<READ_STMT> ::= read ( <VARIABLE> ) ; | readln ( <VARIABLE> ) ;
+
+<WRITE_STMT> ::= write ( <EXPR> ) ; | writeln ( <EXPR> ) ;
+
+<IF STMT> ::= if <EXPR> then <STMT> | if <EXPR> then <STMT> else <STMT>
+
+<WHILE STMT> ::= while <EXPR> do <STMT>
+
+<EXPR> ::= <SIMPLE_EXPR> | <SIMPLE_EXPR> <RELATIONAL_OPS> <SIMPLE_EXPR>
+
+<SIMPLE_EXPR> ::= <SIGN> <TERM> <ADD_OPS> <TERM>
+
+<TERM> ::= <FACTOR> <MULTI_OPS> <FACTOR>
+
+<FACTOR> ::= <VARIABLE> | <CONSTANT> | ( <EXPR> )
+
+<SIGN> ::= + | -
+
+<ADD_OPS> ::= + | -
+
+<MULTI_OPS> ::= * | /
+
+<RELATIONAL_OPS> ::= = | <> | < | <= | >= | >
+
+<VARIABLE> ::= <LETTER> <LETTER> | <DIGIT>
+
+<CONSTANT> ::= <DIGIT> <DIGIT>
+
+<PROGNAME> ::= <CAPITAL_LETTER> <LETTER> | <DIGIT>
+
+<CAPITAL_LETTER> ::= A | B | C | ... | Z
+
+<LETTER> ::= a | b | c | ... | z | <CAPITAL_LETTER>
+
+<DIGIT> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
