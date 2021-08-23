@@ -27,7 +27,7 @@ public class Parser2 {
     void program() {
         String lookAhead = tokenStack.peek();
        /* if(lookAhead == "program"){
-           
+           pop it from the stack then check if the next one is a program name then
        } */
 
        
