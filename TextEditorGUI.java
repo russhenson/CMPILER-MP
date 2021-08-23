@@ -271,6 +271,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
             File outputFile = new File("outputfile.tok");
             File errorFile = new File("error.txt");
             Scanner2 scanner = new Scanner2();
+			Parser2 parser = new Parser2();
             int counter = 0;
 
 			// write to inputfile.pas
@@ -294,10 +295,11 @@ class TextEditorGUI extends JFrame implements ActionListener {
                     scanner.read_line(inputFile, lineNum);
                     String oneLine = scanner.get_line();
                     ArrayList<String> lexemesPerLine = scanner.get_lexeme(oneLine);
+
                     for(int i = 0; i < lexemesPerLine.size(); i++){
                         System.out.print(scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm, isString));
                         scanner.file_dump(outputFile, scanner.console_dump(oneLine, lexemesPerLine.get(i), isnotcomm, isString));
-                        String result = scanner.get_tokenresult();
+						String result = scanner.get_tokenresult();
                         if (result.equals("ERROR")) {
                         	counter++;
                         	scanner.lex_error(lexemesPerLine.get(i), "error.txt", counter);
@@ -334,7 +336,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		if (curlind != (len - 1)) {
                         			after = snip.substring(max, len);
                         			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm, isString));
-                        		}
+								}
                         	}
                         	else {
                         		combi = combi + snip + " ";
@@ -368,13 +370,15 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		if (curlind != (len - 1)) {
                         			after = snip.substring(max, len);
                         			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm, isString));
-                        		}
+
+								}
 								
 							}
 							else {
 								combi = combi + snip + " ";
 							}
 						}
+						
                         
                     }
                     
@@ -384,7 +388,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
                 errlist = scanner.acquire_errorlist();
                 
-                System.out.println("Printing the errors ");
+                System.out.println("\n\nPrinting the errors ");
                 errorBox.setText("");
                 for (int i = 0; i < errlist.size(); i++ ) {
                 	System.out.println(errlist.get(i));
@@ -408,6 +412,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			}
 			//printing the errors 
 			
+
+			parser.program();
 
         }
 	}

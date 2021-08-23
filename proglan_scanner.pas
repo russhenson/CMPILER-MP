@@ -1,5 +1,5 @@
-{this is a comment
-}name
+{this is a comment}
+name
 program proglan_scanner ;
 var sampleIdentifier123 : real ;
 	y : boolean ;

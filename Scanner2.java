@@ -114,8 +114,9 @@ public class Scanner2 {
     String console_dump(String line, String lexeme, boolean isnotcomm, boolean isString){
     	String result = classify_lexeme(lexeme, isnotcomm, isString);
         
-    	this.tokenresult = result;
+        this.tokenresult = result;
         String output = lexeme + "\t" + result + "\n";
+    	
         return output;
     }
 
@@ -140,6 +141,31 @@ public class Scanner2 {
 
         }
     }
+
+    ArrayList<String> token_dump(){
+        File outputFile = new File("outputfile.tok");
+        ArrayList<String> tokens = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(outputFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+               String token = line.split("\\t")[0];
+               tokens.add(token);
+            }
+
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+        /* for(int i = 0; i < tokens.size(); i++){
+            System.out.println("token #" + (i+1) + ": " + tokens.get(i));
+        } */
+
+        return tokens;
+    }
+
+    
     void delete_line(String filename) {
     	byte b;
     	try {
