@@ -271,7 +271,6 @@ class TextEditorGUI extends JFrame implements ActionListener {
             File outputFile = new File("outputfile.tok");
             File errorFile = new File("error.txt");
             Scanner2 scanner = new Scanner2();
-			Parser2 parser = new Parser2();
             int counter = 0;
 
 			// write to inputfile.pas
@@ -394,7 +393,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
                 	System.out.println(errlist.get(i));
                 	errorBox.append(errlist.get(i));
                 }
-               
+
+				
                 
                 
             } catch (IOException error) {
@@ -413,7 +413,10 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			//printing the errors 
 			
 
-			parser.program();
+			//TESTING PARSER
+			Parser2 parser = new Parser2(scanner.token_dump());
+			parser.programHeading();
+			
 
         }
 	}

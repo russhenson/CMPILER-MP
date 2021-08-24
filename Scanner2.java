@@ -143,7 +143,7 @@ public class Scanner2 {
     }
 
     ArrayList<String> token_dump(){
-        File outputFile = new File("outputfile.tok");
+        File outputFile = new File("outputFile.tok");
         ArrayList<String> tokens = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(outputFile))) {
