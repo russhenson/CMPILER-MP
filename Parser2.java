@@ -144,7 +144,30 @@ public class Parser2 {
                 tokenLookAhead = tokenStack.peek();
                 typeLookAhead = tokenTypeStack.peek();
             }
-            
+
+            while(!typeLookAhead.equals("SEMICOLON")){
+                while(!typeLookAhead.equals("COLON")){
+                    if(typeLookAhead.equals("IDENTIFIER")){
+                        tokenStack.pop();
+                        tokenTypeStack.pop();
+                        if(!tokenStack.empty()){ // proceed to peek at the next token
+                            tokenLookAhead = tokenStack.peek();
+                            typeLookAhead = tokenTypeStack.peek();
+                        }
+
+                        if(typeLookAhead.equals("COMMA")){
+                            tokenStack.pop();
+                            tokenTypeStack.pop();
+                            if(!tokenStack.empty()){ // proceed to peek at the next token
+                                tokenLookAhead = tokenStack.peek();
+                                typeLookAhead = tokenTypeStack.peek();
+                            }
+                        }
+                    }
+                }
+                if
+            }
+
         }
 
         return false;
