@@ -134,7 +134,6 @@ public class Parser2 {
         return false;
     }
 
-
     boolean variableDeclaration(){
         // Check if the first token is "var"
         if(tokenLookAhead.equals("var")){
@@ -145,8 +144,8 @@ public class Parser2 {
                 typeLookAhead = tokenTypeStack.peek();
             }
 
-            while(!typeLookAhead.equals("SEMICOLON")){
-                while(!typeLookAhead.equals("COLON")){
+            while(typeLookAhead.equals("SEMICOLON")){
+                while(typeLookAhead.equals("COLON")){
                     if(typeLookAhead.equals("IDENTIFIER")){
                         tokenStack.pop();
                         tokenTypeStack.pop();
@@ -164,9 +163,22 @@ public class Parser2 {
                             }
                         }
                     }
+                    // error for invalid identifier
+                    // error if colon is not found
                 }
-                if
+                if(typeLookAhead.equals("DATA_TYPE")){
+                    tokenStack.pop();
+                    tokenTypeStack.pop();
+                    if(!tokenStack.empty()){ // proceed to peek at the next token
+                        tokenLookAhead = tokenStack.peek();
+                        typeLookAhead = tokenTypeStack.peek();
+                    }
+                }
+
+                // error if the next token is a colon,  it should be a semicolon after the data type
             }
+
+            System.out.println("Valid Variable Declaration");
 
         }
 

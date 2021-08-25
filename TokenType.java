@@ -49,9 +49,9 @@ public class TokenType {
     String[] reserved = {"program", "begin", "end", "function", "procedure", "and", "or", "not", "var", "const", "for", "to", "downto", "repeat", "until", "while",
                         "do", "mod", "div", "return", "array", "of", "if", "then", "else"};
 
-    String[] predeclared = {"boolean", "real", "true", "read", "write", "char", "integer", "false", "readln", "writeln", "string"};
+    String[] predeclared = {"true", "read", "write",  "false", "readln", "writeln"/* , "boolean", "real", "char", "integer", "string" */};
 
-    String[] dataTypes = {"Character", "String", "Integer", "Real", "Boolean", "Array"};
+    String[] dataTypes = {"char", "string", "integer", "real", "boolean", "array"};
 
     public TokenType(String lexeme, boolean isnotcomm, boolean isString){
         this.lexeme = lexeme;
