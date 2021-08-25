@@ -158,11 +158,26 @@ public class Scanner2 {
             e.printStackTrace();
         }
 
-        /* for(int i = 0; i < tokens.size(); i++){
-            System.out.println("token #" + (i+1) + ": " + tokens.get(i));
-        } */
-
         return tokens;
+    }
+
+    ArrayList<String> tokenType_dump(){
+        File outputFile = new File("outputFile.tok");
+        ArrayList<String> tokenTypes = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(outputFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+               String token = line.split("\\t")[1];
+               tokenTypes.add(token);
+            }
+
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return tokenTypes;
     }
 
     

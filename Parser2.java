@@ -6,53 +6,156 @@ import java.util.*;
 public class Parser2 {
 
     private Stack<String> tokenStack;
+    private Stack<String> tokenTypeStack;
+    
+    private String tokenLookAhead;
+    private String typeLookAhead;
+
     private Scanner2 scanner;
-    private ArrayList<String> tokens;
 
-
-    public Parser2(ArrayList<String> tokens) {
-        tokenStack = new Stack<>();
-        scanner = new Scanner2();
-
+    public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType) {
+        this.tokenStack = new Stack<>();
+        this.tokenTypeStack = new Stack<>();
+        this.scanner = new Scanner2();
 
         for(int i = tokens.size()-1; i >= 0; i--){
-            //System.out.println(tokens.get(i));
             tokenStack.push(tokens.get(i));
+            tokenTypeStack.push(tokenType.get(i));
         }
-        
 
+        tokenLookAhead = tokenStack.peek();
+        typeLookAhead = tokenTypeStack.peek();
     }
 
-    // <PROGRAM> ::= program <PROGNAME> ;
-    void programHeading() {
-        
-        System.out.println(Arrays.toString(tokenStack.toArray()));
-
-        String lookAhead = tokenStack.peek();
-        System.out.println("LookAhead: " + lookAhead);
-        if(lookAhead.equals("program")){
-           //pop it from the stack then check if the next one is a program name then
-            //System.out.println("Popping: " + lookAhead);
+    // Syntax: program <IDENTIFIER> ;
+    boolean programHeading() {
+        // Check if the first token is "program"
+        if(tokenLookAhead.equals("program")){
             tokenStack.pop();
-            lookAhead = tokenStack.peek();
-            //System.out.println("New lookAhead: " + lookAhead);
-            if(lookAhead.matches("[a-zA-Z][a-zA-z0-9]*")){ // program name
-                //System.out.println("Popping: " + lookAhead);
-                tokenStack.pop();
-                lookAhead = tokenStack.peek();
-                //System.out.println("New lookAhead: " + lookAhead);
-                if(lookAhead.equals(";")){
-                    System.out.println("Valid program heading");
-                }
-                else
-                    System.out.println("Missing a comma");
+            tokenTypeStack.pop();
+            if(!tokenStack.empty()){ // proceed to peek at the next token
+                tokenLookAhead = tokenStack.peek();
+                typeLookAhead = tokenTypeStack.peek();
             }
-            else
-                System.out.println("Invalid ID");
-       }
+            
+            // Checks the program name if it's valid
+            if(typeLookAhead.equals("IDENTIFIER")){ 
+                tokenStack.pop();
+                tokenTypeStack.pop();
+                if(!tokenStack.empty()){
+                    tokenLookAhead = tokenStack.peek();
+                    typeLookAhead = tokenTypeStack.peek();
+                }
 
-       
-       
+                // Check if it ends with semi colon
+                if(typeLookAhead.equals("SEMICOLON")){
+                    System.out.println("Valid program heading"); // No error
+                    return true;
+                }
+                else {
+                    System.out.println("Missing a comma"); // Missing a comma
+                    // get the error message from error.txt
+                    return false;
+                }
+
+            }
+            else {
+                System.out.println("Invalid ID"); // Missing or invalid name
+                // get the error message from error.txt
+                return false;
+            }
+       }
+       // get the error message from error.txt
+       return false;
+
     }
-    
+
+    // Syntax: l-value := r-value ;
+    boolean assignment(){ 
+        if(typeLookAhead.equals("IDENTIFIER")){ 
+            tokenStack.pop();
+            tokenTypeStack.pop();
+            if(!tokenStack.empty()){
+                tokenLookAhead = tokenStack.peek();
+                typeLookAhead = tokenTypeStack.peek();
+            }
+
+            if(typeLookAhead.equals("COLON_EQUALS")){
+                tokenStack.pop();
+                tokenTypeStack.pop();
+                if(!tokenStack.empty()){
+                    tokenLookAhead = tokenStack.peek();
+                    typeLookAhead = tokenTypeStack.peek();
+                }
+
+                // Check the r-value
+                if( typeLookAhead.equals("STRING") || 
+                    typeLookAhead.equals("REAL") || 
+                    typeLookAhead.equals("INTEGER") || 
+                    arithmeticExpr()){
+
+                    tokenStack.pop();
+                    tokenTypeStack.pop();
+                    if(!tokenStack.empty()){
+                        tokenLookAhead = tokenStack.peek();
+                        typeLookAhead = tokenTypeStack.peek();
+                    }
+
+                    // Check if it ends with semi colon
+                    if(typeLookAhead.equals("SEMICOLON")){
+                        System.out.println("Valid assignment"); // No error
+                        // get the error message from error.txt
+                        return true;
+                    }
+                    else {
+                        System.out.println("Missing a comma"); // Missing a comma
+                        // get the error message from error.txt
+                        return false;
+                    }
+                }
+                else {
+                    System.out.println("Invalid assignment value");
+                    // get the error message from error.txt
+                    return false;
+                }
+
+            }
+            else {
+                System.out.println("Missing an assignment operator");
+                // get the error message from error.txt
+                return false;
+            }
+
+        }
+        // get the error message from error.txt
+        return false;
+    }
+
+    // Syntax: 
+    boolean arithmeticExpr(){
+
+        return false;
+    }
+
+    boolean variableDeclaration(){
+
+        return false;
+    }
+
+    boolean forLoop(){
+
+        return false;
+    }
+
+    boolean ifThen(){
+
+        return false;
+    }
+
+    boolean ifThenElse(){
+
+        return false;
+    }
+
+
 }
