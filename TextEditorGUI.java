@@ -418,7 +418,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			//parser.programHeading();
 			//parser.assignment();
 			//parser.variableDeclaration();
-			parser.forLoop();
+			parser.forStatement();
 
         }
 	}

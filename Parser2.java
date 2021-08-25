@@ -128,12 +128,6 @@ public class Parser2 {
         return false;
     }
 
-    // Syntax: 
-    boolean arithmeticExpr(){
-
-        return false;
-    }
-
     boolean variableDeclaration(){
         // Check if the first token is "var"
         if(tokenLookAhead.equals("var")){
@@ -185,7 +179,7 @@ public class Parser2 {
         return false;
     }
 
-    boolean forLoop(){ // 
+    boolean forStatement(){
         // Check if the first token is "for"
         if(tokenLookAhead.equals("for")){
             tokenStack.pop();
@@ -294,23 +288,66 @@ public class Parser2 {
         return false;
     }
 
-    boolean ifThen(){
+    boolean whileStatement(){
+        return false;
+    }
+    // Syntax: 
+    boolean arithmeticExpr(){
 
         return false;
     }
 
-    boolean ifThenElse(){
+    // <ifStatement> :: = if <expression> then <statement> | if <expression> then <statement> else <statement>
+    boolean ifStatement(){
 
         return false;
     }
 
-    boolean statement() {
-        return true;
-    }
-
-    boolean condition() {
+    boolean expression() {
         return false;
     }
+
+    // <statement> ::= <simpleStatement> | <structuredStatement>
+    boolean statement() { 
+        if(simpleStatement() | structuredStatement())
+            return true;
+            
+        return false;
+    }
+
+    // <simpleStatement> ::= <assignment> | <readStatement> | <writeStatement>
+    boolean simpleStatement() {
+
+        if(assignment() | readStatement() | writeStatement())
+            return true;
+
+        return false;
+    }
+
+    // <structuredStatement> ::= <compoundStatement> | <ifStatement> | <whileStatement> | forStatement
+    boolean structuredStatement() {
+
+        if(compoundStatement() | ifStatement() | whileStatement() | forStatement())
+            return true;
+
+        return false;
+    }
+
+    // <compoundStatement> ::= begin <statement> end
+    boolean compoundStatement() {
+        return false;
+    }
+
+    // <readStatement> ::= read ( *IDENTIFIER* , *IDENTIFIER* ) | readln ( *IDENTIFIER* , *IDENTIFIER* )
+    boolean readStatement() {
+        return false;
+    }
+
+    // <writeStatement> ::= write ( *IDENTIFIER* , *IDENTIFIER* ) | writeln ( *IDENTIFIER* , *IDENTIFIER* )
+    boolean writeStatement() {
+        return false;
+    }
+
 
 
 }
