@@ -1,6 +1,4 @@
-{this is a comment}
-name
-program proglan_scanner ;
+program sample .
 var sampleIdentifier123 : real ;
 	y : boolean ;
 	z , p , input : integer ;

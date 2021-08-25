@@ -19,7 +19,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
 	BufferedWriter bWriter;
     FileWriter fileW;
-
+    int counter  = 0;
 	// Constructor
 	public TextEditorGUI()
 	{
@@ -271,7 +271,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
             File outputFile = new File("outputfile.tok");
             File errorFile = new File("error.txt");
             Scanner2 scanner = new Scanner2();
-            int counter = 0;
+           
 
 			// write to inputfile.pas
 			try {
@@ -402,23 +402,31 @@ class TextEditorGUI extends JFrame implements ActionListener {
                 error.printStackTrace();
             }
 
+            
+			Parser2 parser = new Parser2(scanner.token_dump(), scanner.tokenType_dump(), counter);
+			parser.programHeading();
+			//parser.assignment();
+			parser.variableDeclaration();
 			// print output to output textarea
+			errlist = scanner.acquire_errorlist();
+			ArrayList<String> errparser = parser.get_errparselist();
+			System.out.println("\n\nPrinting the errors ");
+			errorBox.setText("");
+			for (int i = 0; i < errlist.size(); i++) {
+				//System.out.println(errlist.get(i));
+				errorBox.append(errlist.get(i));
+			}
+			System.out.println("Size of " + errparser.size());
+			for (int i = 0; i < errparser.size(); i++) {
+				errorBox.append(errparser.get(i));
+			}
+
 			try {
-				outputBox.read(new InputStreamReader(
-					getClass().getResourceAsStream("outputfile.tok")), null);
+				outputBox.read(new InputStreamReader(getClass().getResourceAsStream("outputfile.tok")), null);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			//printing the errors 
-			
-
-			//TESTING PARSER
-			Parser2 parser = new Parser2(scanner.token_dump(), scanner.tokenType_dump());
-			//parser.programHeading();
-			//parser.assignment();
-			//parser.variableDeclaration();
-			parser.forStatement();
 
         }
 	}

@@ -1,3 +1,8 @@
 1 Unidentified symbol.
 2 Invalid identifier.
 3 Missing token.
+4 Colon not found
+5 Missing/Invalid Identifier
+6 Should be ';' not ':'
+7 Semicolon not found
+8 Invalid program heading

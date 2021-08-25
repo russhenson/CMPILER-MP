@@ -7,14 +7,15 @@ public class Parser2 {
 
     private Stack<String> tokenStack;
     private Stack<String> tokenTypeStack;
-    
+    private ErrorParser errparser;
     private String tokenLookAhead;
     private String typeLookAhead;
-
-    public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType) {
+    private int newcount = 0;
+    public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
-
+        this.newcount = counter;
+        errparser = new ErrorParser();
         for(int i = tokens.size()-1; i >= 0; i--){
             tokenStack.push(tokens.get(i));
             tokenTypeStack.push(tokenType.get(i));
@@ -23,7 +24,12 @@ public class Parser2 {
         tokenLookAhead = tokenStack.peek();
         typeLookAhead = tokenTypeStack.peek();
     }
-
+    ArrayList<String> get_errparselist() {
+    	return this.errparser.get_errparselist();
+    }
+    int getcounter() {
+    	return newcount;
+    }
     // Syntax: program <IDENTIFIER> ;
     boolean programHeading() {
         // Check if the first token is "program"
@@ -50,8 +56,10 @@ public class Parser2 {
                     return true;
                 }
                 else {
-                    System.out.println("Missing a comma"); // Missing a comma
+                    System.out.println("Missing a semicolon"); // Missing a comma
                     // get the error message from error.txt
+                    newcount++;
+                	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
                     return false;
                 }
 
@@ -59,10 +67,16 @@ public class Parser2 {
             else {
                 System.out.println("Invalid ID"); // Missing or invalid name
                 // get the error message from error.txt
+                newcount++;
+            	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
                 return false;
             }
        }
        // get the error message from error.txt
+        else {
+        	newcount++;
+        	errparser.error_checker(8, "error.txt" , newcount, tokenLookAhead);
+        }
        return false;
 
     }
@@ -125,6 +139,9 @@ public class Parser2 {
 
         }
         // get the error message from error.txt
+        else {
+        	
+        }
         return false;
     }
 
