@@ -11,12 +11,9 @@ public class Parser2 {
     private String tokenLookAhead;
     private String typeLookAhead;
 
-    private Scanner2 scanner;
-
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType) {
         this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
-        this.scanner = new Scanner2();
 
         for(int i = tokens.size()-1; i >= 0; i--){
             tokenStack.push(tokens.get(i));
@@ -137,7 +134,18 @@ public class Parser2 {
         return false;
     }
 
+
     boolean variableDeclaration(){
+        // Check if the first token is "var"
+        if(tokenLookAhead.equals("var")){
+            tokenStack.pop();
+            tokenTypeStack.pop();
+            if(!tokenStack.empty()){ // proceed to peek at the next token
+                tokenLookAhead = tokenStack.peek();
+                typeLookAhead = tokenTypeStack.peek();
+            }
+            
+        }
 
         return false;
     }
