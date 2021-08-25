@@ -417,7 +417,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			Parser2 parser = new Parser2(scanner.token_dump(), scanner.tokenType_dump());
 			//parser.programHeading();
 			//parser.assignment();
-			parser.variableDeclaration();
+			//parser.variableDeclaration();
+			parser.forLoop();
 
         }
 	}

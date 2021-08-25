@@ -185,7 +185,111 @@ public class Parser2 {
         return false;
     }
 
-    boolean forLoop(){
+    boolean forLoop(){ // 
+        // Check if the first token is "for"
+        if(tokenLookAhead.equals("for")){
+            tokenStack.pop();
+            tokenTypeStack.pop();
+            if(!tokenStack.empty()){ // proceed to peek at the next token
+                tokenLookAhead = tokenStack.peek();
+                typeLookAhead = tokenTypeStack.peek();
+            }
+
+            if(typeLookAhead.equals("IDENTIFIER")){
+                tokenStack.pop();
+                tokenTypeStack.pop();
+                if(!tokenStack.empty()){ // proceed to peek at the next token
+                    tokenLookAhead = tokenStack.peek();
+                    typeLookAhead = tokenTypeStack.peek();
+                }
+
+                if(typeLookAhead.equals("COLON_EQUALS")){
+                    tokenStack.pop();
+                    tokenTypeStack.pop();
+                    if(!tokenStack.empty()){ // proceed to peek at the next token
+                        tokenLookAhead = tokenStack.peek();
+                        typeLookAhead = tokenTypeStack.peek();
+                    }
+
+                    if(typeLookAhead.equals("INTEGER")){
+                        tokenStack.pop();
+                        tokenTypeStack.pop();
+                        if(!tokenStack.empty()){ // proceed to peek at the next token
+                            tokenLookAhead = tokenStack.peek();
+                            typeLookAhead = tokenTypeStack.peek();
+                        }
+
+                        if(tokenLookAhead.equals("to")){
+                            tokenStack.pop();
+                            tokenTypeStack.pop();
+                            if(!tokenStack.empty()){ // proceed to peek at the next token
+                                tokenLookAhead = tokenStack.peek();
+                                typeLookAhead = tokenTypeStack.peek();
+                            }
+
+                            if(typeLookAhead.equals("INTEGER")){
+                                tokenStack.pop();
+                                tokenTypeStack.pop();
+                                if(!tokenStack.empty()){ // proceed to peek at the next token
+                                    tokenLookAhead = tokenStack.peek();
+                                    typeLookAhead = tokenTypeStack.peek();
+                                }
+
+                                if(tokenLookAhead.equals("do")){
+                                    tokenStack.pop();
+                                    tokenTypeStack.pop();
+                                    if(!tokenStack.empty()){ // proceed to peek at the next token
+                                        tokenLookAhead = tokenStack.peek();
+                                        typeLookAhead = tokenTypeStack.peek();
+                                    }
+
+                                    if(tokenLookAhead.equals("begin")){
+                                        tokenStack.pop();
+                                        tokenTypeStack.pop();
+                                        if(!tokenStack.empty()){ // proceed to peek at the next token
+                                            tokenLookAhead = tokenStack.peek();
+                                            typeLookAhead = tokenTypeStack.peek();
+                                        }
+
+                                        if(statement()){ // statment func not yet polished
+                                            /* tokenStack.pop();
+                                            tokenTypeStack.pop();
+                                            if(!tokenStack.empty()){ // proceed to peek at the next token
+                                                tokenLookAhead = tokenStack.peek();
+                                                typeLookAhead = tokenTypeStack.peek();
+                                            } */
+
+                                            if(tokenLookAhead.equals("end")){
+                                                tokenStack.pop();
+                                                tokenTypeStack.pop();
+                                                if(!tokenStack.empty()){ // proceed to peek at the next token
+                                                    tokenLookAhead = tokenStack.peek();
+                                                    typeLookAhead = tokenTypeStack.peek();
+                                                }
+
+                                                if(typeLookAhead.equals("SEMICOLON")){
+                                                    tokenStack.pop();
+                                                    tokenTypeStack.pop();
+                                                    if(!tokenStack.empty()){ // proceed to peek at the next token
+                                                        tokenLookAhead = tokenStack.peek();
+                                                        typeLookAhead = tokenTypeStack.peek();
+                                                    }
+
+                                                    System.out.println("Valid for-loop");
+                                                    return true;
+                                                }
+                                            }
+                                        } 
+                                    }                                    
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        
 
         return false;
     }
@@ -197,6 +301,14 @@ public class Parser2 {
 
     boolean ifThenElse(){
 
+        return false;
+    }
+
+    boolean statement() {
+        return true;
+    }
+
+    boolean condition() {
         return false;
     }
 
