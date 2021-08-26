@@ -1,7 +1,8 @@
 program sample .
-var sampleIdentifier123 : real ;
-	y : boolean ;
-	z , p , input : integer ;
+var 
+sampleIdentifier123 : real ;
+y : boolean ;
+z , p , input : integer ;
 
 function performFunction ( const x : integer ) : integer ;
 begin
