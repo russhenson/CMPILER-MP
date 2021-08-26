@@ -9,3 +9,4 @@
 9 Missing colon ':'
 10 Invalid variable symbol
 11 Comma not followed by an identifier
+12 Invalid Datatype

@@ -212,7 +212,7 @@ public class Parser2 {
             	}
             	else {
             		newcount++;
-            		errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+            		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
             		return false;
             	}
             	//if it ends with a semicolon
