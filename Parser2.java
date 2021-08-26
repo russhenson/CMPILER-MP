@@ -283,9 +283,6 @@ public class Parser2 {
         return false;
     }
 
-    boolean whileStatement(){
-        return false;
-    }
     // Syntax: 
     boolean arithmeticExpr(){
 
@@ -431,6 +428,7 @@ public class Parser2 {
     // <simpleStatement> ::= <assignment> | <readStatement> | <writeStatement>
     boolean simpleStatement() {
         boolean isValid = false;
+
         if(assignment() | readStatement() | writeStatement())
             isValid = true;
 
@@ -449,6 +447,7 @@ public class Parser2 {
 
     // <compoundStatement> ::= begin <statement> end
     boolean compoundStatement() {
+        boolean isValid = false;
 
         if(tokenLookAhead.equals("begin")){
             tokenStack.pop();
@@ -467,12 +466,12 @@ public class Parser2 {
                         typeLookAhead = tokenTypeStack.peek();
                     }
 
-                    return true;
+                    isValid = true;
                 }
             }
         }
 
-        return false;
+        return isValid;
     }
 
     // <readStatement> ::= read ( *IDENTIFIER* , *IDENTIFIER* ) | readln ( *IDENTIFIER* , *IDENTIFIER* )

@@ -404,10 +404,11 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
             
 			Parser2 parser = new Parser2(scanner.token_dump(), scanner.tokenType_dump(), counter);
-			parser.programHeading();
+			//parser.programHeading();
 			//parser.assignment();
-			parser.variableDeclaration();
+			//parser.variableDeclaration();
 			// print output to output textarea
+
 			errlist = scanner.acquire_errorlist();
 			ArrayList<String> errparser = parser.get_errparselist();
 			System.out.println("\n\nPrinting the errors ");
