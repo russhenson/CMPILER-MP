@@ -6,3 +6,5 @@
 6 Should be ';' not ':'
 7 Semicolon not found
 8 Invalid program heading
+9 Missing colon ':'
+10 Invalid variable symbol

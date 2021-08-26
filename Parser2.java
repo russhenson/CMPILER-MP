@@ -53,6 +53,8 @@ public class Parser2 {
                 // Check if it ends with semi colon
                 if(typeLookAhead.equals("SEMICOLON")){
                     System.out.println("Valid program heading"); // No error
+                    popper();
+                    assigntypes();
                     return true;
                 }
                 else {
@@ -80,7 +82,17 @@ public class Parser2 {
        return false;
 
     }
+    void popper() {
+    	tokenStack.pop();
+        tokenTypeStack.pop();
+    }
+    void assigntypes() {
+    	if(!tokenStack.empty()){ // proceed to peek at the next token
+            tokenLookAhead = tokenStack.peek();
+            typeLookAhead = tokenTypeStack.peek();
+        }
 
+    }
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
         if(typeLookAhead.equals("IDENTIFIER")){ 
@@ -146,7 +158,10 @@ public class Parser2 {
     }
 
     boolean variableDeclaration(){
+    	boolean isGoing = false;
+    	boolean iscorrect = false;
         // Check if the first token is "var"
+    	System.out.println("Checking " + this.tokenLookAhead);
         if(tokenLookAhead.equals("var")){
             tokenStack.pop();
             tokenTypeStack.pop();
@@ -154,8 +169,56 @@ public class Parser2 {
                 tokenLookAhead = tokenStack.peek();
                 typeLookAhead = tokenTypeStack.peek();
             }
-
-            while(typeLookAhead.equals("SEMICOLON")){
+            while (typeLookAhead.equals("IDENTIFIER")) {
+            	iscorrect = true;
+            	isGoing = true;
+            	popper();
+            	assigntypes();
+            	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
+            	while(isGoing) {
+            		//if it is a comma
+            		if (typeLookAhead.equals("COMMA")) {
+            			popper();
+                    	assigntypes();
+            		}
+            		//if it is a colon
+            		else if (typeLookAhead.equals("COLON")) {
+            			popper();
+                    	assigntypes();
+                    	isGoing = false;
+            		}
+            		
+            		else {
+            			newcount++;
+            			errparser.error_checker(10, "error.txt" , newcount, tokenLookAhead);
+            			return false;
+            		}
+            	}
+            	//if it is a keyword
+            	if (typeLookAhead.equals("DATA_TYPE")) {
+            		popper();
+            		assigntypes();
+            	}
+            	else {
+            		newcount++;
+            		errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+            		return false;
+            	}
+            	//if it ends with a semicolon
+            	if (typeLookAhead.equals("SEMICOLON")) {
+            		popper();
+            		assigntypes();
+            		System.out.println("One line valid");
+            	}
+            	else {
+            		newcount++;
+            		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+            		
+            		return false;
+            	}
+            }
+            
+            /*while(typeLookAhead.equals("SEMICOLON")){
                 while(typeLookAhead.equals("COLON")){
                     if(typeLookAhead.equals("IDENTIFIER")){
                         tokenStack.pop();
@@ -188,8 +251,9 @@ public class Parser2 {
 
                 // error if the next token is a colon,  it should be a semicolon after the data type
             }
-
+*/
             System.out.println("Valid Variable Declaration");
+            return iscorrect;
 
         }
 
@@ -444,7 +508,9 @@ public class Parser2 {
 
         return isValid;
     }
-
+    boolean whileStatement() {
+    	return false;
+    }
     // <compoundStatement> ::= begin <statement> end
     boolean compoundStatement() {
         boolean isValid = false;
