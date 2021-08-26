@@ -177,9 +177,20 @@ public class Parser2 {
             	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
             	while(isGoing) {
             		//if it is a comma
+            		System.out.println("ZAP " + this.tokenLookAhead + " " + this.typeLookAhead);
             		if (typeLookAhead.equals("COMMA")) {
             			popper();
                     	assigntypes();
+                    	if (!(typeLookAhead.equals("IDENTIFIER"))) {
+                    		iscorrect = false;
+                    		newcount++;
+                    		errparser.error_checker(11, "error.txt" , newcount, tokenLookAhead);
+                    		return false;
+                    	}
+                    	else {
+                    		popper();
+                        	assigntypes();
+                    	}
             		}
             		//if it is a colon
             		else if (typeLookAhead.equals("COLON")) {

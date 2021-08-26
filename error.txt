@@ -8,3 +8,4 @@
 8 Invalid program heading
 9 Missing colon ':'
 10 Invalid variable symbol
+11 Comma not followed by an identifier
