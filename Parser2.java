@@ -58,9 +58,13 @@ public class Parser2 {
                 if(typeLookAhead.equals("SEMICOLON")){
                     System.out.println("Valid program heading"); // No error
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     popper();
                     assigntypes();
                     return true;
+=======
+                    isValid = true;
+>>>>>>> Stashed changes
 =======
                     isValid = true;
 >>>>>>> Stashed changes
@@ -167,8 +171,13 @@ public class Parser2 {
 
     boolean variableDeclaration(){
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     	boolean isGoing = false;
     	boolean iscorrect = false;
+=======
+        boolean isValid = false;
+
+>>>>>>> Stashed changes
 =======
         boolean isValid = false;
 
@@ -278,9 +287,13 @@ public class Parser2 {
 */
             System.out.println("Valid Variable Declaration");
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             return iscorrect;
 =======
            // isValid = true;
+>>>>>>> Stashed changes
+=======
+            isValid = true;
 >>>>>>> Stashed changes
 
         }
