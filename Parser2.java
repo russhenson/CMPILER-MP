@@ -33,34 +33,38 @@ public class Parser2 {
     	return newcount;
     }
 
+    void popper() {
+    	tokenStack.pop();
+        tokenTypeStack.pop();
+    }
+
+    void peeker() {
+    	if(!tokenStack.empty()){ // proceed to peek at the next token
+            tokenLookAhead = tokenStack.peek();
+            typeLookAhead = tokenTypeStack.peek();
+        }
+
+    }
+
     // <program> ::= program *IDENTIFIER* ;
     boolean program() {
         boolean isValid = false;
         // Check if the first token is "program"
         if(tokenLookAhead.equals("program")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
             
             // Checks the program name if it's valid
             if(typeLookAhead.equals("IDENTIFIER")){ 
-                tokenStack.pop();
-                tokenTypeStack.pop();
-                if(!tokenStack.empty()){
-                    tokenLookAhead = tokenStack.peek();
-                    typeLookAhead = tokenTypeStack.peek();
-                }
+                popper();
+                peeker();
 
                 // Check if it ends with semi colon
                 if(typeLookAhead.equals("SEMICOLON")){
                     System.out.println("Valid program heading"); // No error
                     popper();
-                    assigntypes();
-                    return true;
-                    //isValid = true;
+                    peeker();
+                    isValid = true;
 
                 }
                 else {
@@ -89,36 +93,19 @@ public class Parser2 {
        return isValid;
 
     }
-    void popper() {
-    	tokenStack.pop();
-        tokenTypeStack.pop();
-    }
-    void assigntypes() {
-    	if(!tokenStack.empty()){ // proceed to peek at the next token
-            tokenLookAhead = tokenStack.peek();
-            typeLookAhead = tokenTypeStack.peek();
-        }
-
-    }
+    
+    
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
         boolean isValid = true;
 
         if(typeLookAhead.equals("IDENTIFIER")){ 
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
 
             if(typeLookAhead.equals("COLON_EQUALS")){
-                tokenStack.pop();
-                tokenTypeStack.pop();
-                if(!tokenStack.empty()){
-                    tokenLookAhead = tokenStack.peek();
-                    typeLookAhead = tokenTypeStack.peek();
-                }
+                popper();
+            peeker();
 
                 // Check the r-value
                 if( typeLookAhead.equals("STRING") || 
@@ -126,12 +113,8 @@ public class Parser2 {
                     typeLookAhead.equals("INTEGER") || 
                     arithmeticExpr()){
 
-                    tokenStack.pop();
-                    tokenTypeStack.pop();
-                    if(!tokenStack.empty()){
-                        tokenLookAhead = tokenStack.peek();
-                        typeLookAhead = tokenTypeStack.peek();
-                    }
+                    popper();
+                    peeker();
 
                     // Check if it ends with semi colon
                     if(typeLookAhead.equals("SEMICOLON")){
@@ -172,24 +155,21 @@ public class Parser2 {
         // Check if the first token is "var"
     	System.out.println("Checking " + this.tokenLookAhead);
         if(tokenLookAhead.equals("var")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
+
             while (typeLookAhead.equals("IDENTIFIER")) {
             	iscorrect = true;
             	isGoing = true;
             	popper();
-            	assigntypes();
+            	peeker();
             	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
             	while(isGoing) {
             		//if it is a comma
             		System.out.println("ZAP " + this.tokenLookAhead + " " + this.typeLookAhead);
             		if (typeLookAhead.equals("COMMA")) {
             			popper();
-                    	assigntypes();
+                    	peeker();
                     	if (!(typeLookAhead.equals("IDENTIFIER"))) {
                     		iscorrect = false;
                     		newcount++;
@@ -198,13 +178,13 @@ public class Parser2 {
                     	}
                     	else {
                     		popper();
-                        	assigntypes();
+                        	peeker();
                     	}
             		}
             		//if it is a colon
             		else if (typeLookAhead.equals("COLON")) {
             			popper();
-                    	assigntypes();
+                    	peeker();
                     	isGoing = false;
             		}
             		
@@ -217,7 +197,7 @@ public class Parser2 {
             	//if it is a keyword
             	if (typeLookAhead.equals("DATA_TYPE")) {
             		popper();
-            		assigntypes();
+            		peeker();
             	}
             	else {
             		newcount++;
@@ -227,7 +207,7 @@ public class Parser2 {
             	//if it ends with a semicolon
             	if (typeLookAhead.equals("SEMICOLON")) {
             		popper();
-            		assigntypes();
+            		peeker();
             		System.out.println("One line valid");
             	}
             	else {
@@ -393,38 +373,23 @@ public class Parser2 {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("if")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
+
             if(typeLookAhead.equals("OPEN_PAREN")){
-                tokenStack.pop();
-                tokenTypeStack.pop();
-                if(!tokenStack.empty()){ // proceed to peek at the next token
-                    tokenLookAhead = tokenStack.peek();
-                    typeLookAhead = tokenTypeStack.peek();
-                }
+                popper();
+                peeker();
 
                 if(expression()){
 
                     if(typeLookAhead.equals("CLOSE_PAREN")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        popper();
+                        peeker();
                     }
 
                     if(tokenLookAhead.equals("then")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        popper();
+                        peeker();
 
                         if(compoundStatement()){
 
@@ -443,48 +408,29 @@ public class Parser2 {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("if")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
+
             if(typeLookAhead.equals("OPEN_PAREN")){
-                tokenStack.pop();
-                tokenTypeStack.pop();
-                if(!tokenStack.empty()){ // proceed to peek at the next token
-                    tokenLookAhead = tokenStack.peek();
-                    typeLookAhead = tokenTypeStack.peek();
-                }
+                popper();
+                peeker();
 
                 if(expression()){
 
                     if(typeLookAhead.equals("CLOSE_PAREN")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        popper();
+                        peeker();
                     }
 
                     if(tokenLookAhead.equals("then")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        popper();
+                        peeker();
 
                         if(compoundStatement()){
 
                             if(tokenLookAhead.equals("else")){
-                                tokenStack.pop();
-                                tokenTypeStack.pop();
-                                if(!tokenStack.empty()){ // proceed to peek at the next token
-                                    tokenLookAhead = tokenStack.peek();
-                                    typeLookAhead = tokenTypeStack.peek();
-                                }
+                                popper();
+                                peeker();
 
                                 if(compoundStatement()){
                                     isValid = true;
@@ -549,6 +495,7 @@ public class Parser2 {
 
         return isValid;
     }
+
     boolean whileStatement() {
     	return false;
     }
@@ -557,21 +504,13 @@ public class Parser2 {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("begin")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
 
             if(statement()){
                 if(tokenLookAhead.equals("end")){
-                    tokenStack.pop();
-                    tokenTypeStack.pop();
-                    if(!tokenStack.empty()){ // proceed to peek at the next token
-                        tokenLookAhead = tokenStack.peek();
-                        typeLookAhead = tokenTypeStack.peek();
-                    }
+                    popper();
+                     peeker();
 
                     isValid = true;
                 }
@@ -586,60 +525,32 @@ public class Parser2 {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            popper();
+            peeker();
 
             if(typeLookAhead.equals("OPEN_PAREN")){
-                tokenStack.pop();
-                tokenTypeStack.pop();
-                if(!tokenStack.empty()){ // proceed to peek at the next token
-                    tokenLookAhead = tokenStack.peek();
-                    typeLookAhead = tokenTypeStack.peek();
-                }
+                popper();
+                peeker();
 
                 if(typeLookAhead.equals("IDENTIFIER")){
-                    tokenStack.pop();
-                    tokenTypeStack.pop();
-                    if(!tokenStack.empty()){ // proceed to peek at the next token
-                        tokenLookAhead = tokenStack.peek();
-                        typeLookAhead = tokenTypeStack.peek();
-                    }
+                    popper();
+                    peeker();
 
                     if(typeLookAhead.equals("COMMA")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        popper();
+                        peeker();
 
                         if(typeLookAhead.equals("IDENTIFIER")){
-                            tokenStack.pop();
-                            tokenTypeStack.pop();
-                            if(!tokenStack.empty()){ // proceed to peek at the next token
-                                tokenLookAhead = tokenStack.peek();
-                                typeLookAhead = tokenTypeStack.peek();
-                            }
+                            popper();
+                            peeker();
 
                             if(typeLookAhead.equals("CLOSE_PAREN")){
-                                tokenStack.pop();
-                                tokenTypeStack.pop();
-                                if(!tokenStack.empty()){ // proceed to peek at the next token
-                                    tokenLookAhead = tokenStack.peek();
-                                    typeLookAhead = tokenTypeStack.peek();
-                                }
+                                popper();
+                                peeker();
 
                                 if(typeLookAhead.equals("SEMICOLON")){
-                                    tokenStack.pop();
-                                    tokenTypeStack.pop();
-                                    if(!tokenStack.empty()){ // proceed to peek at the next token
-                                        tokenLookAhead = tokenStack.peek();
-                                        typeLookAhead = tokenTypeStack.peek();
-                                    }
+                                    popper();
+                                    peeker();
             
                                     System.out.println("Valid read statement");
                                     isValid = true;
@@ -651,20 +562,12 @@ public class Parser2 {
 
                     }
                     else if(typeLookAhead.equals("CLOSE_PAREN")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        popper();
+                        peeker();
 
                         if(typeLookAhead.equals("SEMICOLON")){
-                            tokenStack.pop();
-                            tokenTypeStack.pop();
-                            if(!tokenStack.empty()){ // proceed to peek at the next token
-                                tokenLookAhead = tokenStack.peek();
-                                typeLookAhead = tokenTypeStack.peek();
-                            }
+                            popper();
+                            peeker();
     
                             System.out.println("Valid read statement");
                             isValid = true;
