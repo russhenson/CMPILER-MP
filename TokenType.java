@@ -83,9 +83,9 @@ public class TokenType {
 	            token = Type.DIVIDE;
 	        else if(lexeme.equals("="))
 	            token = Type.EQUALS;
-	        else if(lexeme.equals("<"))
-	            token = Type.GREATER_THAN;
 	        else if(lexeme.equals(">"))
+	            token = Type.GREATER_THAN;
+	        else if(lexeme.equals("<"))
 	            token = Type.LESS_THAN;
 	        else if(lexeme.equals("*"))
 	            token = Type.MULTIPLY;
@@ -103,9 +103,9 @@ public class TokenType {
 	            token = Type.CLOSE_PAREN;
 	        else if(lexeme.equals("<>"))
 	            token = Type.NOT_EQUAL;
-	        else if(lexeme.equals("<="))
-	            token = Type.GREATER_EQUAL;
 	        else if(lexeme.equals(">="))
+	            token = Type.GREATER_EQUAL;
+	        else if(lexeme.equals("<="))
 	            token = Type.LESS_EQUAL;
 	        else if(lexeme.equals(".."))
 	            token = Type.DOUBLE_PERIOD;

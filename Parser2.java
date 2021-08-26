@@ -24,14 +24,18 @@ public class Parser2 {
         tokenLookAhead = tokenStack.peek();
         typeLookAhead = tokenTypeStack.peek();
     }
+
     ArrayList<String> get_errparselist() {
     	return this.errparser.get_errparselist();
     }
+
     int getcounter() {
     	return newcount;
     }
+
     // <program> ::= program *IDENTIFIER* ;
     boolean program() {
+        boolean isValid = false;
         // Check if the first token is "program"
         if(tokenLookAhead.equals("program")){
             tokenStack.pop();
@@ -53,16 +57,20 @@ public class Parser2 {
                 // Check if it ends with semi colon
                 if(typeLookAhead.equals("SEMICOLON")){
                     System.out.println("Valid program heading"); // No error
+<<<<<<< Updated upstream
                     popper();
                     assigntypes();
                     return true;
+=======
+                    isValid = true;
+>>>>>>> Stashed changes
                 }
                 else {
                     System.out.println("Missing a semicolon"); // Missing a semicolon
                     // get the error message from error.txt
                     newcount++;
                 	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
-                    return false;
+                   
                 }
 
             }
@@ -71,7 +79,7 @@ public class Parser2 {
                 // get the error message from error.txt
                 newcount++;
             	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
-                return false;
+                
             }
        }
        // get the error message from error.txt
@@ -79,7 +87,8 @@ public class Parser2 {
         	newcount++;
         	errparser.error_checker(8, "error.txt" , newcount, tokenLookAhead);
         }
-       return false;
+
+       return isValid;
 
     }
     void popper() {
@@ -95,6 +104,8 @@ public class Parser2 {
     }
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
+        boolean isValid = true;
+
         if(typeLookAhead.equals("IDENTIFIER")){ 
             tokenStack.pop();
             tokenTypeStack.pop();
@@ -128,38 +139,40 @@ public class Parser2 {
                     if(typeLookAhead.equals("SEMICOLON")){
                         System.out.println("Valid assignment"); // No error
                         // get the error message from error.txt
-                        return true;
+                        isValid =  true;
                     }
                     else {
                         System.out.println("Missing a comma"); // Missing a comma
                         // get the error message from error.txt
-                        return false;
+                        
                     }
                 }
                 else {
                     System.out.println("Invalid assignment value");
                     // get the error message from error.txt
-                    return false;
+                    
                 }
 
             }
             else {
                 System.out.println("Missing an assignment operator");
                 // get the error message from error.txt
-                return false;
+               
             }
 
         }
-        // get the error message from error.txt
-        else {
-        	
-        }
-        return false;
+        
+        return isValid;
     }
 
     boolean variableDeclaration(){
+<<<<<<< Updated upstream
     	boolean isGoing = false;
     	boolean iscorrect = false;
+=======
+        boolean isValid = false;
+
+>>>>>>> Stashed changes
         // Check if the first token is "var"
     	System.out.println("Checking " + this.tokenLookAhead);
         if(tokenLookAhead.equals("var")){
@@ -264,14 +277,19 @@ public class Parser2 {
             }
 */
             System.out.println("Valid Variable Declaration");
+<<<<<<< Updated upstream
             return iscorrect;
+=======
+           // isValid = true;
+>>>>>>> Stashed changes
 
         }
 
-        return false;
+        return isValid;
     }
 
     boolean forStatement(){
+        boolean isValid = false;
         // Check if the first token is "for"
         if(tokenLookAhead.equals("for")){
             tokenStack.pop();
@@ -340,7 +358,7 @@ public class Parser2 {
                                             }
 
                                             System.out.println("Valid for-loop");
-                                            return true;
+                                            isValid = true;
                                         }
                                             
                                         
@@ -355,7 +373,7 @@ public class Parser2 {
 
         
 
-        return false;
+        return isValid;
     }
 
     // Syntax: 
@@ -487,8 +505,25 @@ public class Parser2 {
         return isValid;
     }
 
+    // <expression> ::= <simpleExpression> | <simpleExpression> <relationalOperator> <simpleExpression>
     boolean expression() {
         return false;
+    }
+
+    // <relationalOperator> ::= *NOT_EQUAL* | *LESS_THAN* | *LESS_EQUAL* | *GREATER_EQUAL* | *GREATER_THAN*
+    boolean relationalOperator() {
+        boolean isValid = false;
+
+        if( typeLookAhead.equals("NOT_EQUAL") || 
+            typeLookAhead.equals("LESS_THAN") || 
+            typeLookAhead.equals("LESS_EQUAL") ||
+            typeLookAhead.equals("GREATER_THAN") ||
+            typeLookAhead.equals("GREATER_EQUAL")){
+
+            isValid = true;
+        }
+
+        return isValid;
     }
 
     // <statement> ::= <simpleStatement> | <structuredStatement>
@@ -514,7 +549,7 @@ public class Parser2 {
     boolean structuredStatement() {
         boolean isValid = false;
 
-        if(compoundStatement() | ifStatement() | whileStatement() | forStatement())
+        if(compoundStatement() | ifStatement() /* | whileStatement() */ | forStatement())
             isValid = true;
 
         return isValid;
@@ -553,7 +588,101 @@ public class Parser2 {
 
     // <readStatement> ::= read ( *IDENTIFIER* , *IDENTIFIER* ) | readln ( *IDENTIFIER* , *IDENTIFIER* )
     boolean readStatement() {
-        return false;
+        boolean isValid = false;
+
+        if(tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")){
+            tokenStack.pop();
+            tokenTypeStack.pop();
+            if(!tokenStack.empty()){ // proceed to peek at the next token
+                tokenLookAhead = tokenStack.peek();
+                typeLookAhead = tokenTypeStack.peek();
+            }
+
+            if(typeLookAhead.equals("OPEN_PAREN")){
+                tokenStack.pop();
+                tokenTypeStack.pop();
+                if(!tokenStack.empty()){ // proceed to peek at the next token
+                    tokenLookAhead = tokenStack.peek();
+                    typeLookAhead = tokenTypeStack.peek();
+                }
+
+                if(typeLookAhead.equals("IDENTIFIER")){
+                    tokenStack.pop();
+                    tokenTypeStack.pop();
+                    if(!tokenStack.empty()){ // proceed to peek at the next token
+                        tokenLookAhead = tokenStack.peek();
+                        typeLookAhead = tokenTypeStack.peek();
+                    }
+
+                    if(typeLookAhead.equals("COMMA")){
+                        tokenStack.pop();
+                        tokenTypeStack.pop();
+                        if(!tokenStack.empty()){ // proceed to peek at the next token
+                            tokenLookAhead = tokenStack.peek();
+                            typeLookAhead = tokenTypeStack.peek();
+                        }
+
+                        if(typeLookAhead.equals("IDENTIFIER")){
+                            tokenStack.pop();
+                            tokenTypeStack.pop();
+                            if(!tokenStack.empty()){ // proceed to peek at the next token
+                                tokenLookAhead = tokenStack.peek();
+                                typeLookAhead = tokenTypeStack.peek();
+                            }
+
+                            if(typeLookAhead.equals("CLOSE_PAREN")){
+                                tokenStack.pop();
+                                tokenTypeStack.pop();
+                                if(!tokenStack.empty()){ // proceed to peek at the next token
+                                    tokenLookAhead = tokenStack.peek();
+                                    typeLookAhead = tokenTypeStack.peek();
+                                }
+
+                                if(typeLookAhead.equals("SEMICOLON")){
+                                    tokenStack.pop();
+                                    tokenTypeStack.pop();
+                                    if(!tokenStack.empty()){ // proceed to peek at the next token
+                                        tokenLookAhead = tokenStack.peek();
+                                        typeLookAhead = tokenTypeStack.peek();
+                                    }
+            
+                                    System.out.println("Valid read statement");
+                                    isValid = true;
+                                }
+        
+                                
+                            }
+                        }
+
+                    }
+                    else if(typeLookAhead.equals("CLOSE_PAREN")){
+                        tokenStack.pop();
+                        tokenTypeStack.pop();
+                        if(!tokenStack.empty()){ // proceed to peek at the next token
+                            tokenLookAhead = tokenStack.peek();
+                            typeLookAhead = tokenTypeStack.peek();
+                        }
+
+                        if(typeLookAhead.equals("SEMICOLON")){
+                            tokenStack.pop();
+                            tokenTypeStack.pop();
+                            if(!tokenStack.empty()){ // proceed to peek at the next token
+                                tokenLookAhead = tokenStack.peek();
+                                typeLookAhead = tokenTypeStack.peek();
+                            }
+    
+                            System.out.println("Valid read statement");
+                            isValid = true;
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+
+        return isValid;
     }
 
     // <writeStatement> ::= write ( *IDENTIFIER* , *IDENTIFIER* ) | writeln ( *IDENTIFIER* , *IDENTIFIER* )
