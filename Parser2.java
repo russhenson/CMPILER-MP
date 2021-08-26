@@ -57,17 +57,11 @@ public class Parser2 {
                 // Check if it ends with semi colon
                 if(typeLookAhead.equals("SEMICOLON")){
                     System.out.println("Valid program heading"); // No error
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
                     popper();
                     assigntypes();
                     return true;
-=======
-                    isValid = true;
->>>>>>> Stashed changes
-=======
-                    isValid = true;
->>>>>>> Stashed changes
+                    //isValid = true;
+
                 }
                 else {
                     System.out.println("Missing a semicolon"); // Missing a semicolon
@@ -170,18 +164,11 @@ public class Parser2 {
     }
 
     boolean variableDeclaration(){
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     	boolean isGoing = false;
     	boolean iscorrect = false;
-=======
+
         boolean isValid = false;
 
->>>>>>> Stashed changes
-=======
-        boolean isValid = false;
-
->>>>>>> Stashed changes
         // Check if the first token is "var"
     	System.out.println("Checking " + this.tokenLookAhead);
         if(tokenLookAhead.equals("var")){
@@ -286,15 +273,10 @@ public class Parser2 {
             }
 */
             System.out.println("Valid Variable Declaration");
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-            return iscorrect;
-=======
-           // isValid = true;
->>>>>>> Stashed changes
-=======
+
+            //return iscorrect;
             isValid = true;
->>>>>>> Stashed changes
+
 
         }
 
