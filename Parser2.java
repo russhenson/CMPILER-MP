@@ -105,7 +105,7 @@ public class Parser2 {
 
             if(typeLookAhead.equals("COLON_EQUALS")){
                 popper();
-            peeker();
+                peeker();
 
                 // Check the r-value
                 if( typeLookAhead.equals("STRING") || 
