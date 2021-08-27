@@ -357,7 +357,7 @@ public class Parser2 {
         return false;
     }
 
-    // <ifStatement> ::= <ifThen> | 
+    // <ifStatement> ::= <ifThen> | <ifThenElse>
     boolean ifStatement(){
         boolean isValid = false;
 
@@ -446,9 +446,108 @@ public class Parser2 {
         return isValid;
     }
 
-    // <expression> ::= <simpleExpression> | <simpleExpression> <relationalOperator> <simpleExpression>
+    // <expression> ::= <simpleExpression> | <relationalExpression>
     boolean expression() {
-        return false;
+        Boolean isValid = false;
+
+        if(simpleExpression() || relationalExpression()){
+            isValid = true;
+        }
+
+        return isValid;
+    }
+
+    // <relationalExpression> ::= <simpleExpression> <relationalOperator> <simpleExpression>
+    boolean relationalExpression() {
+        Boolean isValid = false;
+
+        if(simpleExpression()){
+            if(relationalOperator()){
+                if(simpleExpression()){
+                    isValid = true;
+                }
+            }
+        }
+
+        return isValid;
+    }
+
+    // <simpleExpression> ::= <term> | <term> <addingOperator> <term>
+    boolean simpleExpression() {
+        boolean isValid = false;
+
+        if(term()){
+
+            if(addingOperator()){
+
+                if(term()){
+                    isValid = true;
+                }
+
+            }
+            else 
+                isValid = true; // just the term is acceptable
+            
+        }
+
+        return isValid;
+    }
+
+    // <term> ::= <factor> | <factor> <multiOperator> <factor>
+    boolean term(){
+        boolean isValid = false;
+
+        if(factor()){
+
+            if(multiOperator()){
+
+                if(factor()){
+                    isValid = true;
+                }
+            }
+        }
+
+
+        return isValid;
+    }
+
+    // <factor> ::= *IDENTIFIER* | *INTEGER* | ( expression )
+    boolean factor() {
+        boolean isValid = false;
+
+        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")){
+            popper();
+            peeker();
+            isValid = true;
+        }
+
+        return isValid;
+    }
+
+    // <addingOperator> ::= *PLUS* | *MINUS*
+    boolean addingOperator(){
+        boolean isValid = false;
+
+        if(typeLookAhead.equals("PLUS") || typeLookAhead.equals("MINUS")){
+            popper();
+            peeker();
+            isValid = true;
+        }
+
+        return isValid;
+    }
+
+    // <multiOperator> ::= *MULTIPLY* | *DIVIDE*
+    boolean multiOperator(){
+        boolean isValid = false;
+
+        if(typeLookAhead.equals("MULTIPLY") || typeLookAhead.equals("DIVIDE")){
+            popper();
+            peeker();
+            isValid = true;
+        }
+            
+        return isValid;
     }
 
     // <relationalOperator> ::= *NOT_EQUAL* | *LESS_THAN* | *LESS_EQUAL* | *GREATER_EQUAL* | *GREATER_THAN*
