@@ -11,6 +11,7 @@ public class Parser2 {
     private String tokenLookAhead;
     private String typeLookAhead;
     private int newcount = 0;
+    
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
@@ -93,7 +94,6 @@ public class Parser2 {
        return isValid;
 
     }
-    
     
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
@@ -351,12 +351,6 @@ public class Parser2 {
         return isValid;
     }
 
-    // Syntax: 
-    boolean arithmeticExpr(){
-
-        return false;
-    }
-
     // <ifStatement> ::= <ifThen> | <ifThenElse>
     boolean ifStatement(){
         boolean isValid = false;
@@ -595,9 +589,6 @@ public class Parser2 {
         return isValid;
     }
 
-    boolean whileStatement() {
-    	return false;
-    }
     // <compoundStatement> ::= begin <statement> end
     boolean compoundStatement() {
         boolean isValid = false;
