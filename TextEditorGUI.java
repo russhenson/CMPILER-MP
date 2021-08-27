@@ -404,13 +404,14 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
             
 			Parser2 parser = new Parser2(scanner.token_dump(), scanner.tokenType_dump(), counter);
-			parser.program();
+			//parser.program();
 			//parser.assignment();
-			System.out.println("Going variable");
-			parser.variableDeclaration();
+			//System.out.println("Going variable");
+			//parser.variableDeclaration();
 			// print output to output textarea
 			//parser.variableDeclaration();
 			//parser.readStatement();
+			parser.ifStatement();
 
 
 			// print output to output textarea

@@ -10,8 +10,9 @@ public class Parser2 {
     private ErrorParser errparser;
     private String tokenLookAhead;
     private String typeLookAhead;
+
     private int newcount = 0;
-    
+
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
@@ -24,6 +25,7 @@ public class Parser2 {
 
         tokenLookAhead = tokenStack.peek();
         typeLookAhead = tokenTypeStack.peek();
+        
     }
 
     ArrayList<String> get_errparselist() {
@@ -34,9 +36,12 @@ public class Parser2 {
     	return newcount;
     }
 
-    void popper() {
-    	tokenStack.pop();
-        tokenTypeStack.pop();
+    String tokenPopper() {
+        return tokenTypeStack.pop();
+    }
+
+    String tokenTypePopper() {
+        return tokenTypeStack.pop();
     }
 
     void peeker() {
@@ -50,20 +55,27 @@ public class Parser2 {
     // <program> ::= program *IDENTIFIER* ;
     boolean program() {
         boolean isValid = false;
+        
         // Check if the first token is "program"
         if(tokenLookAhead.equals("program")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
             
             // Checks the program name if it's valid
             if(typeLookAhead.equals("IDENTIFIER")){ 
-                popper();
+                
+                tokenPopper();
+                tokenTypePopper();
                 peeker();
 
                 // Check if it ends with semi colon
                 if(typeLookAhead.equals("SEMICOLON")){
                     System.out.println("Valid program heading"); // No error
-                    popper();
+                    
+                    tokenPopper();
+                    tokenTypePopper();
                     peeker();
                     isValid = true;
 
@@ -100,48 +112,62 @@ public class Parser2 {
         boolean isValid = true;
 
         if(typeLookAhead.equals("IDENTIFIER")){ 
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
 
             if(typeLookAhead.equals("COLON_EQUALS")){
-                popper();
+                
+                tokenPopper();
+                tokenTypePopper();
                 peeker();
 
                 // Check the r-value
                 if( typeLookAhead.equals("STRING") || 
                     typeLookAhead.equals("REAL") || 
                     typeLookAhead.equals("INTEGER") || 
-                    arithmeticExpr()){
+                    expression()){ // supposed to be arithmetic
 
-                    popper();
+                    
+                        tokenPopper();
+                    tokenTypePopper();
                     peeker();
 
                     // Check if it ends with semi colon
                     if(typeLookAhead.equals("SEMICOLON")){
+                        
+                        tokenPopper();
+                        tokenTypePopper();
+                        peeker();
                         System.out.println("Valid assignment"); // No error
-                        // get the error message from error.txt
                         isValid =  true;
                     }
                     else {
-                        System.out.println("Missing a comma"); // Missing a comma
+                        System.out.println("Missing a semicolon"); 
+                        // Error: Missing a semicolon 
                         // get the error message from error.txt
                         
                     }
                 }
                 else {
-                    System.out.println("Invalid assignment value");
+                    System.out.println("Invalid assignment value"); 
+                    // Error: Wrong assignment
                     // get the error message from error.txt
                     
                 }
 
             }
             else {
-                System.out.println("Missing an assignment operator");
+                System.out.println("Missing an assignment operator"); 
+                // Error: No := operator
                 // get the error message from error.txt
                
             }
 
         }
+        // Error: Incorrect or Missing Identifier
+        // geth the error message from error.txt
         
         return isValid;
     }
@@ -155,20 +181,26 @@ public class Parser2 {
         // Check if the first token is "var"
     	System.out.println("Checking " + this.tokenLookAhead);
         if(tokenLookAhead.equals("var")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
 
             while (typeLookAhead.equals("IDENTIFIER")) {
             	iscorrect = true;
             	isGoing = true;
-            	popper();
+            	
+                tokenPopper();
+                tokenTypePopper();
             	peeker();
             	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
             	while(isGoing) {
             		//if it is a comma
             		System.out.println("ZAP " + this.tokenLookAhead + " " + this.typeLookAhead);
             		if (typeLookAhead.equals("COMMA")) {
-            			popper();
+            			
+                        tokenPopper();
+                        tokenTypePopper();
                     	peeker();
                     	if (!(typeLookAhead.equals("IDENTIFIER"))) {
                     		iscorrect = false;
@@ -177,13 +209,17 @@ public class Parser2 {
                     		return false;
                     	}
                     	else {
-                    		popper();
+                    		
+                            tokenPopper();
+                            tokenTypePopper();
                         	peeker();
                     	}
             		}
             		//if it is a colon
             		else if (typeLookAhead.equals("COLON")) {
-            			popper();
+            			
+                        tokenPopper();
+                        tokenTypePopper();
                     	peeker();
                     	isGoing = false;
             		}
@@ -196,7 +232,9 @@ public class Parser2 {
             	}
             	//if it is a keyword
             	if (typeLookAhead.equals("DATA_TYPE")) {
-            		popper();
+            		
+                    tokenPopper();
+                    tokenTypePopper();
             		peeker();
             	}
             	else {
@@ -206,7 +244,9 @@ public class Parser2 {
             	}
             	//if it ends with a semicolon
             	if (typeLookAhead.equals("SEMICOLON")) {
-            		popper();
+            		
+                    tokenPopper();
+                    tokenTypePopper();
             		peeker();
             		System.out.println("One line valid");
             	}
@@ -267,84 +307,67 @@ public class Parser2 {
         boolean isValid = false;
         // Check if the first token is "for"
         if(tokenLookAhead.equals("for")){
-            tokenStack.pop();
-            tokenTypeStack.pop();
-            if(!tokenStack.empty()){ // proceed to peek at the next token
-                tokenLookAhead = tokenStack.peek();
-                typeLookAhead = tokenTypeStack.peek();
-            }
+            
+            tokenPopper();
+            tokenTypePopper();
+            peeker();
 
             if(typeLookAhead.equals("IDENTIFIER")){
-                tokenStack.pop();
-                tokenTypeStack.pop();
-                if(!tokenStack.empty()){ // proceed to peek at the next token
-                    tokenLookAhead = tokenStack.peek();
-                    typeLookAhead = tokenTypeStack.peek();
-                }
+                
+                tokenPopper();
+                tokenTypePopper();
+                peeker();
 
                 if(typeLookAhead.equals("COLON_EQUALS")){
-                    tokenStack.pop();
-                    tokenTypeStack.pop();
-                    if(!tokenStack.empty()){ // proceed to peek at the next token
-                        tokenLookAhead = tokenStack.peek();
-                        typeLookAhead = tokenTypeStack.peek();
-                    }
+                    
+                    tokenPopper();
+                    tokenTypePopper();
+                    peeker();
 
                     if(typeLookAhead.equals("INTEGER")){
-                        tokenStack.pop();
-                        tokenTypeStack.pop();
-                        if(!tokenStack.empty()){ // proceed to peek at the next token
-                            tokenLookAhead = tokenStack.peek();
-                            typeLookAhead = tokenTypeStack.peek();
-                        }
+                        
+                        tokenPopper();
+                        tokenTypePopper();
+                        peeker();
 
                         if(tokenLookAhead.equals("to")){
-                            tokenStack.pop();
-                            tokenTypeStack.pop();
-                            if(!tokenStack.empty()){ // proceed to peek at the next token
-                                tokenLookAhead = tokenStack.peek();
-                                typeLookAhead = tokenTypeStack.peek();
-                            }
+                            
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
 
                             if(typeLookAhead.equals("INTEGER")){
-                                tokenStack.pop();
-                                tokenTypeStack.pop();
-                                if(!tokenStack.empty()){ // proceed to peek at the next token
-                                    tokenLookAhead = tokenStack.peek();
-                                    typeLookAhead = tokenTypeStack.peek();
-                                }
+                                
+                                tokenPopper();
+                                tokenTypePopper();
+                                peeker();
 
                                 if(tokenLookAhead.equals("do")){
-                                    tokenStack.pop();
-                                    tokenTypeStack.pop();
-                                    if(!tokenStack.empty()){ // proceed to peek at the next token
-                                        tokenLookAhead = tokenStack.peek();
-                                        typeLookAhead = tokenTypeStack.peek();
-                                    }
+                                    
+                                    tokenPopper();
+                                    tokenTypePopper();
+                                    peeker();
 
                                     if(compoundStatement()){
-
-                                        if(typeLookAhead.equals("SEMICOLON")){
-                                            tokenStack.pop();
-                                            tokenTypeStack.pop();
-                                            if(!tokenStack.empty()){ // proceed to peek at the next token
-                                                tokenLookAhead = tokenStack.peek();
-                                                typeLookAhead = tokenTypeStack.peek();
-                                            }
-
-                                            System.out.println("Valid for-loop");
-                                            isValid = true;
-                                        }
-                                            
+                                        System.out.println("Valid for-loop");
+                                        isValid = true;
                                         
-                                    }                          
-                                } 
+                                    }
+                                    // this function has error handling already no need for one here                          
+                                }
+                                // Error: Expected a "do"
                             }
+                            // Error: Expected an Integer
                         }
+                        // Error: Expected a "to"
                     }
+                    // Error: Expected an Integer
                 }
+                // Error: No := operator
             }
+            // Error: Incorrect or Missing Identifier
         }
+        // Error: Expected a "for"
 
         
 
@@ -354,6 +377,8 @@ public class Parser2 {
     // <ifStatement> ::= <ifThen> | <ifThenElse>
     boolean ifStatement(){
         boolean isValid = false;
+
+        System.out.println("ifStatement function called.");
 
         if(ifThen() || ifThenElse()){
             isValid = true;
@@ -366,33 +391,50 @@ public class Parser2 {
     boolean ifThen() {
         boolean isValid = false;
 
+        System.out.println("ifThen function called.");
+
         if(tokenLookAhead.equals("if")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
 
             if(typeLookAhead.equals("OPEN_PAREN")){
-                popper();
+                
+                tokenPopper();
+                tokenTypePopper();
                 peeker();
 
                 if(expression()){
 
                     if(typeLookAhead.equals("CLOSE_PAREN")){
-                        popper();
+                        
+                        tokenPopper();
+                        tokenTypePopper();
                         peeker();
-                    }
+                
+                        if(tokenLookAhead.equals("then")){
+                            
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
 
-                    if(tokenLookAhead.equals("then")){
-                        popper();
-                        peeker();
+                            if(compoundStatement() && !tokenLookAhead.equals("else")){
 
-                        if(compoundStatement()){
-
-                            isValid = true;
+                                System.out.println("Valid if-then statement");
+                                isValid = true;
+                            }
                         }
+                        // Error: Missing a then
                     }
+                    // Error: Missing a )
                 }
             }
+            // Error: Missing a (
         }
+        // Error: Missing if
+
+        
 
         return isValid;
     }
@@ -401,41 +443,60 @@ public class Parser2 {
     boolean ifThenElse() {
         boolean isValid = false;
 
+        System.out.println("ifThenElse function called.");
+
         if(tokenLookAhead.equals("if")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
 
             if(typeLookAhead.equals("OPEN_PAREN")){
-                popper();
+                
+                tokenPopper();
+                tokenTypePopper();
                 peeker();
 
                 if(expression()){
 
                     if(typeLookAhead.equals("CLOSE_PAREN")){
-                        popper();
+                        
+                        tokenPopper();
+                        tokenTypePopper();
                         peeker();
-                    }
+                    
 
-                    if(tokenLookAhead.equals("then")){
-                        popper();
-                        peeker();
-
-                        if(compoundStatement()){
-
-                            if(tokenLookAhead.equals("else")){
-                                popper();
-                                peeker();
-
-                                if(compoundStatement()){
-                                    isValid = true;
-                                }
-                            }
+                        if(tokenLookAhead.equals("then")){
                             
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
+
+                            if(compoundStatement()){
+
+                                if(tokenLookAhead.equals("else")){
+                                    
+                                    tokenPopper();
+                                    tokenTypePopper();
+                                    peeker();
+
+                                    if(compoundStatement()){
+                                        isValid = true;
+                                        System.out.println("Valid if-then-else statement");
+                                    }
+                                }
+                                // Error: Missing an "else"
+                                
+                            }
                         }
+                        // Error: Missing a then
                     }
+                    // Error: Missing a )
                 }
             }
+            // Error: Missing a ()
         }
+        // Error: Missing if
 
         return isValid;
     }
@@ -443,6 +504,8 @@ public class Parser2 {
     // <expression> ::= <simpleExpression> | <relationalExpression>
     boolean expression() {
         Boolean isValid = false;
+
+        System.out.println("expression function called.");
 
         if(simpleExpression() || relationalExpression()){
             isValid = true;
@@ -470,6 +533,8 @@ public class Parser2 {
     boolean simpleExpression() {
         boolean isValid = false;
 
+        System.out.println("simpleExpression function called.");
+
         if(term()){
 
             if(addingOperator()){
@@ -491,6 +556,8 @@ public class Parser2 {
     boolean term(){
         boolean isValid = false;
 
+        System.out.println("term function called.");
+
         if(factor()){
 
             if(multiOperator()){
@@ -499,21 +566,51 @@ public class Parser2 {
                     isValid = true;
                 }
             }
+            else 
+                isValid = true;
         }
 
 
         return isValid;
     }
 
-    // <factor> ::= *IDENTIFIER* | *INTEGER* | ( expression )
+    // <factor> ::= *IDENTIFIER* | *INTEGER* | <expressionParen>
     boolean factor() {
         boolean isValid = false;
 
-        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")){
-            popper();
+        System.out.println("factor function called.");
+
+        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER") || expressionParen()){ 
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
             isValid = true;
         }
+
+        return isValid;
+    }
+
+    // <expressionParen> ::= ( expression )
+    boolean expressionParen() {
+        boolean isValid = false;
+
+        if(typeLookAhead.equals("OPEN_PAREN")){
+            tokenPopper();
+            tokenTypePopper();
+            peeker();
+            if(expression()){
+                if(typeLookAhead.equals("CLOSE_PAREN")){
+                    tokenPopper();
+                    tokenTypePopper();
+                    peeker();
+
+                    isValid = true;
+                }
+                // Error: Missing )
+            }
+        }
+        // Error: Missing a (
 
         return isValid;
     }
@@ -523,10 +620,13 @@ public class Parser2 {
         boolean isValid = false;
 
         if(typeLookAhead.equals("PLUS") || typeLookAhead.equals("MINUS")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
             isValid = true;
         }
+        // Error: Expected a + or -
 
         return isValid;
     }
@@ -536,10 +636,13 @@ public class Parser2 {
         boolean isValid = false;
 
         if(typeLookAhead.equals("MULTIPLY") || typeLookAhead.equals("DIVIDE")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
             isValid = true;
         }
+        // Error: Expected a * or /
             
         return isValid;
     }
@@ -556,6 +659,7 @@ public class Parser2 {
 
             isValid = true;
         }
+        // Error: Invalid operator
 
         return isValid;
     }
@@ -594,18 +698,36 @@ public class Parser2 {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("begin")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
 
             if(statement()){
                 if(tokenLookAhead.equals("end")){
-                    popper();
-                     peeker();
+                    
+                    tokenPopper();
+                    tokenTypePopper();
+                    peeker();
 
-                    isValid = true;
+                    if(typeLookAhead.equals("SEMICOLON")){
+                        
+                        tokenPopper();
+                        tokenTypePopper();
+                        peeker();
+
+                        isValid = true;
+                        System.out.println("Valid compound statement");
+
+                    }
+                    // Error: Missing a semicolon
+                    
                 }
+                // Error: Expected end
             }
         }
+        // Error: Expected begin
+
 
         return isValid;
     }
@@ -615,34 +737,138 @@ public class Parser2 {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")){
-            popper();
+            
+            tokenPopper();
+            tokenTypePopper();
             peeker();
 
             if(typeLookAhead.equals("OPEN_PAREN")){
-                popper();
+                
+                tokenPopper();
+                tokenTypePopper();
                 peeker();
 
                 if(typeLookAhead.equals("IDENTIFIER")){
-                    popper();
+                    
+                    tokenPopper();
+                    tokenTypePopper();
                     peeker();
 
                     if(typeLookAhead.equals("COMMA")){
-                        popper();
+                        
+                        tokenPopper();
+                        tokenTypePopper();
                         peeker();
 
                         if(typeLookAhead.equals("IDENTIFIER")){
-                            popper();
+                            
+                            tokenPopper();
+                            tokenTypePopper();
                             peeker();
 
                             if(typeLookAhead.equals("CLOSE_PAREN")){
-                                popper();
+                                
+                                tokenPopper();
+                                tokenTypePopper();
                                 peeker();
 
                                 if(typeLookAhead.equals("SEMICOLON")){
-                                    popper();
+                                    
+                                    tokenPopper();
+                                    tokenTypePopper();
                                     peeker();
             
                                     System.out.println("Valid read statement");
+                                    isValid = true;
+                                }
+                                // Error: Missing a ;
+        
+                                
+                            }
+                            // Error: Missing )
+                        }
+                        // Error: Invalid Identifier
+
+                    }
+                    else if(typeLookAhead.equals("CLOSE_PAREN")){
+                        
+                        tokenPopper();
+                        tokenTypePopper();
+                        peeker();
+
+                        if(typeLookAhead.equals("SEMICOLON")){
+                            
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
+    
+                            System.out.println("Valid read statement");
+                            isValid = true;
+                        }
+                        // Error: Missing a ;
+                    }
+                    // Error: Missing )
+                }
+                // Error: Invalid Identifier
+
+            }
+            // Error: Missing (
+
+
+        }
+        // Error: Expected read or readln
+
+
+        return isValid;
+    }
+
+    // <writeStatement> ::= write ( *IDENTIFIER* , *IDENTIFIER* ) | writeln ( *IDENTIFIER* , *IDENTIFIER* )
+    boolean writeStatement() {
+        boolean isValid = false;
+
+        if(tokenLookAhead.equals("write") || tokenLookAhead.equals("writeln")){
+            
+            tokenPopper();
+            tokenTypePopper();
+            peeker();
+
+            if(typeLookAhead.equals("OPEN_PAREN")){
+                
+                tokenPopper();
+                tokenTypePopper();
+                peeker();
+
+                if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("STRING")){
+                    
+                    tokenPopper();
+                    tokenTypePopper();
+                    peeker();
+
+                    if(typeLookAhead.equals("COMMA")){
+                        
+                        tokenPopper();
+                        tokenTypePopper();
+                        peeker();
+
+                        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("STRING")){
+                            
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
+
+                            if(typeLookAhead.equals("CLOSE_PAREN")){
+                                
+                                tokenPopper();
+                                tokenTypePopper();
+                                peeker();
+
+                                if(typeLookAhead.equals("SEMICOLON")){
+                                    
+                                    tokenPopper();
+                                    tokenTypePopper();
+                                    peeker();
+            
+                                    System.out.println("Valid write statement");
                                     isValid = true;
                                 }
         
@@ -652,30 +878,34 @@ public class Parser2 {
 
                     }
                     else if(typeLookAhead.equals("CLOSE_PAREN")){
-                        popper();
+                        
+                        tokenPopper();
+                        tokenTypePopper();
                         peeker();
 
                         if(typeLookAhead.equals("SEMICOLON")){
-                            popper();
+                            
+                            tokenPopper();
+                            tokenTypePopper();
                             peeker();
     
-                            System.out.println("Valid read statement");
+                            System.out.println("Valid write statement");
                             isValid = true;
                         }
+                         // Error: Missing a ;
                     }
+                    // Error: Missing )
+                
                 }
+                // Error: Invalid Identifier or String
 
             }
+            // Error: Missing (
 
         }
-
+        // Error: Expected read or readln
 
         return isValid;
-    }
-
-    // <writeStatement> ::= write ( *IDENTIFIER* , *IDENTIFIER* ) | writeln ( *IDENTIFIER* , *IDENTIFIER* )
-    boolean writeStatement() {
-        return false;
     }
 
 
