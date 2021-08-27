@@ -10,12 +10,14 @@ public class Parser2 {
     private ErrorParser errparser;
     private String tokenLookAhead;
     private String typeLookAhead;
-
+    private ArrayList<String> token_name, type_name;
     private int newcount = 0;
 
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
+        token_name = new ArrayList<String>();
+        type_name = new ArrayList<String>();
         this.newcount = counter;
         errparser = new ErrorParser();
         for(int i = tokens.size()-1; i >= 0; i--){
@@ -302,7 +304,10 @@ public class Parser2 {
 
         return isValid;
     }
-
+    void clearlists() {
+    	token_name.clear();
+    	type_name.clear();
+    }
     boolean forStatement(){
         boolean isValid = false;
         // Check if the first token is "for"
@@ -388,41 +393,65 @@ public class Parser2 {
     }
 
     // <ifThen> ::= if <expression> then <compoundStatement>
+    void returntokens() {
+    	//returning of tokens
+    	for(int i = token_name.size()-1; i >= 0; i--){
+    		this.tokenTypeStack.push(type_name.get(i));
+    		this.tokenStack.push(token_name.get(i));
+    	}
+    	clearlists();
+    }
     boolean ifThen() {
         boolean isValid = false;
-
+       
         System.out.println("ifThen function called.");
 
         if(tokenLookAhead.equals("if")){
-            
+            token_name.add(this.tokenLookAhead);
+            type_name.add(this.typeLookAhead);
             tokenPopper();
             tokenTypePopper();
             peeker();
 
             if(typeLookAhead.equals("OPEN_PAREN")){
-                
+            	token_name.add(this.tokenLookAhead);
+                type_name.add(this.typeLookAhead);
+            	token_name.add(this.tokenLookAhead);
+                type_name.add(this.typeLookAhead);
                 tokenPopper();
                 tokenTypePopper();
                 peeker();
 
                 if(expression()){
-
+                	
                     if(typeLookAhead.equals("CLOSE_PAREN")){
-                        
+                    	token_name.add(this.tokenLookAhead);
+                        type_name.add(this.typeLookAhead);
+                    	token_name.add(this.tokenLookAhead);
+                        type_name.add(this.typeLookAhead);
                         tokenPopper();
                         tokenTypePopper();
                         peeker();
                 
                         if(tokenLookAhead.equals("then")){
-                            
+                        	token_name.add(this.tokenLookAhead);
+                            type_name.add(this.typeLookAhead);
+                        	token_name.add(this.tokenLookAhead);
+                            type_name.add(this.typeLookAhead);
                             tokenPopper();
                             tokenTypePopper();
                             peeker();
-
-                            if(compoundStatement() && !tokenLookAhead.equals("else")){
-
+                            //if(compoundStatement
+                            if(tokenLookAhead.equals("begin") && !tokenLookAhead.equals("else")){
+                            	token_name.add(this.tokenLookAhead);
+                                type_name.add(this.typeLookAhead);
                                 System.out.println("Valid if-then statement");
                                 isValid = true;
+                                clearlists();
+                            }
+                            else {
+                            	//there is an else
+                            	//function for returning of stack
                             }
                         }
                         // Error: Missing a then
@@ -433,12 +462,12 @@ public class Parser2 {
             // Error: Missing a (
         }
         // Error: Missing if
-
+        
         
 
         return isValid;
     }
-
+    
     // <ifThenElse> ::= if <expression> then <compoundStatement> else <compoundStatement>
     boolean ifThenElse() {
         boolean isValid = false;
@@ -561,7 +590,7 @@ public class Parser2 {
         if(factor()){
 
             if(multiOperator()){
-
+            	
                 if(factor()){
                     isValid = true;
                 }
@@ -580,9 +609,16 @@ public class Parser2 {
 
         System.out.println("factor function called.");
 
-        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER") || expressionParen()){ 
-            
+        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")){ 
+            token_name.add(tokenLookAhead);
+            type_name.add(this.typeLookAhead);
             tokenPopper();
+            tokenTypePopper();
+            peeker();
+            isValid = true;
+        }
+        else if (expressionParen()) {
+        	tokenPopper();
             tokenTypePopper();
             peeker();
             isValid = true;
@@ -596,11 +632,15 @@ public class Parser2 {
         boolean isValid = false;
 
         if(typeLookAhead.equals("OPEN_PAREN")){
+        	token_name.add(tokenLookAhead);
+            type_name.add(this.typeLookAhead);
             tokenPopper();
             tokenTypePopper();
             peeker();
             if(expression()){
                 if(typeLookAhead.equals("CLOSE_PAREN")){
+                	token_name.add(tokenLookAhead);
+                    type_name.add(this.typeLookAhead);
                     tokenPopper();
                     tokenTypePopper();
                     peeker();
@@ -620,7 +660,8 @@ public class Parser2 {
         boolean isValid = false;
 
         if(typeLookAhead.equals("PLUS") || typeLookAhead.equals("MINUS")){
-            
+        	token_name.add(tokenLookAhead);
+            type_name.add(this.typeLookAhead);
             tokenPopper();
             tokenTypePopper();
             peeker();
@@ -636,7 +677,8 @@ public class Parser2 {
         boolean isValid = false;
 
         if(typeLookAhead.equals("MULTIPLY") || typeLookAhead.equals("DIVIDE")){
-            
+        	token_name.add(tokenLookAhead);
+            type_name.add(this.typeLookAhead);
             tokenPopper();
             tokenTypePopper();
             peeker();
@@ -656,7 +698,8 @@ public class Parser2 {
             typeLookAhead.equals("LESS_EQUAL") ||
             typeLookAhead.equals("GREATER_THAN") ||
             typeLookAhead.equals("GREATER_EQUAL")){
-
+        	token_name.add(tokenLookAhead);
+            type_name.add(this.typeLookAhead);
             isValid = true;
         }
         // Error: Invalid operator
