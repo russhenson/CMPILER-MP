@@ -12,6 +12,7 @@ public class Parser2 {
     private String typeLookAhead;
     private ArrayList<String> token_name, type_name;
     private int newcount = 0;
+    private int statemode = 0;
 
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
@@ -547,6 +548,149 @@ public class Parser2 {
 				//if it's not a comma
 			}
 		}
+		else if (mode == 5) {
+			//wrong datatype
+			boolean datawrong = true;
+			boolean dasn = false;
+			while (datawrong) {
+				System.out.println("PIZZA");
+				this.burstfunc();
+				//if it is a semicolon
+				if (typeLookAhead.equals(type)) {
+					boolean datatysemi = true;
+					while (datatysemi) {
+						burstfunc();
+						System.out.println("WHACK");
+						//if semicolon
+						if(typeLookAhead.equals("SEMICOLON")) {
+							
+							datatysemi = false;
+							while (cango) {
+								burstfunc();
+								System.out.println("MOLE");
+								//System.out.println("TOKEN " + tokenLookAhead + " TYPE " + typeLookAhead);
+								if (tokenLookAhead.equals("begin") || tokenLookAhead.equals("function")) {
+									cango = false;
+									dasn = true;
+									System.out.println("HELLFIRE");
+									
+								}
+								else if(typeLookAhead.equals("IDENTIFIER")) {
+									
+									cango = false;
+									
+								}
+								//if neither of these
+								else {
+									newcount++;
+				                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+								}
+							}
+						}
+						//if not
+						else {
+							System.out.println("TOKEN " + tokenLookAhead  + " semis");
+							newcount++;
+							errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+					if (dasn) {
+						
+						datawrong = false;
+					}
+					else {
+						cango = true;
+					}
+					System.out.println("DATA " + datawrong);	
+					while (cango) {
+						burstfunc();
+						System.out.println("TOKEN " + tokenLookAhead + " TYPE " + typeLookAhead);
+						//if it is a comma
+						if (tokenLookAhead.equals("COMMA")) {
+							
+							boolean dataiden = true;
+							while (dataiden) {
+								//if it is an identifier
+								burstfunc();
+								if (typeLookAhead.equals("IDENTIFIER")) {
+									dataiden = false;
+									
+								}
+								//if it is not
+								else {
+									newcount++;
+				                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+								}
+							}
+							
+						}
+						//if it is a colon
+						else if (typeLookAhead.equals("COLON")) {
+							boolean datacomms = true;
+							while (datacomms) {
+								burstfunc();
+								//if datatype
+								if (typeLookAhead.equals("DATA_TYPE")) {
+									datacomms = false;
+									boolean datatypeself = true;
+									while (datatypeself) {
+										burstfunc();
+										//if it is a semicolon
+										if (typeLookAhead.equals("SEMICOLON")) {
+											boolean datasemis = true;
+											while (datasemis) {
+												burstfunc();
+												//if it is an identifier
+												if (typeLookAhead.equals("IDENTIFIER")) {
+													datasemis = false;
+												}
+												else if (tokenLookAhead.equals("begin") || tokenLookAhead.equals("function")) {
+													datasemis = false;
+													cango = false;
+												}
+												//if it is not
+												else {
+													newcount++;
+								                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+												}
+											}
+										}
+										//if it is not
+										else {
+											newcount++;
+						                 	errparser.error_checker(9, "error.txt" , newcount, tokenLookAhead);
+										}
+									}
+								}
+								//if not
+								else {
+									newcount++;
+				                 	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+								}
+							}
+							
+						}
+						//if it is not
+						else {
+							newcount++;
+		                 	errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+					
+					//up until here
+				}
+				//if it is not a datatype
+				else {
+					newcount++;
+                 	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+				}
+			}
+		}
+		else if (mode == 6) {
+			//if it is a semicolon
+			
+			//if it is not
+		}
     	
     	
     }
@@ -569,8 +713,7 @@ public class Parser2 {
                 // Check the r-value
                 if( typeLookAhead.equals("STRING") || 
                     typeLookAhead.equals("REAL") || 
-                    typeLookAhead.equals("INTEGER") || 
-                    expression()){ // supposed to be arithmetic
+                    typeLookAhead.equals("INTEGER")){ // supposed to be arithmetic
 
                     
                         tokenPopper();
@@ -592,6 +735,27 @@ public class Parser2 {
                         // get the error message from error.txt
                         
                     }
+                }
+                else if (expression()) {
+                	 tokenPopper();
+                     tokenTypePopper();
+                     peeker();
+
+                     // Check if it ends with semi colon
+                     if(typeLookAhead.equals("SEMICOLON")){
+                         
+                         tokenPopper();
+                         tokenTypePopper();
+                         peeker();
+                         System.out.println("Valid assignment"); // No error
+                         isValid =  true;
+                     }
+                     else {
+                         System.out.println("Missing a semicolon"); 
+                         // Error: Missing a semicolon 
+                         // get the error message from error.txt
+                         
+                     }
                 }
                 else {
                     System.out.println("Invalid assignment value"); 
@@ -680,26 +844,29 @@ public class Parser2 {
                         tokenPopper();
                         tokenTypePopper();
                 		peeker();
+                		// if it ends in a semicolon
+                		if (typeLookAhead.equals("SEMICOLON")) {
+                    		
+                            tokenPopper();
+                            tokenTypePopper();
+                    		peeker();
+                    		System.out.println("One line valid");
+                    	}
+                    	else {
+                    		newcount++;
+                    		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+                    		
+                    		this.panicmode("DATA_TYPE", 6, 0);
+                    	}
                 	}
                 	else {
+                		System.out.println("ERROR ON DATA");
                 		newcount++;
                 		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
-                		return false;
+                		this.panicmode("DATA_TYPE", 5, 0);
                 	}
                 	//if it ends with a semicolon
-                	if (typeLookAhead.equals("SEMICOLON")) {
-                		
-                        tokenPopper();
-                        tokenTypePopper();
-                		peeker();
-                		System.out.println("One line valid");
-                	}
-                	else {
-                		newcount++;
-                		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
-                		
-                		return false;
-                	}
+                	
                 }
             }
             else {
@@ -807,7 +974,7 @@ public class Parser2 {
                                     tokenTypePopper();
                                     peeker();
 
-                                    if(compoundStatement(0)){
+                                    if(compoundStatement()){
                                         System.out.println("Valid for-loop");
                                         isValid = true;
                                         
@@ -956,7 +1123,7 @@ public class Parser2 {
                             tokenTypePopper();
                             peeker();
 
-                            if(compoundStatement(0)){
+                            if(compoundStatement()){
 
                                 if(tokenLookAhead.equals("else")){
                                     
@@ -964,7 +1131,7 @@ public class Parser2 {
                                     tokenTypePopper();
                                     peeker();
 
-                                    if(compoundStatement(0)){
+                                    if(compoundStatement()){
                                         isValid = true;
                                         System.out.println("Valid if-then-else statement");
                                     }
@@ -1078,6 +1245,9 @@ public class Parser2 {
             peeker();
             isValid = true;
         }
+        else {
+        	
+        }
 
         return isValid;
     }
@@ -1106,6 +1276,10 @@ public class Parser2 {
             }
         }
         // Error: Missing a (
+        else {
+        	
+        	this.returntokens();
+        }
 
         return isValid;
     }
@@ -1185,14 +1359,14 @@ public class Parser2 {
     boolean structuredStatement() {
         boolean isValid = false;
 
-        if(compoundStatement(1) | ifStatement() /* | whileStatement() */ | forStatement())
+        if(compoundStatement() | ifStatement() /* | whileStatement() */ | forStatement())
             isValid = true;
 
         return isValid;
     }
 
     // <compoundStatement> ::= begin <statement> end
-    boolean compoundStatement(int mode) {
+    boolean compoundStatement() {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("begin")){
@@ -1208,7 +1382,7 @@ public class Parser2 {
                     tokenTypePopper();
                     peeker();
                     //if statement
-                    if (mode == 0) {
+                    if (statemode == 0) {
                     	if(typeLookAhead.equals("SEMICOLON")){
                             
                             tokenPopper();
@@ -1224,7 +1398,7 @@ public class Parser2 {
                     		
                     	}
                     }
-					else if (mode == 1) {
+					else if (statemode == 1) {
 						if (typeLookAhead.equals("PERIOD")) {
 
 							tokenPopper();
