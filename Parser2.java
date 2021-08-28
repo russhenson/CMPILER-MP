@@ -87,6 +87,7 @@ public class Parser2 {
                     // get the error message from error.txt
                     newcount++;
                 	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+                	panicmode("IDENTIFIER", 2, 0);
                    
                 }
 
@@ -95,9 +96,9 @@ public class Parser2 {
                 System.out.println("Invalid ID"); // Missing or invalid name
                 // get the error message from error.txt
                 newcount++;
-            	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+            	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
             	//panic
-            	panicmode("IDENTIFIER", 1);
+            	panicmode("IDENTIFIER", 1, 0);
                 
             }
        }
@@ -105,25 +106,37 @@ public class Parser2 {
         else {
         	newcount++;
         	errparser.error_checker(8, "error.txt" , newcount, tokenLookAhead);
-        	panicmode("program", 0);
+        	panicmode("program", 0, 1);
         }
 
        return isValid;
 
     }
-    void panicmode(String type, int mode) {
-    	boolean cango = true, colongo = true;
+    void burstfunc() {
+    	this.tokenPopper();
+    	this.tokenTypePopper();
+    	peeker();
+    }
+    void panicmode(String type, int mode, int submode) {
+    	boolean cango = true, colongo = true, identgo = true;
     	if (mode == 0) {
-    		//program
+    		//tokens
     		while (cango) {
+    			System.out.println("Token " + this.tokenLookAhead + " type " + this.typeLookAhead);
         		this.tokenPopper();
             	this.tokenTypePopper();
             	peeker();
             	if (this.tokenLookAhead.equals(type)) {
             		cango = false;
-            		System.out.println("Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
-            		program();
-            		
+            		//System.out.println("Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+            		if (submode == 1) {
+            			//program
+            			program();
+            		}
+            		else if (submode == 2) {
+            			//variable
+            			variableDeclaration();
+            		}
             	}
         	}
     		
@@ -131,29 +144,293 @@ public class Parser2 {
     	else if (mode == 1) {
     		//types for program
     		while (cango) {
-    			System.out.println("Token " + this.tokenLookAhead + " type " +  this.typeLookAhead);
+    			//System.out.println("Token " + this.tokenLookAhead + " type " +  this.typeLookAhead);
         		this.tokenPopper();
             	this.tokenTypePopper();
             	
             	peeker();
             	if (this.typeLookAhead.equals(type)) {
-            		System.out.println(type + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+            		//System.out.println(type + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
             		while(colongo) {
             			this.tokenPopper();
                     	this.tokenTypePopper();
                     	peeker();
                     	if (this.typeLookAhead.equals("SEMICOLON")) {
-                    		System.out.println("SEMICOLON " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+                    		//System.out.println("SEMICOLON " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
                     		colongo = false;
                     		cango = false;
                     	}
+                    	else {
+                    		newcount++;
+                         	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+                    	}
             		}
             	}
+            	//if it is still not an identifier
         	}
     	}
-    	else if (mode == 2) {
-    		
-    	}
+		else if (mode == 2) {
+			// missing semicolon
+			while (cango) {
+				System.out.println("Token " + this.tokenLookAhead + " type " + this.typeLookAhead);
+				this.tokenPopper();
+				this.tokenTypePopper();
+				
+				peeker();
+				if (this.typeLookAhead.equals(type)) {
+					cango = false;
+					System.out.println(type + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+					
+				}
+				else {
+					newcount++;
+                 	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+				}
+			}
+		}
+		else if (mode == 3) {
+			//WRONG IDENTIFIER
+			
+			while (cango) {
+				System.out.println("Token " + this.tokenLookAhead + " type " +  this.typeLookAhead);
+        		this.tokenPopper();
+            	this.tokenTypePopper();
+            	peeker();
+            	if (this.typeLookAhead.equals(type)) {
+					cango = false;
+					//System.out.println(type + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+					while (identgo) {
+						burstfunc();
+		            	
+		            	//if it's a comma
+						System.out.println("COMMA " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+		            	if (typeLookAhead.equals("COMMA")) {
+		            		
+		            		//if it's an identifier
+		            		burstfunc();
+		            		System.out.println("CHECKER " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+		            		if (typeLookAhead.equals("IDENTIFIER")) {
+		            			//System.out.println("BAM");
+		            		}
+		            		else {
+		            			boolean notidentif = true;
+		            			while(notidentif) {
+		            				burstfunc();
+		            				if (typeLookAhead.equals("IDENTIFIER")) {
+		            					notidentif = false;
+				            		}
+		            			}
+		            		}
+		            	}
+		            	else if (typeLookAhead.equals("COLON")) {
+		            		//colon days
+		            		System.out.println("COLON GO");
+		            		// if it's a datatype 
+		            		burstfunc();
+		            		System.out.println("COLON GO AZA " + typeLookAhead);
+			            	//datatype checking
+			            	if (typeLookAhead.equals("DATA_TYPE")) {
+			            		System.out.println("datatype GO");
+			            		// if it's a semicolon
+			            		burstfunc();
+			            		//if it's a semicolon
+			            		if (typeLookAhead.equals("SEMICOLON")) {
+			            			System.out.println("smicolon GO");
+			            			//if it's an identifier
+			            			burstfunc();
+			            			if (typeLookAhead.equals("IDENTIFIER")) {
+			            				System.out.println("idnt");
+			            			}
+			            			else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+										identgo = false;
+									}
+			            			else {
+			            				newcount++;
+		                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+			            				boolean identifgo2 = true;
+			            				while (identifgo2) {
+			            					
+			            					if (typeLookAhead.equals("IDENTIFIER")) {
+			            						System.out.println("shashing");
+					            				identifgo2 = false;
+					            			}
+			            					else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+												identgo = false;
+												identifgo2 = false;
+											}
+			            					else {
+			            						newcount++;
+				                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+			            					}
+			            				}
+			            			}
+			            		}
+			            		//if its not a correct semicolon
+			            		else {
+			            			newcount++;
+	                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+			            			boolean semicolzer = true;
+			            			while (semicolzer) {
+			            				burstfunc();
+			            				if (typeLookAhead.equals("SEMICOLON")) {
+			            					semicolzer = false;
+			            					System.out.println("smicolon GO");
+					            			//if it's an identifier
+					            			burstfunc();
+					            			if (typeLookAhead.equals("IDENTIFIER")) {
+					            				System.out.println("idnt");
+					            			}
+					            			else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+												identgo = false;
+											}
+					            			else {
+					            				newcount++;
+				                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+					            				boolean identifgo2 = true;
+					            				while (identifgo2) {
+					            					
+					            					if (typeLookAhead.equals("IDENTIFIER")) {
+					            						System.out.println("shashing");
+							            				identifgo2 = false;
+							            			}
+					            					else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+														identgo = false;
+														identifgo2 = false;
+													}
+					            					else {
+					            						newcount++;
+						                        		errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+					            					}
+					            				}
+					            			}
+			            				}
+			            				else {
+			            					newcount++;
+			                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+			            				}
+			            			}
+			            			
+			            		}
+				            	//up until here error
+			            	}
+			            	//if it is not a datatype
+			            	else {
+			            		newcount++;
+                        		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+                        		boolean datatypergo = true;
+                        		while (datatypergo) {
+                        			burstfunc();
+                        			if (typeLookAhead.equals("DATA_TYPE")) {
+                        				datatypergo = false;
+                        				burstfunc();
+                        				if (typeLookAhead.equals("SEMICOLON")) {
+        			            			System.out.println("smicolon GO");
+        			            			//if it's an identifier
+        			            			burstfunc();
+        			            			if (typeLookAhead.equals("IDENTIFIER")) {
+        			            				System.out.println("idnt");
+        			            			}
+        			            			else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+        										identgo = false;
+        									}
+        			            			else {
+        			            				newcount++;
+        		                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+        			            				boolean identifgo2 = true;
+        			            				while (identifgo2) {
+        			            					
+        			            					if (typeLookAhead.equals("IDENTIFIER")) {
+        			            						System.out.println("shashing");
+        					            				identifgo2 = false;
+        					            			}
+        			            					else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+        												identgo = false;
+        												identifgo2 = false;
+        											}
+        			            					else {
+        			            						newcount++;
+        				                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+        			            					}
+        			            				}
+        			            			}
+        			            		}
+        			            		//if its not a correct semicolon
+        			            		else {
+        			            			newcount++;
+        	                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+        			            			boolean semicolzer = true;
+        			            			while (semicolzer) {
+        			            				burstfunc();
+        			            				if (typeLookAhead.equals("SEMICOLON")) {
+        			            					semicolzer = false;
+        			            					System.out.println("smicolon GO");
+        					            			//if it's an identifier
+        					            			burstfunc();
+        					            			if (typeLookAhead.equals("IDENTIFIER")) {
+        					            				System.out.println("idnt");
+        					            			}
+        					            			else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+        												identgo = false;
+        											}
+        					            			else {
+        					            				newcount++;
+        				                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+        					            				boolean identifgo2 = true;
+        					            				while (identifgo2) {
+        					            					
+        					            					if (typeLookAhead.equals("IDENTIFIER")) {
+        					            						System.out.println("shashing");
+        							            				identifgo2 = false;
+        							            			}
+        					            					else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
+        														identgo = false;
+        														identifgo2 = false;
+        													}
+        					            					else {
+        					            						newcount++;
+        						                        		errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+        					            					}
+        					            				}
+        					            			}
+        			            				}
+        			            				else {
+        			            					newcount++;
+        			                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+        			            				}
+        			            			}
+        			            			
+        			            		}
+                        			}
+                        			else {
+                        				newcount++;
+                                		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+                        			}
+                        		}
+			            	}
+		            	}
+		            	else {
+		            		//if it's not a comma
+		            		newcount++;
+                    		errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+                    		
+		            	}
+						
+					}
+					
+				}
+				else {
+					newcount++;
+                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+				}
+            	
+			}
+		}
+		else if (mode == 4) {
+			//wrong comma
+			/*while (cango) {
+				
+			}*/
+		}
     	
     	
     }
@@ -235,78 +512,84 @@ public class Parser2 {
             tokenPopper();
             tokenTypePopper();
             peeker();
-
-            while (typeLookAhead.equals("IDENTIFIER")) {
-            	iscorrect = true;
-            	isGoing = true;
-            	
-                tokenPopper();
-                tokenTypePopper();
-            	peeker();
-            	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
-            	while(isGoing) {
-            		//if it is a comma
-            		System.out.println("ZAP " + this.tokenLookAhead + " " + this.typeLookAhead);
-            		if (typeLookAhead.equals("COMMA")) {
-            			
-                        tokenPopper();
-                        tokenTypePopper();
-                    	peeker();
-                    	if (!(typeLookAhead.equals("IDENTIFIER"))) {
-                    		iscorrect = false;
-                    		newcount++;
-                    		errparser.error_checker(11, "error.txt" , newcount, tokenLookAhead);
-                    		return false;
-                    	}
-                    	else {
-                    		
+            if (typeLookAhead.equals("IDENTIFIER")) {
+            	while (typeLookAhead.equals("IDENTIFIER")) {
+                	iscorrect = true;
+                	isGoing = true;
+                	
+                    tokenPopper();
+                    tokenTypePopper();
+                	peeker();
+                	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
+                	while(isGoing) {
+                		//if it is a comma
+                		System.out.println("ZAP " + this.tokenLookAhead + " " + this.typeLookAhead);
+                		if (typeLookAhead.equals("COMMA")) {
+                			
                             tokenPopper();
                             tokenTypePopper();
                         	peeker();
-                    	}
-            		}
-            		//if it is a colon
-            		else if (typeLookAhead.equals("COLON")) {
-            			
+                        	if (!(typeLookAhead.equals("IDENTIFIER"))) {
+                        		iscorrect = false;
+                        		newcount++;
+                        		errparser.error_checker(11, "error.txt" , newcount, tokenLookAhead);
+                        		return false;
+                        	}
+                        	else {
+                        		
+                                tokenPopper();
+                                tokenTypePopper();
+                            	peeker();
+                        	}
+                		}
+                		//if it is a colon
+                		else if (typeLookAhead.equals("COLON")) {
+                			
+                            tokenPopper();
+                            tokenTypePopper();
+                        	peeker();
+                        	isGoing = false;
+                		}
+                		
+                		else {
+                			newcount++;
+                			errparser.error_checker(10, "error.txt" , newcount, tokenLookAhead);
+                			return false;
+                		}
+                	}
+                	//if it is a keyword
+                	if (typeLookAhead.equals("DATA_TYPE")) {
+                		
                         tokenPopper();
                         tokenTypePopper();
-                    	peeker();
-                    	isGoing = false;
-            		}
-            		
-            		else {
-            			newcount++;
-            			errparser.error_checker(10, "error.txt" , newcount, tokenLookAhead);
-            			return false;
-            		}
-            	}
-            	//if it is a keyword
-            	if (typeLookAhead.equals("DATA_TYPE")) {
-            		
-                    tokenPopper();
-                    tokenTypePopper();
-            		peeker();
-            	}
-            	else {
-            		newcount++;
-            		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
-            		return false;
-            	}
-            	//if it ends with a semicolon
-            	if (typeLookAhead.equals("SEMICOLON")) {
-            		
-                    tokenPopper();
-                    tokenTypePopper();
-            		peeker();
-            		System.out.println("One line valid");
-            	}
-            	else {
-            		newcount++;
-            		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
-            		
-            		return false;
-            	}
+                		peeker();
+                	}
+                	else {
+                		newcount++;
+                		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+                		return false;
+                	}
+                	//if it ends with a semicolon
+                	if (typeLookAhead.equals("SEMICOLON")) {
+                		
+                        tokenPopper();
+                        tokenTypePopper();
+                		peeker();
+                		System.out.println("One line valid");
+                	}
+                	else {
+                		newcount++;
+                		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+                		
+                		return false;
+                	}
+                }
             }
+            else {
+            	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+            	this.panicmode("IDENTIFIER", 3, 0);
+            }
+            
             
             /*while(typeLookAhead.equals("SEMICOLON")){
                 while(typeLookAhead.equals("COLON")){
@@ -348,6 +631,12 @@ public class Parser2 {
             isValid = true;
 
 
+        }
+        else {
+        	newcount++;
+    		errparser.error_checker(13, "error.txt" , newcount, tokenLookAhead);
+    		
+        	this.panicmode("var", 0, 2);
         }
 
         return isValid;

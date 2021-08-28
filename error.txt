@@ -10,3 +10,5 @@
 10 Invalid variable symbol
 11 Comma not followed by an identifier
 12 Invalid Datatype
+13 Invalid declaration of var
+14 Missing comma

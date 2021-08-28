@@ -407,7 +407,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			parser.program();
 			//parser.assignment();
 			//System.out.println("Going variable");
-			//parser.variableDeclaration();
+			parser.variableDeclaration();
 			// print output to output textarea
 			//parser.variableDeclaration();
 			//parser.readStatement();
