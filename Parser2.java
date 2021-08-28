@@ -541,6 +541,60 @@ public class Parser2 {
 						}
 					}
 				}
+				else if (typeLookAhead.equals("COLON")) {
+					System.out.println("ROAT");
+					boolean smurf = true;
+					while (smurf) {
+						
+						burstfunc();
+						//if datatype
+						if (typeLookAhead.equals("DATA_TYPE")) {
+							System.out.println("DATA FOUND");
+							smurf = false;
+							boolean smurf2 = true;
+							while (smurf2) {
+								burstfunc();
+								//if semicolon
+								if (typeLookAhead.equals("SEMICOLON")) {
+									System.out.println("CHEKC");
+									smurf2 = false;
+									boolean smurf3 = true;
+									while (smurf3) {
+										burstfunc();
+										//if identifier
+										if (typeLookAhead.equals("IDENTIFIER")) {
+											smurf3 = false;
+										}
+										//if begin or function
+										else if (tokenLookAhead.equals("begin") || tokenLookAhead.equals("function")) {
+											
+											smurf3 = false;
+											cango = false;
+										}
+										//if neither
+										else {
+											;
+											newcount++;
+						                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+										}
+									}
+									
+								}
+								//if not
+								else {
+									newcount++;
+				                 	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+								}
+							}
+						}
+						//if not
+						else {
+							newcount++;
+		                 	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+					
+				}
 				else {
 					newcount++;
                  	errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
@@ -687,9 +741,132 @@ public class Parser2 {
 			}
 		}
 		else if (mode == 6) {
+			boolean semicanf = true, dasemi = true;
 			//if it is a semicolon
+			while (semicanf) {
+				//if it is a semicolon
+				System.out.println(type);
+				burstfunc();
+				System.out.println(typeLookAhead);
+				if (typeLookAhead.equals(type)) {
+					System.out.println("JUMP");
+					boolean semiident = true;
+					while (semiident) {
+						burstfunc();
+						System.out.println("MOLE");
+						//System.out.println("TOKEN " + tokenLookAhead + " TYPE " + typeLookAhead);
+						if (tokenLookAhead.equals("begin") || tokenLookAhead.equals("function")) {
+							cango = false;
+							dasemi = true;
+							semiident = false;
+							semicanf = false;
+							System.out.println("HELLFIRE");
+							
+						}
+						else if(typeLookAhead.equals("IDENTIFIER")) {
+							semiident = false;
+							cango = false;
+							semicanf = false;
+							
+						}
+						//if neither of these
+						else {
+							newcount++;
+		                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+						}
+						
+					}
+				}
+				//if it is not
+				else {
+					newcount++;
+                 	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+				}
+				
+			}
+			if (dasemi) {
+				cango = false;
+				semicanf = false;
+			}
+			else {
+				cango = true;
+			}
+			while (cango) {
+				burstfunc();
+				System.out.println("TOKEN " + tokenLookAhead + " TYPE " + typeLookAhead);
+				//if it is a comma
+				if (tokenLookAhead.equals("COMMA")) {
+					
+					boolean dataiden2 = true;
+					while (dataiden2) {
+						//if it is an identifier
+						burstfunc();
+						if (typeLookAhead.equals("IDENTIFIER")) {
+							dataiden2 = false;
+							
+						}
+						//if it is not
+						else {
+							newcount++;
+		                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+					
+				}
+				//if it is a colon
+				else if (typeLookAhead.equals("COLON")) {
+					boolean datacomms2 = true;
+					while (datacomms2) {
+						burstfunc();
+						//if datatype
+						if (typeLookAhead.equals("DATA_TYPE")) {
+							datacomms2 = false;
+							boolean datatypeself2 = true;
+							while (datatypeself2) {
+								burstfunc();
+								//if it is a semicolon
+								if (typeLookAhead.equals("SEMICOLON")) {
+									boolean datasemis2 = true;
+									while (datasemis2) {
+										burstfunc();
+										//if it is an identifier
+										if (typeLookAhead.equals("IDENTIFIER")) {
+											datasemis2 = false;
+										}
+										else if (tokenLookAhead.equals("begin") || tokenLookAhead.equals("function")) {
+											datasemis2 = false;
+											cango = false;
+										}
+										//if it is not
+										else {
+											newcount++;
+						                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+										}
+									}
+								}
+								//if it is not
+								else {
+									newcount++;
+				                 	errparser.error_checker(9, "error.txt" , newcount, tokenLookAhead);
+								}
+							}
+						}
+						//if not
+						else {
+							newcount++;
+		                 	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+					
+				}
+				//if it is not
+				else {
+					newcount++;
+                 	errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+				}
+				//up until here
+			}
 			
-			//if it is not
 		}
     	
     	
@@ -853,10 +1030,11 @@ public class Parser2 {
                     		System.out.println("One line valid");
                     	}
                     	else {
+                    		System.out.println("SEMI ERROR");
                     		newcount++;
                     		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
                     		
-                    		this.panicmode("DATA_TYPE", 6, 0);
+                    		this.panicmode("SEMICOLON", 6, 0);
                     	}
                 	}
                 	else {
