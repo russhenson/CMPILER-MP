@@ -39,7 +39,7 @@ public class Parser2 {
     }
 
     String tokenPopper() {
-        return tokenTypeStack.pop();
+        return tokenStack.pop();
     }
 
     String tokenTypePopper() {
@@ -96,6 +96,8 @@ public class Parser2 {
                 // get the error message from error.txt
                 newcount++;
             	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+            	//panic
+            	panicmode("IDENTIFIER", 1);
                 
             }
        }
@@ -103,12 +105,53 @@ public class Parser2 {
         else {
         	newcount++;
         	errparser.error_checker(8, "error.txt" , newcount, tokenLookAhead);
+        	panicmode("program", 0);
         }
 
        return isValid;
 
     }
-    
+    void panicmode(String type, int mode) {
+    	boolean cango = true, colongo = true;
+    	if (mode == 0) {
+    		//program
+    		while (cango) {
+        		this.tokenPopper();
+            	this.tokenTypePopper();
+            	peeker();
+            	if (this.tokenLookAhead.equals(type)) {
+            		cango = false;
+            		program();
+            		
+            	}
+        	}
+    	}
+    	else if (mode == 1) {
+    		//types for program
+    		while (cango) {
+    			System.out.println("Token " + this.tokenLookAhead + " type " +  this.typeLookAhead);
+        		this.tokenPopper();
+            	this.tokenTypePopper();
+            	
+            	peeker();
+            	if (this.tokenLookAhead.equals(type)) {
+            		while(colongo) {
+            			this.tokenPopper();
+                    	this.tokenTypePopper();
+                    	peeker();
+                    	if (this.tokenLookAhead.equals("SEMICOLON")) {
+                    		colongo = false;
+                    	}
+            		}
+            	}
+        	}
+    	}
+    	else if (mode == 2) {
+    		
+    	}
+    	
+    	
+    }
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
         boolean isValid = true;
@@ -353,7 +396,7 @@ public class Parser2 {
                                     tokenTypePopper();
                                     peeker();
 
-                                    if(compoundStatement()){
+                                    if(compoundStatement(0)){
                                         System.out.println("Valid for-loop");
                                         isValid = true;
                                         
@@ -452,6 +495,7 @@ public class Parser2 {
                             else {
                             	//there is an else
                             	//function for returning of stack
+                            	this.returntokens();
                             }
                         }
                         // Error: Missing a then
@@ -501,7 +545,7 @@ public class Parser2 {
                             tokenTypePopper();
                             peeker();
 
-                            if(compoundStatement()){
+                            if(compoundStatement(0)){
 
                                 if(tokenLookAhead.equals("else")){
                                     
@@ -509,7 +553,7 @@ public class Parser2 {
                                     tokenTypePopper();
                                     peeker();
 
-                                    if(compoundStatement()){
+                                    if(compoundStatement(0)){
                                         isValid = true;
                                         System.out.println("Valid if-then-else statement");
                                     }
@@ -730,14 +774,14 @@ public class Parser2 {
     boolean structuredStatement() {
         boolean isValid = false;
 
-        if(compoundStatement() | ifStatement() /* | whileStatement() */ | forStatement())
+        if(compoundStatement(1) | ifStatement() /* | whileStatement() */ | forStatement())
             isValid = true;
 
         return isValid;
     }
 
     // <compoundStatement> ::= begin <statement> end
-    boolean compoundStatement() {
+    boolean compoundStatement(int mode) {
         boolean isValid = false;
 
         if(tokenLookAhead.equals("begin")){
@@ -752,18 +796,40 @@ public class Parser2 {
                     tokenPopper();
                     tokenTypePopper();
                     peeker();
+                    //if statement
+                    if (mode == 0) {
+                    	if(typeLookAhead.equals("SEMICOLON")){
+                            
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
 
-                    if(typeLookAhead.equals("SEMICOLON")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
+                            isValid = true;
+                            System.out.println("Valid compound statement");
 
-                        isValid = true;
-                        System.out.println("Valid compound statement");
-
+                        }
+                        // Error: Missing a semicolon
+                    	else {
+                    		
+                    	}
                     }
-                    // Error: Missing a semicolon
+					else if (mode == 1) {
+						if (typeLookAhead.equals("PERIOD")) {
+
+							tokenPopper();
+							tokenTypePopper();
+							peeker();
+
+							isValid = true;
+							System.out.println("Valid compound statement");
+
+						}
+						// Error: Missing a semicolon
+						else {
+							
+						}
+					}
+                    
                     
                 }
                 // Error: Expected end
