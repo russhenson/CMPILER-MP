@@ -118,7 +118,7 @@ public class Parser2 {
     	peeker();
     }
     void panicmode(String type, int mode, int submode) {
-    	boolean cango = true, colongo = true, identgo = true;
+    	boolean cango = true, colongo = true, identgo = true, commago = true;
     	if (mode == 0) {
     		//tokens
     		while (cango) {
@@ -196,6 +196,7 @@ public class Parser2 {
         		this.tokenPopper();
             	this.tokenTypePopper();
             	peeker();
+            	// if it is an identifier
             	if (this.typeLookAhead.equals(type)) {
 					cango = false;
 					//System.out.println(type + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
@@ -203,12 +204,12 @@ public class Parser2 {
 						burstfunc();
 		            	
 		            	//if it's a comma
-						System.out.println("COMMA " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+						//System.out.println("COMMA " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
 		            	if (typeLookAhead.equals("COMMA")) {
 		            		
 		            		//if it's an identifier
 		            		burstfunc();
-		            		System.out.println("CHECKER " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
+		            		//System.out.println("CHECKER " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
 		            		if (typeLookAhead.equals("IDENTIFIER")) {
 		            			//System.out.println("BAM");
 		            		}
@@ -224,13 +225,13 @@ public class Parser2 {
 		            	}
 		            	else if (typeLookAhead.equals("COLON")) {
 		            		//colon days
-		            		System.out.println("COLON GO");
+		            		//System.out.println("COLON GO");
 		            		// if it's a datatype 
 		            		burstfunc();
-		            		System.out.println("COLON GO AZA " + typeLookAhead);
+		            		//System.out.println("COLON GO AZA " + typeLookAhead);
 			            	//datatype checking
 			            	if (typeLookAhead.equals("DATA_TYPE")) {
-			            		System.out.println("datatype GO");
+			            		//System.out.println("datatype GO");
 			            		// if it's a semicolon
 			            		burstfunc();
 			            		//if it's a semicolon
@@ -274,7 +275,7 @@ public class Parser2 {
 			            				burstfunc();
 			            				if (typeLookAhead.equals("SEMICOLON")) {
 			            					semicolzer = false;
-			            					System.out.println("smicolon GO");
+			            					//System.out.println("smicolon GO");
 					            			//if it's an identifier
 					            			burstfunc();
 					            			if (typeLookAhead.equals("IDENTIFIER")) {
@@ -324,11 +325,11 @@ public class Parser2 {
                         				datatypergo = false;
                         				burstfunc();
                         				if (typeLookAhead.equals("SEMICOLON")) {
-        			            			System.out.println("smicolon GO");
+        			            			//System.out.println("smicolon GO");
         			            			//if it's an identifier
         			            			burstfunc();
         			            			if (typeLookAhead.equals("IDENTIFIER")) {
-        			            				System.out.println("idnt");
+        			            				//System.out.println("idnt");
         			            			}
         			            			else if (tokenLookAhead.equals("function") || tokenLookAhead.equals("begin")) {
         										identgo = false;
@@ -338,7 +339,7 @@ public class Parser2 {
         		                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
         			            				boolean identifgo2 = true;
         			            				while (identifgo2) {
-        			            					
+        			            					burstfunc();
         			            					if (typeLookAhead.equals("IDENTIFIER")) {
         			            						System.out.println("shashing");
         					            				identifgo2 = false;
@@ -363,7 +364,7 @@ public class Parser2 {
         			            				burstfunc();
         			            				if (typeLookAhead.equals("SEMICOLON")) {
         			            					semicolzer = false;
-        			            					System.out.println("smicolon GO");
+        			            					//System.out.println("smicolon GO");
         					            			//if it's an identifier
         					            			burstfunc();
         					            			if (typeLookAhead.equals("IDENTIFIER")) {
@@ -377,7 +378,7 @@ public class Parser2 {
         				                        		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
         					            				boolean identifgo2 = true;
         					            				while (identifgo2) {
-        					            					
+        					            					burstfunc();
         					            					if (typeLookAhead.equals("IDENTIFIER")) {
         					            						System.out.println("shashing");
         							            				identifgo2 = false;
@@ -418,6 +419,7 @@ public class Parser2 {
 					}
 					
 				}
+            	//if it is not an identifier
 				else {
 					newcount++;
                  	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
@@ -427,9 +429,123 @@ public class Parser2 {
 		}
 		else if (mode == 4) {
 			//wrong comma
-			/*while (cango) {
+			while (cango) {
 				
-			}*/
+				burstfunc();
+				System.out.println("Token " + tokenLookAhead + " TYPE " + typeLookAhead);
+				//if it's a comma
+				if (typeLookAhead.equals(type)) {
+					
+					commago = true;
+					while (commago) {
+						System.out.println("YUSEI " + typeLookAhead + " " + tokenLookAhead);
+						burstfunc();
+						//if identifier
+						if (typeLookAhead.equals("IDENTIFIER")) {
+							System.out.println("HASD");
+							
+							boolean commaidgo = true;
+							while (commaidgo) {
+								System.out.println("YUSEI2" + typeLookAhead + " " + tokenLookAhead);
+								burstfunc();
+								if (typeLookAhead.equals("COMMA")) {
+									System.out.println("ASDF");
+								
+									//if it goes for comma
+									commaidgo = false;
+									commago = false;
+									System.out.println("ZAP Token " + tokenLookAhead + " TYPE " + typeLookAhead);
+								}
+								else if (typeLookAhead.equals("COLON")) {
+									System.out.println("Hwe");
+									//if it goes for colon
+									commaidgo = false;
+									boolean commacolgo = true;
+									
+									while (commacolgo) {
+										burstfunc();
+										//if it is a datatype
+										if (typeLookAhead.equals("DATA_TYPE")) {
+											System.out.println("aqerhD");
+											commacolgo = false;
+											boolean commadata = true;
+											while (commadata) {
+												burstfunc();
+												//if it is a semicolon
+												if (typeLookAhead.equals("SEMICOLON")) {
+													System.out.println("Cuz");
+													commadata = false;
+													boolean commasemi = true;
+													while (commasemi) {
+														System.out.println("eat " + typeLookAhead + " " + tokenLookAhead);
+														burstfunc();
+														//if it is another identifier
+														if (typeLookAhead.equals("IDENTIFIER")) {
+															System.out.println("when");
+															commasemi = false;
+															boolean anothercomaid = true;
+															while (anothercomaid) {
+																burstfunc();
+																//if it is a comma 
+																if (typeLookAhead.equals("COMMA")) {
+																	anothercomaid = false;
+																	commago = false;
+																}
+																//if it is not a comma
+																else {
+																	newcount++;
+												                 	errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+																}
+															}
+														}
+														//if it is a function or begin
+														else if (tokenLookAhead.equals("begin") || tokenLookAhead.equals("function")) {
+															System.out.println("HUASD");
+															commasemi = false;
+															commago = false;
+															cango = false;
+															
+														}
+														//if not
+														else {
+															newcount++;
+										                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+														}
+													}
+												}
+												//if it is not a semicolon
+												else {
+													newcount++;
+								                 	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+												}
+											}
+										}
+										//if it is not a datatype
+										else {
+											newcount++;
+						                 	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+										}
+									}
+									
+								}
+								else {
+									newcount++;
+				                 	errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+								}
+							}
+						}
+						else {
+							newcount++;
+		                 	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+				}
+				else {
+					newcount++;
+                 	errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+				}
+				//if it's not a comma
+			}
 		}
     	
     	
@@ -554,6 +670,7 @@ public class Parser2 {
                 		else {
                 			newcount++;
                 			errparser.error_checker(10, "error.txt" , newcount, tokenLookAhead);
+                			this.panicmode("COMMA", 4, 0);
                 			return false;
                 		}
                 	}
