@@ -121,10 +121,12 @@ public class Parser2 {
             	peeker();
             	if (this.tokenLookAhead.equals(type)) {
             		cango = false;
+            		System.out.println("Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
             		program();
             		
             	}
         	}
+    		
     	}
     	else if (mode == 1) {
     		//types for program
@@ -134,13 +136,16 @@ public class Parser2 {
             	this.tokenTypePopper();
             	
             	peeker();
-            	if (this.tokenLookAhead.equals(type)) {
+            	if (this.typeLookAhead.equals(type)) {
+            		System.out.println(type + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
             		while(colongo) {
             			this.tokenPopper();
                     	this.tokenTypePopper();
                     	peeker();
-                    	if (this.tokenLookAhead.equals("SEMICOLON")) {
+                    	if (this.typeLookAhead.equals("SEMICOLON")) {
+                    		System.out.println("SEMICOLON " + " Stopped at " + this.tokenLookAhead + " type " + this.typeLookAhead);
                     		colongo = false;
+                    		cango = false;
                     	}
             		}
             	}
