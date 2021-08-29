@@ -2215,7 +2215,8 @@ public class Parser2 {
         if(program()){
             if(variableDeclaration()){
                 if(functionDeclaration()){
-                    System.out.println("No errors");
+					if(compoundStatement(0))
+                    	System.out.println("No errors");
                 }
 
             }
