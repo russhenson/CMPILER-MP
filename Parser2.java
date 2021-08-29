@@ -919,6 +919,12 @@ public class Parser2 {
                         System.out.println("Missing a semicolon"); 
                         // Error: Missing a semicolon 
                         // get the error message from error.txt
+                       
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        
                         
                     }
                 }
@@ -941,12 +947,24 @@ public class Parser2 {
                          // Error: Missing a semicolon 
                          // get the error message from error.txt
                          
+                         	//dummy code change with whatever applicable
+                         	newcount++;
+     						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+     						this.panicmode("PERIOD", 10, 0); //dummy code
+                         
+                         
                      }
                 }
                 else {
                     System.out.println("Invalid assignment value"); 
                     // Error: Wrong assignment
                     // get the error message from error.txt
+                  
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    
                     
                 }
 
@@ -955,12 +973,24 @@ public class Parser2 {
                 System.out.println("Missing an assignment operator"); 
                 // Error: No := operator
                 // get the error message from error.txt
+                
+                	//dummy code change with whatever applicable
+                	newcount++;
+					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+					this.panicmode("PERIOD", 10, 0); //dummy code
+                
                
             }
 
         }
         // Error: Incorrect or Missing Identifier
         // geth the error message from error.txt
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
         
         return isValid;
     }
@@ -1172,18 +1202,60 @@ public class Parser2 {
                                     // this function has error handling already no need for one here                          
                                 }
                                 // Error: Expected a "do"
+                                else {
+                                	//dummy code change with whatever applicable
+                                	newcount++;
+            						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+            						this.panicmode("PERIOD", 10, 0); //dummy code
+                                }
                             }
                             // Error: Expected an Integer
+                            else {
+                            	//dummy code change with whatever applicable
+                            	newcount++;
+        						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+        						this.panicmode("PERIOD", 10, 0); //dummy code
+                            }
                         }
                         // Error: Expected a "to"
+                        else {
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        }
                     }
                     // Error: Expected an Integer
+                    else {
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    }
                 }
                 // Error: No := operator
+                else {
+                	//dummy code change with whatever applicable
+                	newcount++;
+					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+					this.panicmode("PERIOD", 10, 0); //dummy code
+                }
             }
             // Error: Incorrect or Missing Identifier
+            else {
+            	//dummy code change with whatever applicable
+            	newcount++;
+				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				this.panicmode("PERIOD", 10, 0); //dummy code
+            }
         }
         // Error: Expected a "for"
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
 
         
 
@@ -1268,13 +1340,37 @@ public class Parser2 {
                             }
                         }
                         // Error: Missing a then
+                        else {
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        }
                     }
                     // Error: Missing a )
+                    else {
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    }
                 }
             }
             // Error: Missing a (
+            else {
+            	//dummy code change with whatever applicable
+            	newcount++;
+				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				this.panicmode("PERIOD", 10, 0); //dummy code
+            }
         }
         // Error: Missing if
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
         
         
 
@@ -1328,17 +1424,47 @@ public class Parser2 {
                                     }
                                 }
                                 // Error: Missing an "else"
+                                else {
+                                	//dummy code change with whatever applicable
+                                	newcount++;
+            						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+            						this.panicmode("PERIOD", 10, 0); //dummy code
+                                }
                                 
                             }
                         }
                         // Error: Missing a then
+                        else {
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        }
                     }
                     // Error: Missing a )
+                    else {
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    }
                 }
             }
             // Error: Missing a ()
+            else {
+            	//dummy code change with whatever applicable
+            	newcount++;
+				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				this.panicmode("PERIOD", 10, 0); //dummy code
+            }
         }
         // Error: Missing if
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
 
         return isValid;
     }
@@ -1464,8 +1590,15 @@ public class Parser2 {
                     isValid = true;
                 }
                 // Error: Missing )
+                
                 else {
                 	this.returntokens();
+                
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    
                 }
             }
         }
@@ -1473,6 +1606,12 @@ public class Parser2 {
         else {
         	
         	this.returntokens();
+        	
+            	//dummy code change with whatever applicable
+            	newcount++;
+				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				this.panicmode("PERIOD", 10, 0); //dummy code
+            
         }
 
         return isValid;
@@ -1491,6 +1630,12 @@ public class Parser2 {
             isValid = true;
         }
         // Error: Expected a + or -
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
 
         return isValid;
     }
@@ -1508,6 +1653,12 @@ public class Parser2 {
             isValid = true;
         }
         // Error: Expected a * or /
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
             
         return isValid;
     }
@@ -1526,6 +1677,12 @@ public class Parser2 {
             isValid = true;
         }
         // Error: Invalid operator
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
 
         return isValid;
     }
@@ -1601,6 +1758,11 @@ public class Parser2 {
                         // Error: Missing a semicolon
                     	else {
                     		
+                            	//dummy code change with whatever applicable
+                            	newcount++;
+        						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+        						this.panicmode("PERIOD", 10, 0); //dummy code
+                            
                     	}
                     }
 					else if (mode == 0) {
@@ -1615,25 +1777,30 @@ public class Parser2 {
 						}
 						// Error: Missing a semicolon
 						else {
-							System.out.println("ZAM");
-							newcount++;
+	                    	//dummy code change with whatever applicable
+	                    	newcount++;
 							errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-						}
+							this.panicmode("PERIOD", 10, 0); //dummy code
+	                    }
 					}
                     
                     
                 }
                 // Error: Expected end
                 else {
+                	//dummy code change with whatever applicable
                 	newcount++;
 					errparser.error_checker(17, "error.txt" , newcount, tokenLookAhead);
+					this.panicmode("PERIOD", 10, 0); //dummy code
                 }
             }
         }
         // Error: Expected begin
         else {
+        	//dummy code change with whatever applicable
         	newcount++;
 			errparser.error_checker(18, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
         return isValid;
@@ -1690,12 +1857,30 @@ public class Parser2 {
                                     isValid = true;
                                 }
                                 // Error: Missing a ;
+                                else {
+                                	//dummy code change with whatever applicable
+                                	newcount++;
+            						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+            						this.panicmode("PERIOD", 10, 0); //dummy code
+                                }
         
                                 
                             }
                             // Error: Missing )
+                            else {
+                            	//dummy code change with whatever applicable
+                            	newcount++;
+        						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+        						this.panicmode("PERIOD", 10, 0); //dummy code
+                            }
                         }
                         // Error: Invalid Identifier
+                        else {
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        }
 
                     }
                     else if(typeLookAhead.equals("CLOSE_PAREN")){
@@ -1714,17 +1899,46 @@ public class Parser2 {
                             isValid = true;
                         }
                         // Error: Missing a ;
+                        else {
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        }
                     }
                     // Error: Missing )
+                    else {
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    }
                 }
                 // Error: Invalid Identifier
-
+                else {
+                	//dummy code change with whatever applicable
+                	newcount++;
+					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+					this.panicmode("PERIOD", 10, 0); //dummy code
+                }
             }
             // Error: Missing (
+            else {
+            	//dummy code change with whatever applicable
+            	newcount++;
+				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				this.panicmode("PERIOD", 10, 0); //dummy code
+            }
 
 
         }
         // Error: Expected read or readln
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
 
 
         return isValid;
@@ -1801,17 +2015,47 @@ public class Parser2 {
                             isValid = true;
                         }
                          // Error: Missing a ;
+                        else {
+                        	//dummy code change with whatever applicable
+                        	newcount++;
+    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						this.panicmode("PERIOD", 10, 0); //dummy code
+                        }
                     }
                     // Error: Missing )
+                    else {
+                    	//dummy code change with whatever applicable
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						this.panicmode("PERIOD", 10, 0); //dummy code
+                    }
                 
                 }
                 // Error: Invalid Identifier or String
+                else {
+                	//dummy code change with whatever applicable
+                	newcount++;
+					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+					this.panicmode("PERIOD", 10, 0); //dummy code
+                }
 
             }
             // Error: Missing (
+            else {
+            	//dummy code change with whatever applicable
+            	newcount++;
+				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				this.panicmode("PERIOD", 10, 0); //dummy code
+            }
 
         }
         // Error: Expected read or readln
+        else {
+        	//dummy code change with whatever applicable
+        	newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			this.panicmode("PERIOD", 10, 0); //dummy code
+        }
 
         return isValid;
     }
