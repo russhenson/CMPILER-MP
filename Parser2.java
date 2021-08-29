@@ -13,6 +13,7 @@ public class Parser2 {
     private ArrayList<String> token_name, type_name;
     private int newcount = 0;
     private int statemode = 0;
+    private String indic = "";
 
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
@@ -868,13 +869,20 @@ public class Parser2 {
 			}
 			
 		}
+		else if(mode == 7) {
+			//if it is not a dot after begin
+			newcount++;
+			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			
+		}
     	
     	
     }
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
         boolean isValid = true;
-
+        System.out.println("HUng " + tokenLookAhead + " " + typeLookAhead);
+         
         if(typeLookAhead.equals("IDENTIFIER")){ 
             
             tokenPopper();
@@ -1110,6 +1118,7 @@ public class Parser2 {
     boolean forStatement(){
         boolean isValid = false;
         // Check if the first token is "for"
+        System.out.println("FOR STATEMENT");
         if(tokenLookAhead.equals("for")){
             
             tokenPopper();
@@ -1152,7 +1161,7 @@ public class Parser2 {
                                     tokenTypePopper();
                                     peeker();
 
-                                    if(compoundStatement()){
+                                    if(compoundStatement(1)){
                                         System.out.println("Valid for-loop");
                                         isValid = true;
                                         
@@ -1182,7 +1191,7 @@ public class Parser2 {
     boolean ifStatement(){
         boolean isValid = false;
 
-        System.out.println("ifStatement function called.");
+        System.out.println("ifStatement function called. " + tokenLookAhead + " " + typeLookAhead);
 
         if(ifThen() || ifThenElse()){
             isValid = true;
@@ -1241,7 +1250,7 @@ public class Parser2 {
                             tokenTypePopper();
                             peeker();
                             //if(compoundStatement
-                            if(tokenLookAhead.equals("begin") && !tokenLookAhead.equals("else")){
+                            if(compoundStatement(1) && !tokenLookAhead.equals("else")){
                             	token_name.add(this.tokenLookAhead);
                                 type_name.add(this.typeLookAhead);
                                 System.out.println("Valid if-then statement");
@@ -1301,7 +1310,7 @@ public class Parser2 {
                             tokenTypePopper();
                             peeker();
 
-                            if(compoundStatement()){
+                            if(compoundStatement(1)){
 
                                 if(tokenLookAhead.equals("else")){
                                     
@@ -1309,7 +1318,7 @@ public class Parser2 {
                                     tokenTypePopper();
                                     peeker();
 
-                                    if(compoundStatement()){
+                                    if(compoundStatement(1)){
                                         isValid = true;
                                         System.out.println("Valid if-then-else statement");
                                     }
@@ -1451,6 +1460,9 @@ public class Parser2 {
                     isValid = true;
                 }
                 // Error: Missing )
+                else {
+                	this.returntokens();
+                }
             }
         }
         // Error: Missing a (
@@ -1515,9 +1527,9 @@ public class Parser2 {
     }
 
     // <statement> ::= <simpleStatement> | <structuredStatement>
-    boolean statement() { 
+    boolean statement(int mode) { 
         boolean isValid = false;
-        if(simpleStatement() | structuredStatement())
+        if(simpleStatement() | structuredStatement(mode))
             isValid = true;
             
         return isValid;
@@ -1532,35 +1544,44 @@ public class Parser2 {
 
         return isValid;
     }
-
+    boolean simpleSubStatement() {
+    	boolean isValid = false;
+    	if (simpleStatement()) {
+    		if (statement(1)) {
+    			isValid = true;
+    		}
+    	}
+    	
+    	return isValid;
+    }
     // <structuredStatement> ::= <compoundStatement> | <ifStatement> | <whileStatement> | forStatement
-    boolean structuredStatement() {
+    boolean structuredStatement(int mode) {
         boolean isValid = false;
 
-        if(compoundStatement() | ifStatement() /* | whileStatement() */ | forStatement())
+        if(compoundStatement(mode) | ifStatement() /* | whileStatement() */ | forStatement()  )
             isValid = true;
 
         return isValid;
     }
 
     // <compoundStatement> ::= begin <statement> end
-    boolean compoundStatement() {
-        boolean isValid = false;
+    boolean compoundStatement(int mode) {
+        boolean isValid = false, canstate = true;
 
         if(tokenLookAhead.equals("begin")){
             
             tokenPopper();
             tokenTypePopper();
             peeker();
-
-            if(statement()){
+            
+            if(statement(1)){
                 if(tokenLookAhead.equals("end")){
                     
                     tokenPopper();
                     tokenTypePopper();
                     peeker();
                     //if statement
-                    if (statemode == 0) {
+                    if (mode == 1) {
                     	if(typeLookAhead.equals("SEMICOLON")){
                             
                             tokenPopper();
@@ -1576,12 +1597,11 @@ public class Parser2 {
                     		
                     	}
                     }
-					else if (statemode == 1) {
+					else if (mode == 0) {
+						System.out.println("FADS");
 						if (typeLookAhead.equals("PERIOD")) {
-
-							tokenPopper();
-							tokenTypePopper();
-							peeker();
+							System.out.println("ZAM2");
+							
 
 							isValid = true;
 							System.out.println("Valid compound statement");
@@ -1589,17 +1609,26 @@ public class Parser2 {
 						}
 						// Error: Missing a semicolon
 						else {
-							
+							System.out.println("ZAM");
+							newcount++;
+							errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
 						}
 					}
                     
                     
                 }
                 // Error: Expected end
+                else {
+                	newcount++;
+					errparser.error_checker(17, "error.txt" , newcount, tokenLookAhead);
+                }
             }
         }
         // Error: Expected begin
-
+        else {
+        	newcount++;
+			errparser.error_checker(18, "error.txt" , newcount, tokenLookAhead);
+        }
 
         return isValid;
     }
@@ -1607,6 +1636,7 @@ public class Parser2 {
     // <readStatement> ::= read ( *IDENTIFIER* , *IDENTIFIER* ) | readln ( *IDENTIFIER* , *IDENTIFIER* )
     boolean readStatement() {
         boolean isValid = false;
+        System.out.println("READ STATEMENT");
 
         if(tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")){
             
