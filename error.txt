@@ -14,5 +14,16 @@
 14 Missing comma
 15 Symbol after end in statements must be ;
 16 Symbol after end at the very end must be .
-17 Expected End
-18 Expected Begin
+17 Expected "end" to complete the statement
+18 Expected "begin" to complete the statement
+19 Expected "else" to complete the statement
+20 Expected "then" to complete the statement
+21 Missing "if" to complete the statement
+22 Missing a ")"
+23 Missing a "("
+24 Invalid operator. Expected a "+" or "-"
+25 Invalid operator. Expected a "/" or "*"
+26 Invalid operator
+27 Missing a ";"
+28 Expect "read" or "readln" to complete the statement
+29 Expect "write" or "writeln" to complete the statement

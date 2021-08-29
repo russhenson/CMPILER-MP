@@ -1427,8 +1427,7 @@ public class Parser2 {
                                 else {
                                 	//dummy code change with whatever applicable
                                 	newcount++;
-            						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-            						this.panicmode("PERIOD", 10, 0); //dummy code
+            						errparser.error_checker(19, "error.txt" , newcount, tokenLookAhead);
                                 }
                                 
                             }
@@ -1437,8 +1436,8 @@ public class Parser2 {
                         else {
                         	//dummy code change with whatever applicable
                         	newcount++;
-    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-    						this.panicmode("PERIOD", 10, 0); //dummy code
+    						errparser.error_checker(20, "error.txt" , newcount, tokenLookAhead);
+    						//this.panicmode("PERIOD", 10, 0); //dummy code
                         }
                     }
                     // Error: Missing a )
@@ -1446,24 +1445,24 @@ public class Parser2 {
                     	//dummy code change with whatever applicable
                     	newcount++;
 						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-						this.panicmode("PERIOD", 10, 0); //dummy code
+						//this.panicmode("PERIOD", 10, 0); //dummy code
                     }
                 }
             }
-            // Error: Missing a ()
+            // Error: Missing a (
             else {
             	//dummy code change with whatever applicable
             	newcount++;
-				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-				this.panicmode("PERIOD", 10, 0); //dummy code
+				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
+				//this.panicmode("PERIOD", 10, 0); //dummy code
             }
         }
         // Error: Missing if
         else {
         	//dummy code change with whatever applicable
         	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
+			errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
         return isValid;
@@ -1562,9 +1561,7 @@ public class Parser2 {
             peeker();
             isValid = true;
         }
-        else {
-        	
-        }
+        
 
         return isValid;
     }
@@ -1596,8 +1593,8 @@ public class Parser2 {
                 
                     	//dummy code change with whatever applicable
                     	newcount++;
-						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-						this.panicmode("PERIOD", 10, 0); //dummy code
+						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+						//this.panicmode("PERIOD", 10, 0); //dummy code
                     
                 }
             }
@@ -1609,8 +1606,8 @@ public class Parser2 {
         	
             	//dummy code change with whatever applicable
             	newcount++;
-				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-				this.panicmode("PERIOD", 10, 0); //dummy code
+				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
+				//this.panicmode("PERIOD", 10, 0); //dummy code
             
         }
 
@@ -1633,8 +1630,8 @@ public class Parser2 {
         else {
         	//dummy code change with whatever applicable
         	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
+			errparser.error_checker(24, "error.txt" , newcount, tokenLookAhead);
+			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
         return isValid;
@@ -1656,8 +1653,8 @@ public class Parser2 {
         else {
         	//dummy code change with whatever applicable
         	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
+			errparser.error_checker(25, "error.txt" , newcount, tokenLookAhead);
+			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
             
         return isValid;
@@ -1680,8 +1677,8 @@ public class Parser2 {
         else {
         	//dummy code change with whatever applicable
         	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
+			errparser.error_checker(26, "error.txt" , newcount, tokenLookAhead);
+			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
         return isValid;
@@ -1760,8 +1757,8 @@ public class Parser2 {
                     		
                             	//dummy code change with whatever applicable
                             	newcount++;
-        						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-        						this.panicmode("PERIOD", 10, 0); //dummy code
+        						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
+        						//this.panicmode("PERIOD", 10, 0); //dummy code
                             
                     	}
                     }
@@ -1779,8 +1776,8 @@ public class Parser2 {
 						else {
 	                    	//dummy code change with whatever applicable
 	                    	newcount++;
-							errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-							this.panicmode("PERIOD", 10, 0); //dummy code
+							errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
+							//this.panicmode("PERIOD", 10, 0); //dummy code
 	                    }
 					}
                     
@@ -1791,7 +1788,7 @@ public class Parser2 {
                 	//dummy code change with whatever applicable
                 	newcount++;
 					errparser.error_checker(17, "error.txt" , newcount, tokenLookAhead);
-					this.panicmode("PERIOD", 10, 0); //dummy code
+					//this.panicmode("PERIOD", 10, 0); //dummy code
                 }
             }
         }
@@ -1800,7 +1797,7 @@ public class Parser2 {
         	//dummy code change with whatever applicable
         	newcount++;
 			errparser.error_checker(18, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
+			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
         return isValid;
@@ -1860,8 +1857,8 @@ public class Parser2 {
                                 else {
                                 	//dummy code change with whatever applicable
                                 	newcount++;
-            						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-            						this.panicmode("PERIOD", 10, 0); //dummy code
+            						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
+            						//this.panicmode("PERIOD", 10, 0); //dummy code
                                 }
         
                                 
@@ -1870,16 +1867,16 @@ public class Parser2 {
                             else {
                             	//dummy code change with whatever applicable
                             	newcount++;
-        						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-        						this.panicmode("PERIOD", 10, 0); //dummy code
+        						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+        						//this.panicmode("PERIOD", 10, 0); //dummy code
                             }
                         }
                         // Error: Invalid Identifier
                         else {
                         	//dummy code change with whatever applicable
                         	newcount++;
-    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-    						this.panicmode("PERIOD", 10, 0); //dummy code
+    						errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+    						//this.panicmode("PERIOD", 10, 0); //dummy code
                         }
 
                     }
@@ -1902,23 +1899,23 @@ public class Parser2 {
                         else {
                         	//dummy code change with whatever applicable
                         	newcount++;
-    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-    						this.panicmode("PERIOD", 10, 0); //dummy code
+    						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
+    						//this.panicmode("PERIOD", 10, 0); //dummy code
                         }
                     }
                     // Error: Missing )
                     else {
                     	//dummy code change with whatever applicable
                     	newcount++;
-						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-						this.panicmode("PERIOD", 10, 0); //dummy code
+						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+						//this.panicmode("PERIOD", 10, 0); //dummy code
                     }
                 }
                 // Error: Invalid Identifier
                 else {
                 	//dummy code change with whatever applicable
                 	newcount++;
-					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+					errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
 					this.panicmode("PERIOD", 10, 0); //dummy code
                 }
             }
@@ -1926,7 +1923,7 @@ public class Parser2 {
             else {
             	//dummy code change with whatever applicable
             	newcount++;
-				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
 				this.panicmode("PERIOD", 10, 0); //dummy code
             }
 
@@ -1936,7 +1933,7 @@ public class Parser2 {
         else {
         	//dummy code change with whatever applicable
         	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			errparser.error_checker(28, "error.txt" , newcount, tokenLookAhead);
 			this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
@@ -2018,7 +2015,7 @@ public class Parser2 {
                         else {
                         	//dummy code change with whatever applicable
                         	newcount++;
-    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+    						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
     						this.panicmode("PERIOD", 10, 0); //dummy code
                         }
                     }
@@ -2026,7 +2023,7 @@ public class Parser2 {
                     else {
                     	//dummy code change with whatever applicable
                     	newcount++;
-						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
 						this.panicmode("PERIOD", 10, 0); //dummy code
                     }
                 
@@ -2035,7 +2032,7 @@ public class Parser2 {
                 else {
                 	//dummy code change with whatever applicable
                 	newcount++;
-					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+					errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
 					this.panicmode("PERIOD", 10, 0); //dummy code
                 }
 
@@ -2044,16 +2041,16 @@ public class Parser2 {
             else {
             	//dummy code change with whatever applicable
             	newcount++;
-				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
 				this.panicmode("PERIOD", 10, 0); //dummy code
             }
 
         }
-        // Error: Expected read or readln
+        // Error: Expected write or writeln
         else {
         	//dummy code change with whatever applicable
         	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+			errparser.error_checker(29, "error.txt" , newcount, tokenLookAhead);
 			this.panicmode("PERIOD", 10, 0); //dummy code
         }
 
