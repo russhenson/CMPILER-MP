@@ -2057,6 +2057,171 @@ public class Parser2 {
         return isValid;
     }
 
+    boolean functionDeclaration(){
+        boolean isValid = false;
+        boolean isGoing = true;
+        String prevToken = "";
 
+        if(tokenLookAhead.equals("function")){
+            tokenPopper();
+            tokenTypePopper();
+            peeker();
+
+            if(typeLookAhead.equals("IDENTIFIER")){
+                tokenPopper();
+                tokenTypePopper();
+                peeker();
+
+                if(typeLookAhead.equals("OPEN_PAREN")){
+                    prevToken = "OPEN_PAREN";
+                    tokenPopper();
+                    tokenTypePopper();
+                    peeker();
+
+                    while(isGoing){
+                        if((tokenLookAhead.equals("var") || tokenLookAhead.equals("const"))
+                        && (prevToken.equals("OPEN_PAREN") || (prevToken.equals("SEMICOLON")))){
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
+                        }
+                        if(typeLookAhead.equals("IDENTIFIER") ){
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
+
+                            if(typeLookAhead.equals("COMMA")){
+                                tokenPopper();
+                                tokenTypePopper();
+                                peeker();
+
+                                if(!typeLookAhead.equals("IDENTIFIER")){
+                                    newcount++;
+    						        errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+                                    isValid = false;
+                                    isGoing = false;
+                                }
+                            }
+                            else if(typeLookAhead.equals("COLON")){
+                                tokenPopper();
+                                tokenTypePopper();
+                                peeker();
+
+                                if(typeLookAhead.equals("DATA_TYPE")){
+                                    tokenPopper();
+                                    tokenTypePopper();
+                                    peeker();
+
+                                    if(typeLookAhead.equals("SEMICOLON")){
+                                        prevToken = "SEMICOLON";
+                                        tokenPopper();
+                                        tokenTypePopper();
+                                        peeker();
+                                    }
+                                    else if(typeLookAhead.equals("CLOSE_PAREN")){
+                                        tokenPopper();
+                                        tokenTypePopper();
+                                        peeker();
+                                        isGoing = false;
+                                    }
+                                    else {
+                                        // Error: Missing a ";" or ")"
+										isGoing = false;
+                                        newcount++;
+                                        errparser.error_checker(30, "error.txt" , newcount, tokenLookAhead);
+                                    }
+                                    
+                                }
+                                else {
+                                    // Invalid data type
+									isGoing = false;
+                                    newcount++;
+    						        errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+                                }
+                            }
+                            else {
+                                // Missing a "," or ":"
+								isGoing = false;
+                                newcount++;
+                                errparser.error_checker(31, "error.txt" , newcount, tokenLookAhead);
+                            }
+                            
+                        }
+                        else {
+                            // Missing id
+							isGoing = false;
+                            newcount++;
+                            errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+                        }
+                        
+                    }
+
+                }
+
+                if(typeLookAhead.equals("COLON")){
+                    tokenPopper();
+                    tokenTypePopper();
+                    peeker();
+                    if(typeLookAhead.equals("DATA_TYPE")){
+                        tokenPopper();
+                        tokenTypePopper();
+                        peeker();
+                        if(typeLookAhead.equals("SEMICOLON")){
+                            tokenPopper();
+                            tokenTypePopper();
+                            peeker();
+                            isValid = true;
+							System.out.println("Valid program declaration");
+                        }
+                        else{
+                            newcount++;
+                            errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
+                        }
+    
+                    }
+                    else {
+                        newcount++;
+                        errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+                    }
+
+                }
+                else {
+                    newcount++;
+                    errparser.error_checker(9, "error.txt" , newcount, tokenLookAhead);
+                }
+
+            }
+            else {
+                newcount++;
+                errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+            }
+                
+            
+        }
+
+        return isValid;
+    }
+
+    void print_errors(){
+
+        ArrayList<String> errorList = errparser.get_errparselist();
+
+        for(int i = 0; i < errorList.size(); i++){
+            System.out.println(errorList.get(i));
+        }
+    }
+
+    void programStructure(){
+        if(program()){
+            if(variableDeclaration()){
+                if(functionDeclaration()){
+                    System.out.println("No errors");
+                }
+
+            }
+        }
+
+        print_errors();
+    }
 
 }

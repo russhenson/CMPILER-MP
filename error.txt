@@ -25,5 +25,7 @@
 25 Invalid operator. Expected a "/" or "*"
 26 Invalid operator
 27 Missing a ";"
-28 Expect "read" or "readln" to complete the statement
-29 Expect "write" or "writeln" to complete the statement
+28 Expected "read" or "readln" to complete the statement
+29 Expected "write" or "writeln" to complete the statement
+30 Missing a ";" or ")"
+31 Missing a "," or ":"
