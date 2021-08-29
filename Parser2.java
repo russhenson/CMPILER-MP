@@ -1696,7 +1696,7 @@ public class Parser2 {
     // <simpleStatement> ::= <assignment> | <readStatement> | <writeStatement>
     boolean simpleStatement() {
         boolean isValid = false;
-
+        
         if(assignment() | readStatement() | writeStatement())
             isValid = true;
 
@@ -2071,7 +2071,7 @@ public class Parser2 {
                 tokenPopper();
                 tokenTypePopper();
                 peeker();
-
+                //variables in parenthesis
                 if(typeLookAhead.equals("OPEN_PAREN")){
                     prevToken = "OPEN_PAREN";
                     tokenPopper();
@@ -2170,8 +2170,11 @@ public class Parser2 {
                             tokenPopper();
                             tokenTypePopper();
                             peeker();
-                            isValid = true;
-							System.out.println("Valid program declaration");
+                            if (compoundStatement(1)) {
+                            	isValid = true;
+    							System.out.println("Valid program declaration");
+                            }
+                            
                         }
                         else{
                             newcount++;
