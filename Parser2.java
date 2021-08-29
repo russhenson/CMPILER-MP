@@ -878,6 +878,7 @@ public class Parser2 {
     	
     	
     }
+    
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
         boolean isValid = true;
@@ -1111,10 +1112,12 @@ public class Parser2 {
 
         return isValid;
     }
+    
     void clearlists() {
     	token_name.clear();
     	type_name.clear();
     }
+    
     boolean forStatement(){
         boolean isValid = false;
         // Check if the first token is "for"
@@ -1200,7 +1203,6 @@ public class Parser2 {
         return isValid;
     }
 
-    // <ifThen> ::= if <expression> then <compoundStatement>
     void returntokens() {
     	//returning of tokens
     	for(int i = token_name.size()-1; i >= 0; i--){
@@ -1209,6 +1211,8 @@ public class Parser2 {
     	}
     	clearlists();
     }
+    
+    // <ifThen> ::= if <expression> then <compoundStatement>
     boolean ifThen() {
         boolean isValid = false;
        
@@ -1544,6 +1548,7 @@ public class Parser2 {
 
         return isValid;
     }
+    
     boolean simpleSubStatement() {
     	boolean isValid = false;
     	if (simpleStatement()) {
@@ -1554,6 +1559,7 @@ public class Parser2 {
     	
     	return isValid;
     }
+    
     // <structuredStatement> ::= <compoundStatement> | <ifStatement> | <whileStatement> | forStatement
     boolean structuredStatement(int mode) {
         boolean isValid = false;
