@@ -2203,18 +2203,6 @@ public class Parser2 {
         }
     }
 
-    void programStructure(){
-        if(program()){
-            if(variableDeclaration()){
-                if(functionDeclaration()){
-					if(compoundStatement(0))
-                    	System.out.println("No errors");
-                }
-
-            }
-        }
-
-        //print_errors();
-    }
+    
 
 }
