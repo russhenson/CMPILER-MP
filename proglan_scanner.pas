@@ -1,4 +1,5 @@
 program sample ;
+
 var 
 sampleIdentifier123 : real ;
 y : boolean ;

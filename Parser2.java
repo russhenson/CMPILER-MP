@@ -1119,11 +1119,24 @@ public class Parser2 {
 
 						}
 						else {
-							// Error: Missing a "," or ":"
-							newcount++;
-							errparser.error_checker(31, "error.txt" , newcount, tokenLookAhead);
+							
 							isValid = false;
-							isGoing = false;
+
+							if(typeLookAhead.equals("DATA_TYPE")){
+								colonPopped = true;
+								isGoing = false;
+
+								// Missing a ":"
+								newcount++;
+								errparser.error_checker(9, "error.txt" , newcount, tokenLookAhead);
+							}
+							else if(typeLookAhead.equals("IDENTIFIER")){
+								// Missing a ","
+								newcount++;
+								errparser.error_checker(14, "error.txt" , newcount, tokenLookAhead);
+								isGoing = true;
+							}
+
 						}
 					}
 					else {
@@ -1153,9 +1166,16 @@ public class Parser2 {
 						else {
 							startAgain = false;
 							isValid = true;
-							System.out.println("Valid Variable Declaration");
+							//System.out.println("Valid Variable Declaration");
 						}
 						
+					}
+					else if(typeLookAhead.equals("IDENTIFIER")){
+						// no semicolon on previous line, but there's more declaration
+						startAgain = true;
+						isGoing = true;
+						newcount++;
+						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
 					}
 					else {
 						startAgain = false;
@@ -2204,10 +2224,13 @@ public class Parser2 {
                             tokenPopper();
                             tokenTypePopper();
                             peeker();
-                            if (compoundStatement(1)) {
+
+							isValid = true;
+							System.out.println("Valid Function declaration");
+                            /* if (compoundStatement(1)) {
                             	isValid = true;
     							System.out.println("Valid program declaration");
-                            }
+                            } */
                             
                         }
                         else{
