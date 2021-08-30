@@ -1007,89 +1007,6 @@ public class Parser2 {
             tokenPopper();
             tokenTypePopper();
             peeker();
-
-            /* if (typeLookAhead.equals("IDENTIFIER")) {
-            	while (typeLookAhead.equals("IDENTIFIER")) {
-                	iscorrect = true;
-                	isGoing = true;
-                	
-                    tokenPopper();
-                    tokenTypePopper();
-                	peeker();
-                	System.out.println("Grun " + this.tokenLookAhead + " " + this.typeLookAhead);
-                	while(isGoing) {
-                		//if it is a comma
-                		System.out.println("ZAP " + this.tokenLookAhead + " " + this.typeLookAhead);
-                		if (typeLookAhead.equals("COMMA")) {
-                			
-                            tokenPopper();
-                            tokenTypePopper();
-                        	peeker();
-                        	if (!(typeLookAhead.equals("IDENTIFIER"))) {
-                        		iscorrect = false;
-                        		newcount++;
-                        		errparser.error_checker(11, "error.txt" , newcount, tokenLookAhead);
-                        		return false;
-                        	}
-                        	else {
-                        		
-                                tokenPopper();
-                                tokenTypePopper();
-                            	peeker();
-                        	}
-                		}
-                		//if it is a colon
-                		else if (typeLookAhead.equals("COLON")) {
-                			
-                            tokenPopper();
-                            tokenTypePopper();
-                        	peeker();
-                        	isGoing = false;
-                		}
-                		
-                		else {
-                			newcount++;
-                			errparser.error_checker(10, "error.txt" , newcount, tokenLookAhead);
-                			//this.panicmode("COMMA", 4, 0);
-                			return false;
-                		}
-                	}
-                	//if it is a keyword
-                	if (typeLookAhead.equals("DATA_TYPE")) {
-                		
-                        tokenPopper();
-                        tokenTypePopper();
-                		peeker();
-                		// if it ends in a semicolon
-                		if (typeLookAhead.equals("SEMICOLON")) {
-                    		
-                            tokenPopper();
-                            tokenTypePopper();
-                    		peeker();
-                    		System.out.println("One line valid");
-                    	}
-                    	else {
-                    		System.out.println("SEMI ERROR");
-                    		newcount++;
-                    		errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
-                    		
-                    		this.panicmode("SEMICOLON", 6, 0);
-                    	}
-                	}
-                	else {
-                		System.out.println("ERROR ON DATA");
-                		newcount++;
-                		errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
-                		this.panicmode("DATA_TYPE", 5, 0);
-                	}
-                	//if it ends with a semicolon
-                	
-                }
-            }
-            else {
-            	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
-            	this.panicmode("IDENTIFIER", 3, 0);
-            } */
             
             while(startAgain) {
 				while(isGoing){
@@ -1107,7 +1024,7 @@ public class Parser2 {
 								newcount++;
 								errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
 								isValid = false;
-								isGoing = false;
+								isGoing = true;
 							}
 						}
 						else if(typeLookAhead.equals("COLON")){
@@ -1119,7 +1036,7 @@ public class Parser2 {
 
 						}
 						else {
-							
+							// Error Handling
 							isValid = false;
 
 							if(typeLookAhead.equals("DATA_TYPE")){
@@ -1139,12 +1056,27 @@ public class Parser2 {
 
 						}
 					}
-					else {
-						// Error: Missing/Invalid ID
+
+					else if(typeLookAhead.equals("COMMA")){
+						tokenPopper();
+						tokenTypePopper();
+						peeker();
+
+						newcount++;
+						errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+						isValid = false;
+						isGoing = true;
+					}
+					else if(typeLookAhead.equals("COLON")){
+						tokenPopper();
+						tokenTypePopper();
+						peeker();
+
 						newcount++;
 						errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
 						isValid = false;
 						isGoing = false;
+						colonPopped = true;
 					}
 						
 				}
