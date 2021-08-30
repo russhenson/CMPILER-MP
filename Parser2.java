@@ -13,8 +13,10 @@ public class Parser2 {
     private ArrayList<String> token_name, type_name;
     private int newcount = 0;
     private int statemode = 0;
+    
     private String indic = "";
-
+    private int instamod = 0;
+    private boolean cangostruct = true;
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
@@ -882,20 +884,35 @@ public class Parser2 {
     // Syntax: l-value := r-value ;
     boolean assignment(){ 
         boolean isValid = true;
-        System.out.println("HUng " + tokenLookAhead + " " + typeLookAhead);
+        if (tokenLookAhead.equals("p")) {
+    		System.out.println("Has p");
+    	}
+        this.burstfunc();
+        System.out.println("Going " + tokenLookAhead);
+        if (typeLookAhead.equals("COLON_EQUALS")) {
+        	this.burstfunc();
+        	isValid = this.expression();
+        }
+        else {
+        	//expected colon equals
+        	newcount++;
+        	errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+        }
+        //old code
+        /*System.out.println("HUng " + tokenLookAhead + " " + typeLookAhead);
          
         if(typeLookAhead.equals("IDENTIFIER")){ 
             
             tokenPopper();
             tokenTypePopper();
             peeker();
-
+            System.out.println("GAAAA " + tokenLookAhead);
             if(typeLookAhead.equals("COLON_EQUALS")){
                 
                 tokenPopper();
                 tokenTypePopper();
                 peeker();
-
+                System.out.println("GAAAA " + tokenLookAhead);
                 // Check the r-value
                 if( typeLookAhead.equals("STRING") || 
                     typeLookAhead.equals("REAL") || 
@@ -905,7 +922,7 @@ public class Parser2 {
                         tokenPopper();
                     tokenTypePopper();
                     peeker();
-
+                    System.out.println("GAAAA " + tokenLookAhead);
                     // Check if it ends with semi colon
                     if(typeLookAhead.equals("SEMICOLON")){
                         
@@ -913,7 +930,9 @@ public class Parser2 {
                         tokenTypePopper();
                         peeker();
                         System.out.println("Valid assignment"); // No error
+                        System.out.println("GAAAA " + tokenLookAhead);
                         isValid =  true;
+                        cangostruct = false;
                     }
                     else {
                         System.out.println("Missing a semicolon"); 
@@ -940,7 +959,10 @@ public class Parser2 {
                          tokenTypePopper();
                          peeker();
                          System.out.println("Valid assignment"); // No error
+                         System.out.println("SAAAA " + tokenLookAhead);
                          isValid =  true;
+                         cangostruct = false;
+                        
                      }
                      else {
                          System.out.println("Missing a semicolon"); 
@@ -991,8 +1013,9 @@ public class Parser2 {
 			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
 			this.panicmode("PERIOD", 10, 0); //dummy code
         }
-        
+       System.out.println("Gasa " + tokenLookAhead);*/
         return isValid;
+        
     }
 
     boolean variableDeclaration(){
@@ -1251,12 +1274,26 @@ public class Parser2 {
     // <ifStatement> ::= <ifThen> | <ifThenElse>
     boolean ifStatement(){
         boolean isValid = false;
-
-        System.out.println("ifStatement function called. " + tokenLookAhead + " " + typeLookAhead);
+        
+        this.burstfunc();
+        isValid = this.expression();
+        if (tokenLookAhead.equals("then")) {
+        	this.burstfunc();
+        	isValid = this.statement(1);
+        	if (tokenLookAhead.equals("else")) {
+        		this.burstfunc();
+        		isValid = this.statement(1);
+        	}
+        }
+        else {
+        	//expected then
+        }
+        //old code
+        /*System.out.println("ifStatement function called. " + tokenLookAhead + " " + typeLookAhead);
 
         if(ifThen() || ifThenElse()){
             isValid = true;
-        }
+        }*/
 
         return isValid;
     }
@@ -1456,13 +1493,19 @@ public class Parser2 {
 
     // <expression> ::= <simpleExpression> | <relationalExpression>
     boolean expression() {
+    	String beftoken, beftype;
         Boolean isValid = false;
-
-        System.out.println("expression function called.");
+        isValid = this.simpleExpression();
+        if (this.tokenLookAhead.equals(">") || this.tokenLookAhead.equals("<>") || this.tokenLookAhead.equals("<")  || this.tokenLookAhead.equals("=")  || this.tokenLookAhead.equals(">=")  || this.tokenLookAhead.equals("<=")) {
+        	this.burstfunc();
+        	isValid = this.relationalExpression();
+        }
+        //old code
+        /*System.out.println("expression function called.");
 
         if(simpleExpression() || relationalExpression()){
             isValid = true;
-        }
+        }*/
 
         return isValid;
     }
@@ -1470,7 +1513,17 @@ public class Parser2 {
     // <relationalExpression> ::= <simpleExpression> <relationalOperator> <simpleExpression>
     boolean relationalExpression() {
         Boolean isValid = false;
-
+        if (tokenLookAhead.equals("+") || tokenLookAhead.equals("-")) {
+        	
+        	this.burstfunc();
+        }
+        isValid = this.term();
+        while (tokenLookAhead.equals("+") || tokenLookAhead.equals("-")) {
+        	this.burstfunc();
+        	isValid = this.term();
+        }
+        //old code
+        /*
         if(simpleExpression()){
             if(relationalOperator()){
                 if(simpleExpression()){
@@ -1478,16 +1531,26 @@ public class Parser2 {
                 }
             }
         }
-
+*/
         return isValid;
     }
 
     // <simpleExpression> ::= <term> | <term> <addingOperator> <term>
     boolean simpleExpression() {
         boolean isValid = false;
-
+        
         System.out.println("simpleExpression function called.");
-
+        if (tokenLookAhead.equals("+") || tokenLookAhead.equals("-")) {
+        	
+        	this.burstfunc();
+        }
+        isValid = this.term();
+        while (tokenLookAhead.equals("+") || tokenLookAhead.equals("-")) {
+        	this.burstfunc();
+        	isValid = this.term();
+        }
+		//old code
+        /*
         if(term()){
 
             if(addingOperator()){
@@ -1500,7 +1563,7 @@ public class Parser2 {
             else 
                 isValid = true; // just the term is acceptable
             
-        }
+        }*/
 
         return isValid;
     }
@@ -1510,7 +1573,14 @@ public class Parser2 {
         boolean isValid = false;
 
         System.out.println("term function called.");
+        isValid = this.factor();
 
+        while (tokenLookAhead.equals("*") || tokenLookAhead.equals("/")) {
+        	this.burstfunc();
+        	isValid = this.factor();
+        }
+        //old code
+/*
         if(factor()){
 
             if(multiOperator()){
@@ -1522,7 +1592,7 @@ public class Parser2 {
             else 
                 isValid = true;
         }
-
+*/
 
         return isValid;
     }
@@ -1532,8 +1602,21 @@ public class Parser2 {
         boolean isValid = false;
 
         System.out.println("factor function called.");
-
-        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")){ 
+        if (typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("STRING") || typeLookAhead.equals("REAL") || typeLookAhead.equals("INTEGER")) {
+        	this.burstfunc();
+        }
+        else if (typeLookAhead.equals("OPEN_PAREN")) {
+        	burstfunc();
+        	isValid = expression();
+        	if (typeLookAhead.equals("CLOSE_PAREN")) {
+        		burstfunc();
+        	}
+        	else {
+        		//expected close paren
+        	}
+        }
+        //old code
+        /*if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")){ 
             token_name.add(tokenLookAhead);
             type_name.add(this.typeLookAhead);
             tokenPopper();
@@ -1546,7 +1629,7 @@ public class Parser2 {
             tokenTypePopper();
             peeker();
             isValid = true;
-        }
+        }*/
         
 
         return isValid;
@@ -1672,19 +1755,53 @@ public class Parser2 {
 
     // <statement> ::= <simpleStatement> | <structuredStatement>
     boolean statement(int mode) { 
+    	System.out.println("ZAP");
         boolean isValid = false;
-        if(simpleStatement() | structuredStatement(mode))
+        if (mode == 2) {
+        	if (tokenLookAhead.equals("if") || tokenLookAhead.equals("for")) {
+        		this.statemode = 1;
+        		isValid = structuredStatement(statemode);
+        	}
+        	else {
+        		isValid = simpleStatement();
+        	}
+        }
+        else if (mode == 1) {
+        	if (tokenLookAhead.equals("if") || tokenLookAhead.equals("for") || tokenLookAhead.equals("body")) {
+        		this.statemode = 1;
+        		structuredStatement(statemode);
+        	}
+        	else {
+        		isValid = simpleStatement();
+        	}
+        }
+        
+        //old code
+        /*if(simpleStatement() | structuredStatement(mode))
             isValid = true;
-            
+        
+        System.out.println("Gas " + isValid);*/
         return isValid;
+		
     }
 
     // <simpleStatement> ::= <assignment> | <readStatement> | <writeStatement>
     boolean simpleStatement() {
         boolean isValid = false;
         
-        if(assignment() | readStatement() | writeStatement())
-            isValid = true;
+        if (typeLookAhead.equals("IDENTIFIER")) {
+        	
+        	isValid = this.assignment();
+        }
+        else if (tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")) {
+        	isValid = this.readStatement();
+        }
+        else if (tokenLookAhead.equals("write") || tokenLookAhead.equals("writeln")) {
+        	isValid = this.writeStatement();
+        }
+        //old code
+        /*if(assignment() | readStatement() | writeStatement())
+            isValid = true;*/
 
         return isValid;
     }
@@ -1703,9 +1820,24 @@ public class Parser2 {
     // <structuredStatement> ::= <compoundStatement> | <ifStatement> | <whileStatement> | forStatement
     boolean structuredStatement(int mode) {
         boolean isValid = false;
-
-        if(compoundStatement(mode) | ifStatement() /* | whileStatement() */ | forStatement()  )
-            isValid = true;
+        if (tokenLookAhead.equals("begin")) {
+        	isValid = this.compoundStatement(2);
+        }
+        else if (tokenLookAhead.equals("if")) {
+        	isValid = this.ifStatement();
+        }
+        else if (tokenLookAhead.equals("for")) {
+        	isValid = this.forStatement();
+        }
+        /*if (!(this.cangostruct)) {
+        	System.out.println("HA");
+        	cangostruct = true;
+        }
+        else {
+        	if(compoundStatement(mode) | ifStatement() /* | whileStatement() */ //| forStatement()  )
+                //isValid = true;
+        //}
+        
 
         return isValid;
     }
@@ -1713,14 +1845,54 @@ public class Parser2 {
     // <compoundStatement> ::= begin <statement> end
     boolean compoundStatement(int mode) {
         boolean isValid = false, canstate = true;
-
+        if (mode == 0) {
+        	this.statemode = 2;
+        }
         if(tokenLookAhead.equals("begin")){
-            
+            this.statemode = 2;
             tokenPopper();
             tokenTypePopper();
             peeker();
-            
+            isValid = this.statement(statemode);
+            while (tokenLookAhead.equals(";")) {
+            	
+            	tokenPopper();
+                tokenTypePopper();
+                peeker();
+                System.out.println("IZA " + tokenLookAhead);
+                isValid = statement(statemode);
+            }
+            if (tokenLookAhead.equals("end")) {
+            	tokenPopper();
+                tokenTypePopper();
+                peeker();
+                if (mode == 0) {
+                	if (tokenLookAhead.equals(".")) {
+                    	isValid = true;
+                    }
+                    else {
+                    	//expected dot
+                    	newcount++;
+						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
+                    }
+                }
+                else {
+                	if (tokenLookAhead.equals(";")) {
+                    	isValid = true;
+                    	newcount++;
+						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
+                    }
+                    else {
+                    	//expected dot
+                    	isValid = false;
+                    }
+                }
+            }
+            //old code
+            /*
             if(statement(1)){
+            	boolean wayup = true;
+            	System.out.println("Shwang " + tokenLookAhead);
                 if(tokenLookAhead.equals("end")){
                     
                     tokenPopper();
@@ -1776,7 +1948,7 @@ public class Parser2 {
 					errparser.error_checker(17, "error.txt" , newcount, tokenLookAhead);
 					//this.panicmode("PERIOD", 10, 0); //dummy code
                 }
-            }
+            }*/
         }
         // Error: Expected begin
         else {
@@ -1792,7 +1964,7 @@ public class Parser2 {
     // <readStatement> ::= read ( *IDENTIFIER* , *IDENTIFIER* ) | readln ( *IDENTIFIER* , *IDENTIFIER* )
     boolean readStatement() {
         boolean isValid = false;
-        System.out.println("READ STATEMENT");
+        System.out.println("READ STATEMENT " + tokenLookAhead);
 
         if(tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")){
             
@@ -1838,6 +2010,7 @@ public class Parser2 {
             
                                     System.out.println("Valid read statement");
                                     isValid = true;
+                                    cangostruct = false;
                                 }
                                 // Error: Missing a ;
                                 else {
@@ -1880,6 +2053,7 @@ public class Parser2 {
     
                             System.out.println("Valid read statement");
                             isValid = true;
+                            cangostruct = false;
                         }
                         // Error: Missing a ;
                         else {
@@ -1922,7 +2096,7 @@ public class Parser2 {
 			errparser.error_checker(28, "error.txt" , newcount, tokenLookAhead);
 			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
-
+        System.out.println(cangostruct);
 
         return isValid;
     }
@@ -1975,6 +2149,7 @@ public class Parser2 {
             
                                     System.out.println("Valid write statement");
                                     isValid = true;
+                                    cangostruct = false;
                                 }
         
                                 
@@ -1996,6 +2171,7 @@ public class Parser2 {
     
                             System.out.println("Valid write statement");
                             isValid = true;
+                            cangostruct = false;
                         }
                          // Error: Missing a ;
                         else {
@@ -2039,7 +2215,7 @@ public class Parser2 {
 			errparser.error_checker(29, "error.txt" , newcount, tokenLookAhead);
 			//this.panicmode("PERIOD", 10, 0); //dummy code
         }
-
+        System.out.println(cangostruct);
         return isValid;
     }
 
@@ -2159,6 +2335,7 @@ public class Parser2 {
 
 							isValid = true;
 							System.out.println("Valid Function declaration");
+							isValid = this.compoundStatement(2);
                             /* if (compoundStatement(1)) {
                             	isValid = true;
     							System.out.println("Valid program declaration");
