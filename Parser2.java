@@ -78,7 +78,7 @@ public class Parser2 {
 
                 // Check if it ends with semi colon
                 if(typeLookAhead.equals("SEMICOLON")){
-                    System.out.println("Valid program heading"); // No error
+                    //System.out.println("Valid program heading"); // No error
                     
                     tokenPopper();
                     tokenTypePopper();
@@ -90,8 +90,7 @@ public class Parser2 {
                     System.out.println("Missing a semicolon"); // Missing a semicolon
                     // get the error message from error.txt
                     newcount++;
-                	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
-                	panicmode("IDENTIFIER", 2, 0);
+                	errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead); 	
                    
                 }
 
@@ -101,17 +100,28 @@ public class Parser2 {
                 // get the error message from error.txt
                 newcount++;
             	errparser.error_checker(2, "error.txt" , newcount, tokenLookAhead);
-            	//panic
-            	panicmode("IDENTIFIER", 1, 0);
                 
             }
        }
        // get the error message from error.txt
-        else {
-        	newcount++;
-        	errparser.error_checker(8, "error.txt" , newcount, tokenLookAhead);
-        	panicmode("program", 0, 1);
+        else if(typeLookAhead.equals("IDENTIFIER")){
+			tokenPopper();
+			tokenTypePopper();
+			peeker();
+
+			if(typeLookAhead.equals("IDENTIFIER")){
+				// Missing program
+				newcount++;
+				errparser.error_checker(32, "error.txt" , newcount, tokenLookAhead);
+			}
+			else{
+				newcount++;
+				errparser.error_checker(8, "error.txt" , newcount, tokenLookAhead);
+			}
         }
+		
+		variableDeclaration();
+		
 
        return isValid;
 
@@ -1026,7 +1036,14 @@ public class Parser2 {
 		boolean startAgain = true;
 
         // Check if the first token is "var"
-        if(tokenLookAhead.equals("var")){
+        if(!tokenLookAhead.equals(null)){
+
+			// Missing "var"
+			if(!tokenLookAhead.equals("var")){
+				newcount++;
+				errparser.error_checker(33, "error.txt" , newcount, tokenLookAhead);
+			}
+			
             tokenPopper();
             tokenTypePopper();
             peeker();
@@ -1147,7 +1164,9 @@ public class Parser2 {
 			}
 
         }
-		// var not found
+	
+		functionDeclaration();
+		
         
         return isValid;
     }
@@ -2333,13 +2352,13 @@ public class Parser2 {
                             tokenTypePopper();
                             peeker();
 
-							isValid = true;
-							System.out.println("Valid Function declaration");
+							//isValid = true;
+							//System.out.println("Valid Function declaration");
 							isValid = this.compoundStatement(2);
-                            /* if (compoundStatement(1)) {
+                            if (compoundStatement(1)) {
                             	isValid = true;
     							System.out.println("Valid program declaration");
-                            } */
+                            }
                             
                         }
                         else{
@@ -2371,14 +2390,7 @@ public class Parser2 {
         return isValid;
     }
 
-    void print_errors(){
-
-        ArrayList<String> errorList = errparser.get_errparselist();
-
-        for(int i = 0; i < errorList.size(); i++){
-            System.out.println(errorList.get(i));
-        }
-    }
+    
 
     
 

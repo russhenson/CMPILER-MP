@@ -29,3 +29,4 @@
 29 Expected "write" or "writeln" to complete the statement
 30 Missing a ";" or ")"
 31 Missing a "," or ":"
+32 Missing a "program"
