@@ -408,6 +408,8 @@ class TextEditorGUI extends JFrame implements ActionListener {
 			parser.program();
 			parser.variableDeclaration();
 			parser.functionDeclaration();
+			System.out.println("Hajimaru");
+			
 			parser.compoundStatement(0);
 
 

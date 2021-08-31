@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 public class Parser2 {
-	private boolean shak = false;
+	private boolean shak = false, sagemark = false;;
     private Stack<String> tokenStack;
     private Stack<String> tokenTypeStack;
     private ErrorParser errparser;
@@ -1183,7 +1183,7 @@ public class Parser2 {
                     tokenTypePopper();
                     peeker();
 
-                    if(typeLookAhead.equals("INTEGER")){
+                    if(typeLookAhead.equals("INTEGER") || typeLookAhead.equals("IDENTIFIER")){
                         
                         tokenPopper();
                         tokenTypePopper();
@@ -1195,7 +1195,7 @@ public class Parser2 {
                             tokenTypePopper();
                             peeker();
 
-                            if(typeLookAhead.equals("INTEGER")){
+                            if(typeLookAhead.equals("INTEGER") || typeLookAhead.equals("IDENTIFIER")){
                                 
                                 tokenPopper();
                                 tokenTypePopper();
@@ -1206,12 +1206,10 @@ public class Parser2 {
                                     tokenPopper();
                                     tokenTypePopper();
                                     peeker();
-                                    System.out.println("gas");
-                                    if(compoundStatement(1)){
-                                        System.out.println("Valid for-loop");
-                                        isValid = true;
-                                        
-                                    }
+                                    System.out.println("gas " + tokenLookAhead);
+                                    isValid = compoundStatement(1);
+                                    
+                                    
                                     // this function has error handling already no need for one here                          
                                 }
                                 // Error: Expected a "do"
@@ -1292,11 +1290,13 @@ public class Parser2 {
         		this.burstfunc();
         		shak = false;
         	}
+        	System.out.println("Wahooas " + tokenLookAhead);
         	if (tokenLookAhead.equals("else")) {
         		System.out.println("Wahoo");
         		this.burstfunc();
-        		this.shak = true;
+        		
         		isValid = this.compoundStatement(1);
+        		
         	}
         }
         else {
@@ -1552,7 +1552,7 @@ public class Parser2 {
     // <simpleExpression> ::= <term> | <term> <addingOperator> <term>
     boolean simpleExpression() {
         boolean isValid = false;
-        System.out.println("simpleExpression function called.");
+        System.out.println("simpleExpression function called. " + tokenLookAhead);
         this.relationalExpression();
         if (tokenLookAhead.equals("+") || tokenLookAhead.equals("-")) {
         	
@@ -1586,7 +1586,7 @@ public class Parser2 {
     boolean term(){
         boolean isValid = false;
 
-        System.out.println("term function called.");
+        System.out.println("term function called. " + tokenLookAhead);
         isValid = this.factor();
 
         while (tokenLookAhead.equals("*") || tokenLookAhead.equals("/")) {
@@ -1615,7 +1615,7 @@ public class Parser2 {
     boolean factor() {
         boolean isValid = false;
 
-        System.out.println("factor function called.");
+        System.out.println("factor function called. " + tokenLookAhead);
         if (tokenLookAhead.equals("not:")) {
         	this.burstfunc();
         }
@@ -1861,16 +1861,22 @@ public class Parser2 {
 
     // <compoundStatement> ::= begin <statement> end
     boolean compoundStatement(int mode) {
-        boolean isValid = false, canstate = true, shakdated = false;
+        boolean isValid = false, canstate = false, shakdated = false, wowzer = false;
+        if (sagemark) {
+        	canstate = true;
+        	sagemark = false;
+        }
         System.out.println("Kun6 " + mode);
         if (mode == 0) {
+        	System.out.println("ASD " + tokenLookAhead);
         	this.statemode = 2;
+        	wowzer = true;
         }
         if (shak) {
         	mode = 1;
         	shakdated = true;
         	shak = false;
-        	System.out.println("Kun5 " + mode);
+        	System.out.println("Kun5 " + mode + tokenLookAhead);
         }
         if(tokenLookAhead.equals("begin")){
             this.statemode = 2;
@@ -1899,8 +1905,12 @@ public class Parser2 {
             	tokenPopper();
                 tokenTypePopper();
                 peeker();
+                System.out.println("Jaster");
                 if (shak) {
                 	System.out.println("Kun " + mode);
+                }
+                if (wowzer) {
+                	System.out.println("Wowzaaaa");
                 }
                 if (mode == 0) {
                 	if (tokenLookAhead.equals(".")) {
@@ -1913,11 +1923,15 @@ public class Parser2 {
                     }
                 }
                 else {
-                	System.out.println(" asdfaas " + tokenLookAhead + " " + tokenLookAhead.equals(";"));
+                	System.out.println(" asdfaas " + tokenLookAhead + " " + tokenLookAhead.equals(";") + " " + sagemark);
+                	if (sagemark) {
+                		System.out.println("Sage goes here");
+                	}
                 	if (tokenLookAhead.equals(";")) {
                     	isValid = true;
                     	if (shakdated) {
-                    		this.shak = true;
+                    		shakdated = false;
+                    		shak = true;
                     	}
 						
                     }
@@ -2366,7 +2380,10 @@ public class Parser2 {
 
 							isValid = true;
 							System.out.println("Valid Function declaration");
+							sagemark = true;
 							isValid = this.compoundStatement(2);
+							System.out.println("ZONK " + tokenLookAhead);
+							this.burstfunc();
                             /* if (compoundStatement(1)) {
                             	isValid = true;
     							System.out.println("Valid program declaration");
