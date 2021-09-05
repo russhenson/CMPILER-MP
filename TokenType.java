@@ -43,7 +43,10 @@ public class TokenType {
         BOOL_NOT,
 		STRING,
 		ARRAY,
-        ERROR
+        ERROR,
+        VOID,
+        UP_UNTIL,
+        STRING_SINGLE
     }
 
     String[] reserved = {"program", "begin", "end", "function", "procedure", "and", "or", "not", "var", "const", "for", "to", "downto", "repeat", "until", "while",
@@ -73,10 +76,14 @@ public class TokenType {
 	            token = Type.SEMICOLON;
 	        else if(lexeme.equals(":"))
 	            token = Type.COLON;
+	        else if (lexeme.equals("...")) {
+	        	token = Type.UP_UNTIL;
+	        }
 	        else if(lexeme.equals("+"))
 	            token = Type.PLUS;
 	        else if(lexeme.equals("-"))
 	            token = Type.MINUS;
+	       
 	        else if(lexeme.equals("*"))
 	            token = Type.MULTIPLY;
 	        else if(lexeme.equals("/"))
@@ -113,14 +120,22 @@ public class TokenType {
 				token = Type.ARRAY;
 	        else if(lexeme.equals("^"))
 	            token = Type.HAT;
+	        else if (lexeme.equals("void")) {
+	        	token = Type.VOID;
+	        }
 	        else if(lexeme.matches("[a-zA-Z][a-zA-z0-9]*") && !lAnalyzer.isComment)
 	            token = Type.IDENTIFIER;
 			else if(lexeme.matches("\\{") || lexeme.startsWith("{"))
 				token = Type.OPEN_CURLY_BRACE;
-	        else if(lexeme.equals("‘") | lexeme.equals("\'"))
+	        else if(lexeme.equals("‘") | lexeme.equals("\'") || lexeme.startsWith("\'"))
 	            token = Type.SINGLE_QUOTE;
+	        else if (lexeme.startsWith("‘") || lexeme.startsWith("'")) {
+	        	token = Type.STRING_SINGLE;
+	        }
 	        else if(lexeme.equals("\""))
 	            token = Type.DOUBLE_QUOTE;
+	        else if(lexeme.startsWith("\""))
+	            token = Type.STRING;
 	        else if(lexeme.matches("[0-9]+"))
 	            token = Type.INTEGER;
 	        else if(lexeme.matches("[0-9]*.[0-9]+"))
@@ -131,6 +146,7 @@ public class TokenType {
 	            token = Type.BOOL_OR;
 	        else if(lexeme.matches("not:"))
 	            token = Type.BOOL_NOT;
+	        
 	        else
 	            token = Type.ERROR;
         }

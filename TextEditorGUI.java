@@ -291,6 +291,7 @@ class TextEditorGUI extends JFrame implements ActionListener {
                 boolean isnotcomm = true;
 				boolean isString = false;
 				boolean isFirstQuote = false;
+				boolean isNotSingleQuote = true;
                 while((line = br.readLine())!= null){
                     scanner.read_line(inputFile, lineNum);
                     String oneLine = scanner.get_line();
@@ -342,16 +343,54 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		combi = combi + snip + " ";
                         	}
                         }
-						else if(result.equals("DOUBLE_QUOTE") || result.equals("STRING")){
+						else if(result.equals("DOUBLE_QUOTE") || result.equals("STRING") && isNotSingleQuote){
 							//deletes last line
+							
                     		scanner.delete_line("outputfile.tok");
 							String snip = lexemesPerLine.get(i);
+							boolean hasfoundsec = false;
+							
 							if(!isFirstQuote && snip.contains("\"")){
 								combi = combi + snip + " ";
+								System.out.println("BANG 1 " + combi);
 								isString = true;
 								isFirstQuote = true;
+								int stringlen = snip.length(), firstind = 0;
+								for (int z = 0; z < stringlen; z++ ) {
+									String letra = Character.toString(snip.charAt(z));
+									if (letra.equals("\"")) {
+										firstind = z;
+										break;
+									}
+								}
+								int afterind = firstind + 1, secind = 0;
+								for (int z = afterind; z < stringlen; z++) {
+									String letra2 = Character.toString(snip.charAt(z));
+									if (letra2.equals("\"")) {
+										hasfoundsec = true;
+										isString = false;
+										isFirstQuote = false;
+										secind = z;
+										break;
+									}
+									
+								}
+								String newoutput = "";
+							
+								if (hasfoundsec) {
+									//if double quote is not last
+									if (secind != stringlen - 1) {
+										newoutput = combi + "\t" + "ERROR" + "\n";
+									}
+									else {
+										newoutput = combi + "\t" + "STRING" + "\n";
+									}
+									combi = "";
+									scanner.file_dump(outputFile, newoutput);
+								}
 							}
 							else if(isFirstQuote && snip.contains("\"")){
+							
 								int len = snip.length(), curlind = 0;
 								for (int j = 0; j < len; j++) {
                         			String letty = Character.toString(snip.charAt(j));
@@ -362,22 +401,112 @@ class TextEditorGUI extends JFrame implements ActionListener {
                         		}
                         		int max = curlind + 1;
                         		String before = snip.substring(0, max), after = "";
-                        		String newoutput = combi + before + "\t" + "STRING" + "\n";
-                        		combi = "";
-                        		scanner.file_dump(outputFile, newoutput);
+                        		String newoutput = "";
+                        		
+                        		
                         		isString = false;
 								isFirstQuote = false;
                         		if (curlind != (len - 1)) {
-                        			after = snip.substring(max, len);
-                        			scanner.file_dump(outputFile, scanner.console_dump(oneLine, after, isnotcomm, isString));
+                        			newoutput = combi + snip + "\t" + "ERROR" + "\n";
+                        			
+                        			
 
 								}
+                        		else {
+                        			newoutput = combi + snip + "\t" + "STRING" + "\n";
+                        		}
+                        		combi = "";
+                        		scanner.file_dump(outputFile, newoutput);
 								
 							}
 							else {
 								combi = combi + snip + " ";
 							}
 						}
+						else if (result.equals("SINGLE_QUOTE") || result.equals("STRING_SINGLE") || result.equals("STRING")) {
+							//deletes last line
+							isNotSingleQuote = false;
+                    		scanner.delete_line("outputfile.tok");
+							String snip = lexemesPerLine.get(i);
+							boolean hasfoundsec = false;
+							
+							if(!isFirstQuote && snip.contains("\'")){
+								combi = combi + snip + " ";
+								
+								isString = true;
+								isFirstQuote = true;
+								int stringlen = snip.length(), firstind = 0;
+								for (int z = 0; z < stringlen; z++ ) {
+									String letra = Character.toString(snip.charAt(z));
+									if (letra.equals("\'")) {
+										firstind = z;
+										break;
+									}
+								}
+								int afterind = firstind + 1, secind = 0;
+								for (int z = afterind; z < stringlen; z++) {
+									String letra2 = Character.toString(snip.charAt(z));
+									if (letra2.equals("\'")) {
+										hasfoundsec = true;
+										isString = false;
+										isFirstQuote = false;
+										secind = z;
+										break;
+									}
+									
+								}
+								String newoutput = "";
+								System.out.println("BANG 2 " + combi + " " + hasfoundsec);
+								if (hasfoundsec) {
+									//if double quote is not last
+									if (secind != stringlen - 1) {
+										newoutput = combi + "\t" + "ERROR" + "\n";
+									}
+									else {
+										newoutput = combi + "\t" + "STRING" + "\n";
+									}
+									isNotSingleQuote = true;
+									combi = "";
+									scanner.file_dump(outputFile, newoutput);
+								}
+							}
+							else if(isFirstQuote && snip.contains("\'")){
+							
+								int len = snip.length(), curlind = 0;
+								for (int j = 0; j < len; j++) {
+                        			String letty = Character.toString(snip.charAt(j));
+                        			if (letty.equals("\'")) {
+                        				curlind = j;
+                        				break;
+                        			}
+                        		}
+                        		int max = curlind + 1;
+                        		String before = snip.substring(0, max), after = "";
+                        		String newoutput = "";
+                        		
+                        		
+                        		isString = false;
+								isFirstQuote = false;
+                        		if (curlind != (len - 1)) {
+                        			newoutput = combi + snip + "\t" + "ERROR" + "\n";
+                        			
+                        			
+
+								}
+                        		else {
+                        			newoutput = combi + snip + "\t" + "STRING" + "\n";
+                        			
+                        		}
+                        		isNotSingleQuote = true;
+                        		combi = "";
+                        		scanner.file_dump(outputFile, newoutput);
+								
+							}
+							else {
+								combi = combi + snip + " ";
+							}
+						}
+						
 						
                         
                     }
@@ -405,12 +534,9 @@ class TextEditorGUI extends JFrame implements ActionListener {
 
             
 			Parser2 parser = new Parser2(scanner.token_dump(), scanner.tokenType_dump(), counter);
-			parser.program();
-			parser.variableDeclaration();
-			parser.functionDeclaration();
-			System.out.println("Hajimaru");
+			parser.start();
 			
-			parser.compoundStatement(0);
+			
 
 
 			// print output to output textarea
