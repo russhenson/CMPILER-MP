@@ -1,1 +1,10 @@
 /function.class
+/semanticanalyzer.class
+/variableGlobal.class
+/variableLocal.class
+/ErrrorInterp.class
+/ErrorInterp.class
+/explist.class
+/forloop.class
+/whileloop.class
+/functionmove.class

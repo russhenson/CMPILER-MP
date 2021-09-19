@@ -1,13 +1,15 @@
 import javax.swing.text.html.HTMLEditorKit.Parser;
 
+import semanticanalyzer.semanticanalyzer;
+import semanticanalyzer.*;
 import java.io.*;
 import java.util.*;
 
 public class Parser2 {
 	private boolean shak = false, sagemark = false;
 	private int errornum = 0;
-    private Stack<String> tokenStack;
-    private Stack<String> tokenTypeStack;
+    private Stack<String> tokenStack, tokenStack2;
+    private Stack<String> tokenTypeStack, tokenTypeStack2;
     private ErrorParser errparser;
     private String tokenLookAhead;
     private String typeLookAhead;
@@ -19,9 +21,13 @@ public class Parser2 {
     private boolean notthrown = true;
     private int instamod = 0;
     private boolean cangostruct = true;
+    private ArrayList<String> tokenn, typee;
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
-        this.tokenStack = new Stack<>();
+        tokenn = tokens;
+        typee = tokenType;
+    	this.tokenStack = new Stack<>();
         this.tokenTypeStack = new Stack<>();
+        
         token_name = new ArrayList<String>();
         type_name = new ArrayList<String>();
         this.newcount = counter;
@@ -30,7 +36,8 @@ public class Parser2 {
             tokenStack.push(tokens.get(i));
             tokenTypeStack.push(tokenType.get(i));
         }
-
+      
+       
         tokenLookAhead = tokenStack.peek();
         typeLookAhead = tokenTypeStack.peek();
         
@@ -113,6 +120,13 @@ public class Parser2 {
                     	
                     	isValid = this.compoundStatement(0);
                     	System.out.println("Check the weather " + notthrown + " and " + tokenLookAhead + " size " + this.errparser.get_errparselist().size());
+                    	
+                    	int num = this.errparser.get_errparselist().size();
+                    	if (num == 0) {
+                    		
+                    		semanticanalyzer sem4 = new semanticanalyzer(this.tokenn, this.typee, newcount);
+                    		
+                    	}
                     }
 
                 }
@@ -941,122 +955,7 @@ public class Parser2 {
         	}
         	
         }
-        //old code
-        /*System.out.println("HUng " + tokenLookAhead + " " + typeLookAhead);
-         
-        if(typeLookAhead.equals("IDENTIFIER")){ 
-            
-            tokenPopper();
-            tokenTypePopper();
-            peeker();
-            System.out.println("GAAAA " + tokenLookAhead);
-            if(typeLookAhead.equals("COLON_EQUALS")){
-                
-                tokenPopper();
-                tokenTypePopper();
-                peeker();
-                System.out.println("GAAAA " + tokenLookAhead);
-                // Check the r-value
-                if( typeLookAhead.equals("STRING") || 
-                    typeLookAhead.equals("REAL") || 
-                    typeLookAhead.equals("INTEGER")){ // supposed to be arithmetic
-
-                    
-                        tokenPopper();
-                    tokenTypePopper();
-                    peeker();
-                    System.out.println("GAAAA " + tokenLookAhead);
-                    // Check if it ends with semi colon
-                    if(typeLookAhead.equals("SEMICOLON")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
-                        System.out.println("Valid assignment"); // No error
-                        System.out.println("GAAAA " + tokenLookAhead);
-                        isValid =  true;
-                        cangostruct = false;
-                    }
-                    else {
-                        System.out.println("Missing a semicolon"); 
-                        // Error: Missing a semicolon 
-                        // get the error message from error.txt
-                       
-                        	//dummy code change with whatever applicable
-                        	newcount++;
-    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-    						this.panicmode("PERIOD", 10, 0); //dummy code
-                        
-                        
-                    }
-                }
-                else if (expression()) {
-                	 tokenPopper();
-                     tokenTypePopper();
-                     peeker();
-
-                     // Check if it ends with semi colon
-                     if(typeLookAhead.equals("SEMICOLON")){
-                         
-                         tokenPopper();
-                         tokenTypePopper();
-                         peeker();
-                         System.out.println("Valid assignment"); // No error
-                         System.out.println("SAAAA " + tokenLookAhead);
-                         isValid =  true;
-                         cangostruct = false;
-                        
-                     }
-                     else {
-                         System.out.println("Missing a semicolon"); 
-                         // Error: Missing a semicolon 
-                         // get the error message from error.txt
-                         
-                         	//dummy code change with whatever applicable
-                         	newcount++;
-     						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-     						this.panicmode("PERIOD", 10, 0); //dummy code
-                         
-                         
-                     }
-                }
-                else {
-                    System.out.println("Invalid assignment value"); 
-                    // Error: Wrong assignment
-                    // get the error message from error.txt
-                  
-                    	//dummy code change with whatever applicable
-                    	newcount++;
-						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-						this.panicmode("PERIOD", 10, 0); //dummy code
-                    
-                    
-                }
-
-            }
-            else {
-                System.out.println("Missing an assignment operator"); 
-                // Error: No := operator
-                // get the error message from error.txt
-                
-                	//dummy code change with whatever applicable
-                	newcount++;
-					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-					this.panicmode("PERIOD", 10, 0); //dummy code
-                
-               
-            }
-
-        }
-        // Error: Incorrect or Missing Identifier
-        // geth the error message from error.txt
-        else {
-        	//dummy code change with whatever applicable
-        	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
-        }
-       System.out.println("Gasa " + tokenLookAhead);*/
+        
         return isValid;
         
     }
@@ -1103,6 +1002,7 @@ public class Parser2 {
 						}
 						else {
 							//expected data type
+							System.out.println("UMAE 4");
 							notthrown = false;
 							notthrown = false;
 				            newcount++;
@@ -1143,7 +1043,7 @@ public class Parser2 {
 		boolean hasarray = false;
 
         // Check if the first token is "var"
-		
+		//GO BACK ARRAY SHOULD ONLY ACCEPT INTEGERS
 		if (tokenLookAhead.equals("var")) {
 			this.burstfunc();
 			//required identifier
@@ -1151,6 +1051,7 @@ public class Parser2 {
 				//keep looking for identifier
 				
 				while (typeLookAhead.equals("IDENTIFIER") && notthrown) {
+					System.out.println("QUICK CHECK " + tokenLookAhead);
 					this.burstfunc();
 					//optional comma
 					if (tokenLookAhead.equals(",")) {
@@ -1163,6 +1064,8 @@ public class Parser2 {
 							else {
 								//expected identifier
 								notthrown = false;
+								newcount++;
+					        	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
 							}
 						}
 					}
@@ -1179,13 +1082,13 @@ public class Parser2 {
 								if (tokenLookAhead.equals("[")) {
 									this.burstfunc();
 									//if integer or identifier
-									if (typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")) {
+									if (typeLookAhead.equals("INTEGER")) {
 										this.burstfunc();
 										//if up until data type
 										if (typeLookAhead.equals("UP_UNTIL")) {
 											this.burstfunc();
 											//if identifier or integer
-											if (typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")) {
+											if (typeLookAhead.equals("INTEGER")) {
 												this.burstfunc();
 												//expected close bracket
 												if (tokenLookAhead.equals("]")) {
@@ -1193,7 +1096,31 @@ public class Parser2 {
 													if (tokenLookAhead.equals("of")) {
 														this.burstfunc();
 														//if it is a data type
-														
+														/*System.out.println("OFFING " + typeLookAhead);
+														if (typeLookAhead.equals("DATA_TYPE")) {
+															System.out.println("BUZZ");
+															this.burstfunc();
+															if (tokenLookAhead.equals(";")) {
+																//revert to check if it is an identifier still
+																System.out.println("SEMICOLON VAR3 " + tokenLookAhead);
+																this.burstfunc();
+																System.out.println("SEMICOLON VAR " + tokenLookAhead);
+																hasarray = false;
+															}
+															else {
+																//expected semicolon
+																notthrown = false;
+													            newcount++;
+													        	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+															}
+														}
+														else {
+															//expected data type
+															System.out.println("UMAE 1");
+															notthrown = false;
+												            newcount++;
+												        	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
+														}*/
 														
 													}
 													else {
@@ -1240,7 +1167,9 @@ public class Parser2 {
 								}
 								
 							}
+							System.out.println("SHang");
 							if (typeLookAhead.equals("DATA_TYPE") && !(tokenLookAhead.equals("array"))) {
+								System.out.println("SHang2");
 								this.burstfunc();
 								hasarray = false;
 								//required semicolon
@@ -1260,6 +1189,7 @@ public class Parser2 {
 							else {
 								//expected data type
 								if (hasarray && tokenLookAhead.equals("array")) {
+									System.out.println("UMAE 2");
 									hasarray = false;
 									//repeated array
 									notthrown = false;
@@ -1268,6 +1198,7 @@ public class Parser2 {
 						        	errparser.error_checker(39, "error.txt" , newcount, tokenLookAhead);
 								}
 								else {
+									System.out.println("UMAE 3");
 									notthrown = false;
 									notthrown = false;
 						            newcount++;
@@ -1506,117 +1437,7 @@ public class Parser2 {
         	newcount++;
 			errparser.error_checker(40, "error.txt" , newcount, tokenLookAhead);
         }
-        /*
-        if(tokenLookAhead.equals("for")){
-            
-            tokenPopper();
-            tokenTypePopper();
-            peeker();
-
-            if(typeLookAhead.equals("IDENTIFIER")){
-                
-                tokenPopper();
-                tokenTypePopper();
-                peeker();
-
-                if(typeLookAhead.equals("COLON_EQUALS")){
-                    
-                    tokenPopper();
-                    tokenTypePopper();
-                    peeker();
-
-                    if(typeLookAhead.equals("INTEGER") || typeLookAhead.equals("IDENTIFIER")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
-
-                        if(tokenLookAhead.equals("to")){
-                            
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
-
-                            if(typeLookAhead.equals("INTEGER") || typeLookAhead.equals("IDENTIFIER")){
-                                
-                                tokenPopper();
-                                tokenTypePopper();
-                                peeker();
-
-                                if(tokenLookAhead.equals("do")){
-                                    
-                                    tokenPopper();
-                                    tokenTypePopper();
-                                    peeker();
-                                    System.out.println("gas " + tokenLookAhead);
-                                    isValid = compoundStatement(1);
-                                    
-                                    
-                                    // this function has error handling already no need for one here                          
-                                }
-                                // Error: Expected a "do"
-                                else {
-                                	
-                                	System.out.println("UMAEKA for");
-                                	//dummy code change with whatever applicable
-                                	newcount++;
-            						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-            						this.panicmode("PERIOD", 10, 0); //dummy code
-                                }
-                            }
-                            // Error: Expected an Integer
-                            else {
-                            	//dummy code change with whatever applicable
-                            	System.out.println("UMAEKA for2");
-                            	newcount++;
-        						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-        						this.panicmode("PERIOD", 10, 0); //dummy code
-                            }
-                        }
-                        // Error: Expected a "to"
-                        else {
-                        	System.out.println("UMAEKA for3");
-                        	//dummy code change with whatever applicable
-                        	newcount++;
-    						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-    						this.panicmode("PERIOD", 10, 0); //dummy code
-                        }
-                    }
-                    // Error: Expected an Integer
-                    else {
-                    	//dummy code change with whatever applicable
-                    	System.out.println("UMAEKA for4");
-                    	newcount++;
-						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-						this.panicmode("PERIOD", 10, 0); //dummy code
-                    }
-                }
-                // Error: No := operator
-                else {
-                	//dummy code change with whatever applicable
-                	System.out.println("UMAEKA for5");
-                	newcount++;
-					errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-					this.panicmode("PERIOD", 10, 0); //dummy code
-                }
-            }
-            // Error: Incorrect or Missing Identifier
-            else {
-            	//dummy code change with whatever applicable
-            	System.out.println("UMAEKA for6");
-            	newcount++;
-				errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-				this.panicmode("PERIOD", 10, 0); //dummy code
-            }
-        }
-        // Error: Expected a "for"
-        else {
-        	//dummy code change with whatever applicable
-        	System.out.println("UMAEKA for7");
-        	newcount++;
-			errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
-			this.panicmode("PERIOD", 10, 0); //dummy code
-        }*/
+       
 
         
 
@@ -1626,6 +1447,7 @@ public class Parser2 {
     // <ifStatement> ::= <ifThen> | <ifThenElse>
     boolean ifStatement(){
         boolean isValid = false;
+        boolean cancont = true;
         //GO BACK TO HERE SOMETIME VERY IMPORTANT
         this.burstfunc();
         if (tokenLookAhead.equals("(")) {
@@ -1643,21 +1465,69 @@ public class Parser2 {
                     	System.out.println("Go here " + tokenLookAhead);
                     	
                     	int num = 1;
-                    	isValid = this.statement(1);
-                    	System.out.println(tokenLookAhead + " jitters");
-                    	
-                    	if (tokenLookAhead.equals("else") && notthrown) {
-                    		System.out.println("Wahoo");
-                    		this.burstfunc();
-                    		
-                    		isValid = this.compoundStatement(1);
-                    		
-                    	}
+                    	isValid = this.compoundStatement(2);
+                    	System.out.println(tokenLookAhead + " jitters " + this.errparser.get_errparselist().size());
                     	if (notthrown) {
+                    		if (tokenLookAhead.equals("else")) {
+                        		while (tokenLookAhead.equals("else") && notthrown && cancont) {
+                        			this.burstfunc();
+                        			if (tokenLookAhead.equals("if")) {
+                        				this.burstfunc();
+                        				if (tokenLookAhead.equals("(")) {
+                        					this.burstfunc();
+                        		        	isValid = this.expression(0);
+                        		        	if (notthrown) {
+                        		        		if (tokenLookAhead.equals(")")) {
+                        		        			this.burstfunc();
+                        		        			if (tokenLookAhead.equals("then")) {
+                        		        				this.burstfunc();
+                        		        			}
+                        		        			else {
+                        		        				//expected then
+                        		        				//expected )
+                        		                		notthrown = false;
+                        		                    	newcount++;
+                        		            			errparser.error_checker(20, "error.txt" , newcount, tokenLookAhead);
+                        		        			}
+                        		        		}
+                        		        		else {
+                        		        			//expected close parenthesis
+                        		        			//expected )
+                        		            		notthrown = false;
+                        		                	newcount++;
+                        		        			errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+                        		        		}
+                        		        	}
+                        				}
+                        				else {
+                        					//expected openparent
+                        					//expected )
+                                    		notthrown = false;
+                                        	newcount++;
+                                			errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
+                        				}
+                        				
+                        			}
+                        			else {
+                        				System.out.println("OUT OF ELSE BOUNDS " + tokenLookAhead);
+                        				cancont = false;
+                        			}
+                        			
+                            		
+                            		System.out.println("NOW CHECKING HERE " + tokenLookAhead);
+                            		isValid = this.compoundStatement(2);
+                            		System.out.println("LAST " + tokenLookAhead + " GOING  UP " + notthrown + " " + this.errparser.get_errparselist().size());
+                        		}
+                        		
+                        		
+                        	}
+                    	}
+                    	
+                    	/*if (notthrown) {
                     		tokenStack.push(";");
                     		this.tokenTypeStack.push("SEMICOLON");
                     		peeker();
-                    	}
+                    	}*/
                     	
                     	
                     	
@@ -2010,6 +1880,21 @@ public class Parser2 {
         System.out.println("factor function called. " + tokenLookAhead);
         if (tokenLookAhead.equals("not:")) {
         	this.burstfunc();
+        	if (typeLookAhead.equals("OPEN_PAREN")) {
+        		burstfunc();
+            	isValid = expression(mode);
+            	if (notthrown) {
+            		if (typeLookAhead.equals("CLOSE_PAREN")) {
+                		burstfunc();
+                	}
+                	else {
+                		//expected close paren
+                		notthrown = false;
+                    	newcount++;
+                    	errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
+                	}
+            	}
+        	}
         }
         if (typeLookAhead.equals("STRING") || typeLookAhead.equals("REAL") || typeLookAhead.equals("INTEGER") || tokenLookAhead.equals("true") || tokenLookAhead.equals("false")) {
         	System.out.println("BUZZING SOUND " + tokenLookAhead);
@@ -2049,30 +1934,18 @@ public class Parser2 {
         else if (typeLookAhead.equals("OPEN_PAREN")) {
         	burstfunc();
         	isValid = expression(mode);
-        	if (typeLookAhead.equals("CLOSE_PAREN")) {
-        		burstfunc();
+        	if (notthrown) {
+        		if (typeLookAhead.equals("CLOSE_PAREN")) {
+            		burstfunc();
+            	}
+            	else {
+            		//expected close paren
+            		notthrown = false;
+            	}
         	}
-        	else {
-        		//expected close paren
-        		notthrown = false;
-        	}
+        	
         }
-        //old code
-        /*if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("INTEGER")){ 
-            token_name.add(tokenLookAhead);
-            type_name.add(this.typeLookAhead);
-            tokenPopper();
-            tokenTypePopper();
-            peeker();
-            isValid = true;
-        }
-        else if (expressionParen()) {
-        	tokenPopper();
-            tokenTypePopper();
-            peeker();
-            isValid = true;
-        }*/
-        
+      
 
         return isValid;
     }
@@ -2198,7 +2071,7 @@ public class Parser2 {
 
     // <statement> ::= <simpleStatement> | <structuredStatement>
     boolean statement(int mode) { 
-    	System.out.println("ZAP");
+    	System.out.println("ZAP " + tokenLookAhead);
         boolean isValid = false;
         if (mode == 2) {
         	if (tokenLookAhead.equals("if") || tokenLookAhead.equals("for") || tokenLookAhead.equals("while")) {
@@ -2305,13 +2178,16 @@ public class Parser2 {
     // <simpleStatement> ::= <assignment> | <readStatement> | <writeStatement>
     boolean simpleStatement() {
         boolean isValid = false;
-        
+        System.out.println("Simple statement parser " + tokenLookAhead);
         if (typeLookAhead.equals("IDENTIFIER")) {
         	this.burstfunc();
         	if (tokenLookAhead.equals("[")) {
         		//array
+        		System.out.println("ARRAY GOES " + tokenLookAhead);
         		isValid = this.arrayDeclare();
-        		
+        		if (notthrown) {
+        			isValid = this.assignment(1);
+        		}
         	}
         	else if (tokenLookAhead.equals("(")) {
         		
@@ -2459,7 +2335,8 @@ public class Parser2 {
                 isValid = statement(statemode);
                 System.out.println("FOR LOOP END LETS SEE " + tokenLookAhead);
             }
-            if (tokenLookAhead.equals("end") && notthrown) {
+            if (notthrown) {
+            if (tokenLookAhead.equals("end")) {
             	tokenPopper();
                 tokenTypePopper();
                 peeker();
@@ -2485,7 +2362,7 @@ public class Parser2 {
 						errparser.error_checker(16, "error.txt" , newcount, tokenLookAhead);
                     }
                 }
-                else {
+                else if (mode == 1) {
                 	System.out.println(" asdfaas " + tokenLookAhead + " " + tokenLookAhead.equals(";") + " " + sagemark);
                 	if (sagemark) {
                 		System.out.println("Sage goes here");
@@ -2512,6 +2389,9 @@ public class Parser2 {
 						errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
                     }
                 }
+                else {
+                	System.out.println("Last token is " + tokenLookAhead);
+                }
             }
             else {
             	//expected end
@@ -2521,67 +2401,8 @@ public class Parser2 {
 				errparser.error_checker(17, "error.txt" , newcount, tokenLookAhead);
             	
             }
-            //old code
-            /*
-            if(statement(1)){
-            	boolean wayup = true;
-            	System.out.println("Shwang " + tokenLookAhead);
-                if(tokenLookAhead.equals("end")){
-                    
-                    tokenPopper();
-                    tokenTypePopper();
-                    peeker();
-                    //if statement
-                    if (mode == 1) {
-                    	if(typeLookAhead.equals("SEMICOLON")){
-                            
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
-
-                            isValid = true;
-                            System.out.println("Valid compound statement");
-
-                        }
-                        // Error: Missing a semicolon
-                    	else {
-                    		
-                            	//dummy code change with whatever applicable
-                            	newcount++;
-        						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
-        						//this.panicmode("PERIOD", 10, 0); //dummy code
-                            
-                    	}
-                    }
-					else if (mode == 0) {
-						System.out.println("FADS");
-						if (typeLookAhead.equals("PERIOD")) {
-							System.out.println("ZAM2");
-							
-
-							isValid = true;
-							System.out.println("Valid compound statement");
-
-						}
-						// Error: Missing a semicolon
-						else {
-	                    	//dummy code change with whatever applicable
-	                    	newcount++;
-							errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
-							//this.panicmode("PERIOD", 10, 0); //dummy code
-	                    }
-					}
-                    
-                    
-                }
-                // Error: Expected end
-                else {
-                	//dummy code change with whatever applicable
-                	newcount++;
-					errparser.error_checker(17, "error.txt" , newcount, tokenLookAhead);
-					//this.panicmode("PERIOD", 10, 0); //dummy code
-                }
-            }*/
+        }
+            
         }
         // Error: Expected begin
         else {
@@ -2600,228 +2421,49 @@ public class Parser2 {
         System.out.println("READ STATEMENT " + tokenLookAhead);
         
         if (tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")) {
-        	this.burstfunc();
-        	if (tokenLookAhead.equals("(")) {
-        		
-        		
-        		System.out.println("NOW CHECKING VARIABLES " + typeLookAhead);
-        		this.burstfunc();
-        		isValid = this.expression(0);
-        		if (notthrown) {
-        			
-            		
-            		if (tokenLookAhead.equals(",")) {
-            			while (tokenLookAhead.equals(",")) {
-            				this.burstfunc();
-            				isValid = this.expression(0);
-            			}
-            		}
-            		if (notthrown) {
-            			
-            			
-            			System.out.println("READ STATEMENT GOES HERE " + tokenLookAhead);
-            			if (tokenLookAhead.equals(")")) {
-            				this.burstfunc();
-            				
-            			}
-            			else {
-            				//expected )
-            				notthrown = false;
-            				
-            	        	newcount++;
-            				errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
-            			}
-            		}
-            		
-        		}
-        		
-        		/*if (typeLookAhead.equals("IDENTIFIER")) {
-        			hasparam = true;
-            		System.out.println("gassed " + tokenLookAhead);
-            		this.burstfunc();
-            		if (tokenLookAhead.equals("(")) {
-            			isValid = this.funcDeclare();
-            		}
-            		else if (tokenLookAhead.equals("[")) {
-            			isValid = this.arrayDeclare();
-            			
-            		}
-            	}
-            	else if (typeLookAhead.equals("STRING") || typeLookAhead.equals("INTEGER") || typeLookAhead.equals("REAL") || tokenLookAhead.equals("true") || tokenLookAhead.equals("false")) {
-            		System.out.println("ZAMMING STRING");
-            		hasparam = true;
-            		this.burstfunc();
-            	}
-            	System.out.println("gassed2 " + tokenLookAhead);
-            	if (tokenLookAhead.equals(",") && hasparam && notthrown) {
-            		System.out.println("gassed3 " + tokenLookAhead);
-            		while (tokenLookAhead.equals(",") && notthrown) {
-            			this.burstfunc();
-            			if (typeLookAhead.equals("IDENTIFIER")) {
-                    		this.burstfunc();
-                    		if (tokenLookAhead.equals("(")) {
-                    			isValid = this.funcDeclare();
-                    		}
-                    		else if (tokenLookAhead.equals("[")) {
-                    			System.out.println("ARRAY JUMP");
-                    			isValid = this.arrayDeclare();
-                    			
-                    		}
-                    	}
-                    	else if (typeLookAhead.equals("STRING")) {
-                    		this.burstfunc();
-                    	}
-            		}
-            	}
-            	if (tokenLookAhead.equals(")")) {
-            		this.burstfunc();
-            		isValid = true;
-            	}
-            	else {
-            		//expected )
-            		notthrown = false;
-    	        	newcount++;
-    				errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
-            	}*/
-        	}
-        	else {
-        		//expected (
-        		notthrown = false;
-	        	newcount++;
-				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
-        	}
-        	
-        	
-        }
+			this.burstfunc();
+			if (tokenLookAhead.equals("(")) {
 
-        /*if(tokenLookAhead.equals("read") || tokenLookAhead.equals("readln")){
-            
-            tokenPopper();
-            tokenTypePopper();
-            peeker();
+				
+				this.burstfunc();
+				if (typeLookAhead.equals("IDENTIFIER")) {
+					this.burstfunc();
+				}
+				else {
+					notthrown = false;
+					newcount++;
+					errparser.error_checker(5, "error.txt", newcount, tokenLookAhead);
+				}
+				if (notthrown) {
 
-            if(typeLookAhead.equals("OPEN_PAREN")){
-                
-                tokenPopper();
-                tokenTypePopper();
-                peeker();
+					
+					if (notthrown) {
 
-                if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("STRING")){
-                    
-                    tokenPopper();
-                    tokenTypePopper();
-                    peeker();
+						
+						if (tokenLookAhead.equals(")")) {
+							this.burstfunc();
 
-                    if(typeLookAhead.equals("COMMA")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
+						} else {
+							// expected )
+							notthrown = false;
 
-                        if(typeLookAhead.equals("IDENTIFIER")){
-                            
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
+							newcount++;
+							errparser.error_checker(22, "error.txt", newcount, tokenLookAhead);
+						}
+					}
 
-                            if(typeLookAhead.equals("CLOSE_PAREN")){
-                                
-                                tokenPopper();
-                                tokenTypePopper();
-                                peeker();
+				}
 
-                                if(typeLookAhead.equals("SEMICOLON")){
-                                    
-                                    
-            
-                                    System.out.println("Valid read statement");
-                                    isValid = true;
-                                    cangostruct = false;
-                                }
-                                // Error: Missing a ;
-                                else {
-                                	//dummy code change with whatever applicable
-                                	newcount++;
-            						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
-            						//this.panicmode("PERIOD", 10, 0); //dummy code
-                                }
-        
-                                
-                            }
-                            // Error: Missing )
-                            else {
-                            	//dummy code change with whatever applicable
-                            	newcount++;
-        						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
-        						//this.panicmode("PERIOD", 10, 0); //dummy code
-                            }
-                        }
-                        // Error: Invalid Identifier
-                        else {
-                        	//dummy code change with whatever applicable
-                        	newcount++;
-    						errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
-    						//this.panicmode("PERIOD", 10, 0); //dummy code
-                        }
+				
+			} else {
+				// expected (
+				notthrown = false;
+				newcount++;
+				errparser.error_checker(23, "error.txt", newcount, tokenLookAhead);
+			}
 
-                    }
-                    else if(typeLookAhead.equals("CLOSE_PAREN")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
+		}
 
-                        if(typeLookAhead.equals("SEMICOLON")){
-                            
-                           
-    
-                            System.out.println("Valid read statement");
-                            isValid = true;
-                            cangostruct = false;
-                        }
-                        // Error: Missing a ;
-                        else {
-                        	//dummy code change with whatever applicable
-                        	newcount++;
-    						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
-    						//this.panicmode("PERIOD", 10, 0); //dummy code
-                        }
-                    }
-                    // Error: Missing )
-                    else {
-                    	//dummy code change with whatever applicable
-                    	newcount++;
-						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
-						//this.panicmode("PERIOD", 10, 0); //dummy code
-                    }
-                }
-                // Error: Invalid Identifier
-                else {
-                	//dummy code change with whatever applicable
-                	newcount++;
-					errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
-					//this.panicmode("PERIOD", 10, 0); //dummy code
-                }
-            }
-            // Error: Missing (
-            else {
-            	//dummy code change with whatever applicable
-            	newcount++;
-				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
-				//this.panicmode("PERIOD", 10, 0); //dummy code
-            }
-
-
-        }
-        // Error: Expected read or readln
-        else {
-        	//dummy code change with whatever applicable
-        	newcount++;
-			errparser.error_checker(28, "error.txt" , newcount, tokenLookAhead);
-			//this.panicmode("PERIOD", 10, 0); //dummy code
-        }
-        System.out.println(cangostruct);
-*/
         return isValid;
     }
 
@@ -2875,112 +2517,7 @@ public class Parser2 {
         else {
         	//expected write
         }
-        /*if(tokenLookAhead.equals("write") || tokenLookAhead.equals("writeln")){
-            
-            tokenPopper();
-            tokenTypePopper();
-            peeker();
-
-            if(typeLookAhead.equals("OPEN_PAREN")){
-                
-                tokenPopper();
-                tokenTypePopper();
-                peeker();
-
-                if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("STRING")){
-                    
-                    tokenPopper();
-                    tokenTypePopper();
-                    peeker();
-
-                    if(typeLookAhead.equals("COMMA")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
-
-                        if(typeLookAhead.equals("IDENTIFIER") || typeLookAhead.equals("STRING")){
-                            
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
-
-                            if(typeLookAhead.equals("CLOSE_PAREN")){
-                                
-                                tokenPopper();
-                                tokenTypePopper();
-                                peeker();
-
-                                if(typeLookAhead.equals("SEMICOLON")){
-                                    
-                                   
-            
-                                    System.out.println("Valid write statement");
-                                    isValid = true;
-                                    cangostruct = false;
-                                }
-        
-                                
-                            }
-                        }
-
-                    }
-                    else if(typeLookAhead.equals("CLOSE_PAREN")){
-                        
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
-
-                        if(typeLookAhead.equals("SEMICOLON")){
-                            
-                         
-                            System.out.println("Valid write statement");
-                            isValid = true;
-                            cangostruct = false;
-                        }
-                         // Error: Missing a ;
-                        else {
-                        	//dummy code change with whatever applicable
-                        	newcount++;
-    						errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
-    						//this.panicmode("PERIOD", 10, 0); //dummy code
-                        }
-                    }
-                    // Error: Missing )
-                    else {
-                    	//dummy code change with whatever applicable
-                    	newcount++;
-						errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
-						//this.panicmode("PERIOD", 10, 0); //dummy code
-                    }
-                
-                }
-                // Error: Invalid Identifier or String
-                else {
-                	//dummy code change with whatever applicable
-                	newcount++;
-					errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
-					//this.panicmode("PERIOD", 10, 0); //dummy code
-                }
-
-            }
-            // Error: Missing (
-            else {
-            	//dummy code change with whatever applicable
-            	newcount++;
-				errparser.error_checker(23, "error.txt" , newcount, tokenLookAhead);
-				//this.panicmode("PERIOD", 10, 0); //dummy code
-            }
-
-        }
-        // Error: Expected write or writeln
-        else {
-        	//dummy code change with whatever applicable
-        	newcount++;
-			errparser.error_checker(29, "error.txt" , newcount, tokenLookAhead);
-			//this.panicmode("PERIOD", 10, 0); //dummy code
-        }
-        System.out.println(cangostruct);*/
+       
         return isValid;
     }
     

@@ -76,7 +76,7 @@ public class TokenType {
 	            token = Type.SEMICOLON;
 	        else if(lexeme.equals(":"))
 	            token = Type.COLON;
-	        else if (lexeme.equals("...")) {
+	        else if (lexeme.equals("..")) {
 	        	token = Type.UP_UNTIL;
 	        }
 	        else if(lexeme.equals("+"))

@@ -42,3 +42,4 @@
 42 Expected "to"
 43 Expected ":="
 44 Expected "while"
+45 Anonymous after "("
