@@ -1,0 +1,32 @@
+'Hello. I need your number: '
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+Yes 1
+193.0 is a very huge number
+55 is a very huge number
+loop 0-> 13
+loop 1-> 13
+loop 2-> 13
+loop 3-> 13
+loop 4-> 13
+loop 5-> 13
+loop 0-> 270
+loop 1-> 270
+loop 2-> 270
+loop 3-> 270
+loop 4-> 270
+loop 0-> 5
+loop 1-> 5
+loop 2-> 5
+loop 3-> 5
+loop 4-> 5
+SUM = 7
+Hello
