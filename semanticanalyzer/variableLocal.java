@@ -114,11 +114,12 @@ public class variableLocal {
 	public void setFloatlist(ArrayList<Float> floatlist) {
 		this.floatlist = floatlist;
 	}
-	public variableLocal(String varname, String vartype, int listnum, String namefunc) {
+	public variableLocal(String varname, String vartype, int listnum, String namefunc, boolean isarray) {
 		this.variablename = varname;
 		this.vartype = vartype;
 		this.arraynum = listnum;
 		this.fromfunc = namefunc;
+		this.islist = isarray;
 	}
 	private String charval = "";
 	public String getCharval() {
@@ -127,4 +128,5 @@ public class variableLocal {
 	public void setCharval(String charval) {
 		this.charval = charval;
 	}
+	
 }

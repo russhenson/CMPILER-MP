@@ -1095,32 +1095,7 @@ public class Parser2 {
 													this.burstfunc();
 													if (tokenLookAhead.equals("of")) {
 														this.burstfunc();
-														//if it is a data type
-														/*System.out.println("OFFING " + typeLookAhead);
-														if (typeLookAhead.equals("DATA_TYPE")) {
-															System.out.println("BUZZ");
-															this.burstfunc();
-															if (tokenLookAhead.equals(";")) {
-																//revert to check if it is an identifier still
-																System.out.println("SEMICOLON VAR3 " + tokenLookAhead);
-																this.burstfunc();
-																System.out.println("SEMICOLON VAR " + tokenLookAhead);
-																hasarray = false;
-															}
-															else {
-																//expected semicolon
-																notthrown = false;
-													            newcount++;
-													        	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
-															}
-														}
-														else {
-															//expected data type
-															System.out.println("UMAE 1");
-															notthrown = false;
-												            newcount++;
-												        	errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
-														}*/
+														
 														
 													}
 													else {
@@ -2485,6 +2460,7 @@ public class Parser2 {
         				System.out.println("WRITE HAS A COMMA");
         				while (tokenLookAhead.equals(",") && notthrown) {
         					this.burstfunc();
+        					System.out.println("SRATHC " + tokenLookAhead);
         					isValid = this.expression(0);
         					System.out.println("CHECKERS " + tokenLookAhead);
         				}
@@ -2660,153 +2636,7 @@ public class Parser2 {
             newcount++;
         	errparser.error_checker(32, "error.txt" , newcount, tokenLookAhead);
 		}
-       /* if(tokenLookAhead.equals("function")){
-            tokenPopper();
-            tokenTypePopper();
-            peeker();
-
-            if(typeLookAhead.equals("IDENTIFIER")){
-                tokenPopper();
-                tokenTypePopper();
-                peeker();
-                //variables in parenthesis
-                if(typeLookAhead.equals("OPEN_PAREN")){
-                    prevToken = "OPEN_PAREN";
-                    tokenPopper();
-                    tokenTypePopper();
-                    peeker();
-
-                    while(isGoing){
-                        if((tokenLookAhead.equals("var") || tokenLookAhead.equals("const"))
-                        && (prevToken.equals("OPEN_PAREN") || (prevToken.equals("SEMICOLON")))){
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
-                        }
-                        if(typeLookAhead.equals("IDENTIFIER") ){
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
-
-                            if(typeLookAhead.equals("COMMA")){
-                                tokenPopper();
-                                tokenTypePopper();
-                                peeker();
-
-                                if(!typeLookAhead.equals("IDENTIFIER")){
-                                    newcount++;
-    						        errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
-                                    isValid = false;
-                                    isGoing = false;
-                                }
-                            }
-                            else if(typeLookAhead.equals("COLON")){
-                                tokenPopper();
-                                tokenTypePopper();
-                                peeker();
-
-                                if(typeLookAhead.equals("DATA_TYPE")){
-                                    tokenPopper();
-                                    tokenTypePopper();
-                                    peeker();
-
-                                    if(typeLookAhead.equals("SEMICOLON")){
-                                        prevToken = "SEMICOLON";
-                                        tokenPopper();
-                                        tokenTypePopper();
-                                        peeker();
-                                    }
-                                    else if(typeLookAhead.equals("CLOSE_PAREN")){
-                                        tokenPopper();
-                                        tokenTypePopper();
-                                        peeker();
-                                        isGoing = false;
-                                    }
-                                    else {
-                                        // Error: Missing a ";" or ")"
-										isGoing = false;
-                                        newcount++;
-                                        errparser.error_checker(30, "error.txt" , newcount, tokenLookAhead);
-                                    }
-                                    
-                                }
-                                else {
-                                    // Invalid data type
-									isGoing = false;
-                                    newcount++;
-    						        errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
-                                }
-                            }
-                            else {
-                                // Missing a "," or ":"
-								isGoing = false;
-                                newcount++;
-                                errparser.error_checker(31, "error.txt" , newcount, tokenLookAhead);
-                            }
-                            
-                        }
-                        else {
-                            // Missing id
-							isGoing = false;
-                            newcount++;
-                            errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
-                        }
-                        
-                    }
-
-                }
-
-                if(typeLookAhead.equals("COLON")){
-                    tokenPopper();
-                    tokenTypePopper();
-                    peeker();
-                    if(typeLookAhead.equals("DATA_TYPE")){
-                        tokenPopper();
-                        tokenTypePopper();
-                        peeker();
-                        if(typeLookAhead.equals("SEMICOLON")){
-                            tokenPopper();
-                            tokenTypePopper();
-                            peeker();
-
-							isValid = true;
-							System.out.println("Valid Function declaration");
-							sagemark = true;
-							isValid = this.compoundStatement(2);
-							System.out.println("ZONK " + tokenLookAhead);
-							this.burstfunc();
-                             if (compoundStatement(1)) {
-                            	isValid = true;
-    							System.out.println("Valid program declaration");
-                            } 
-                            
-                        }
-                        else{
-                            newcount++;
-                            errparser.error_checker(27, "error.txt" , newcount, tokenLookAhead);
-                        }
-    
-                    }
-                    else {
-                        newcount++;
-                        errparser.error_checker(12, "error.txt" , newcount, tokenLookAhead);
-                    }
-
-                }
-                else {
-                    newcount++;
-                    errparser.error_checker(9, "error.txt" , newcount, tokenLookAhead);
-                }
-
-            }
-            else {
-                newcount++;
-                errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
-            }
-                
-            
-        }*/
-
+       
         return isValid;
     }
 

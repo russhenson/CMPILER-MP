@@ -1,12 +1,10 @@
+/bin/
 /Driver.class
+/ErrorParser.class
+/ErrorScanner.class
+/Parser2.class
 /Scanner2.class
 /TextEditorGUI.class
 /TokenType$Type.class
 /TokenType.class
-/ErrorScanner.class
-/ErrorParser.class
-/Parser2.class
 /dummysample.class
-/dummysample$1$1.class
-/dummysample$1$2.class
-/dummysample$1.class

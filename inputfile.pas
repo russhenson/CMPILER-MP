@@ -1,25 +1,21 @@
+
 program parserTest ;
-var value , ban : integer ;
+var value , nextValue : real ;
+	blue : integer ;
+function testOne ( num1 , num2 : integer ; val1 , val2 : string ) : integer ;
+var 
+	x , y , z , value  : integer ;
+	blue , red : real ;
 
-
+begin
+	value := 5 ;
+	writeln ( "Hyuga tiger" , value ) ;
+	testOne := 24 ;
+end ;
 
 
 begin
-	value := 2 ;
-	if ( value > 5 ) then
-		begin
-			writeln ( "Greater" ) ;
-		end
-	else if ( value = 5 ) then
-		begin
-			writeln ( "Equal" ) ;
-		end
-	else if ( value = 4 ) then
-		begin
-			writeln ( "FOUR" ) ;
-		end
-	else 
-		begin
-			writeln ( "LESSER" ) ;
-		end ;
+	value := 20 ;
+	blue := testOne ( 1 , 5 , "hello" , "world" )  ;
+	writeln ( " Value " ,  blue ) ;
 end .
