@@ -1,17 +1,21 @@
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Interpreter {
     AST tree;
 
+    // hashmap for all variables hashmap of hashmaps
     //stores function parameters
     HashMap<String, HashMap<String, Symbol>> symbol_tables = new HashMap<>();
     Stack<String> current_scope = new Stack<>();
@@ -20,15 +24,19 @@ public class Interpreter {
 
     ScriptEngineManager manager = new ScriptEngineManager();
     ScriptEngine engine = manager.getEngineByName("JavaScript");
+    public boolean has_ide = false;
+    public IDE ide;
+
     public Interpreter(AST tree) {
         this.tree = tree;
-
     }
 
+    // constructor
     public static Interpreter c(AST tree){
         return new Interpreter(tree);
     }
 
+    //print out to output.txt
     public void output_log(String output){
         File path = new File("output.txt");
         BufferedWriter wr;
@@ -40,6 +48,7 @@ public class Interpreter {
         }
     }
 
+    // print errors to error.txt
     public void error_log(String output){
         File path = new File("error.txt");
         BufferedWriter wr;
@@ -51,6 +60,7 @@ public class Interpreter {
         }
     }
 
+    //clears output.txt
     public void clear_log(){
         File path = new File("output.txt");
         BufferedWriter wr;
@@ -63,6 +73,7 @@ public class Interpreter {
 
     }
 
+    //walks the abstract syntax tree starting with rightmost derivation
     public void walk_tree(AST tree){
 
         switch(tree.rule){
@@ -95,6 +106,7 @@ public class Interpreter {
         }
     }
 
+    //start of program block
     public void program(AST tree){
         HashMap<String, Symbol> global_variables = new HashMap<>();
         String scope = "GLOBAL";
@@ -103,6 +115,7 @@ public class Interpreter {
         tree.nodeList.forEach(tr -> walk_tree(tr));
     }
 
+    //add variable to symbol table
     public void addVariable(AST variable, String scope){
         String datatype = variable.getTreeNode("DATA_TYPE").token.lexeme.toUpperCase();
         List<AST> identifiers = variable.getNodeList().stream().filter(tr->tr.rule.equals("IDENTIFIER")).collect(Collectors.toList());
@@ -117,6 +130,7 @@ public class Interpreter {
         }
     }
 
+    //add function to symbol table
     public void addFunction(String id, AST exec_block, AST params, String return_type, String scope){
         List<AST> parameter_list = params.getNodeList().stream().filter(tr->tr.rule.equals("VARIABLE")).collect(Collectors.toList());
         HashMap<String, Symbol> params_map = new HashMap<>();
@@ -137,6 +151,7 @@ public class Interpreter {
         System.out.println("");
     }
 
+    //checks to see if function has already been declared and if not then call addfunction adn variable declaration
     public void function_declaration(AST tree){
 
         String scope = "GLOBAL";
@@ -162,6 +177,7 @@ public class Interpreter {
         }
     }
 
+    //checks to see if variable is already declared
     public void variable_declaration(AST tree, String scope){
         if(tree != null){
             AST variable_list = tree.getTreeNode("VARIABLE_LIST");
@@ -212,8 +228,8 @@ public class Interpreter {
             }else if(rule.equals("BOOLEAN")){
                 operation = "relational";
                 if(type.equals("number") || type.equals("boolean")){
-                    if(lexeme.equals("not")){        expression += "!";
-                    }else if(lexeme.equals("and")){  expression += "&&";
+                    if(lexeme.equals("not")){        expression += "!"; }
+                    else if(lexeme.equals("and")){  expression += "&&";
                     }else if(lexeme.equals("or")){   expression += "||"; }
                 }else return "inc";
 
@@ -239,15 +255,12 @@ public class Interpreter {
                     if(datatype.equals("string") && type.equals("string") || type.equals("none")) {
                         type = "string";
                     }expression += value;
-
                 }else{
                     System.out.println("Line " + t.token.line + " : Variable " + id + " not declared");
                     error_log("Line " + t.token.line + ": variable "+  id+ " not declared");
                     return "id";
                 }
-            }
-
-            expression += " ";
+            }expression += " ";
         }
         //System.out.println(expression);
         return expression.trim();
@@ -279,41 +292,43 @@ public class Interpreter {
         AST init = tree.getTreeNode("ASSIGNMENT");
         AST end = tree.getTreeNode("EXPRESSION");
         //AST type = tree.get downto and to
-        Token t = init.getTreeNode("IDENTIFIER").token;
-        String end_expr = evaluateExpression(end);
-        String id = t.lexeme;
-        String init_val = evaluateExpression(init.getTreeNode("EXPRESSION"));
-        AST block = tree.getTreeNode("BLOCK");
-        Symbol s;
+        Token t;
+        if(init!= null) {
+            t = init.getTreeNode("IDENTIFIER").token;
+            String end_expr = evaluateExpression(end);
+            String id = t.lexeme;
+            String init_val = evaluateExpression(init.getTreeNode("EXPRESSION"));
+            AST block = tree.getTreeNode("BLOCK");
+            Symbol s;
 
-        String scope = current_scope.peek();
+            String scope = current_scope.peek();
 
-        if(!symbol_tables.get(scope).containsKey(id) && !symbol_tables.get("GLOBAL").containsKey(id)){
-            System.out.println("Line " + t.line +": VARIABLE " + id + " NOT DECLARED");
-        }else{
-            if( end_expr.equals("") || end_expr.equals("err") || end_expr.equals("inc") ) {
-                System.out.println("Line " + t.line +": Invalid exit condition");
-            }
-            else if( isNumeric(init_val) && isNumeric(end_expr)){
-                symbol_tables.get(scope).get(id).val = init_val.trim();
-                int a = Integer.parseInt(init_val);
-                int b = Integer.parseInt(end_expr);
 
-                if(a < b){
-                    for(int i=a; i <= b ; i++){
-                        symbol_tables.get(scope).get(id).val = String.valueOf(i);
-                        walk_tree(block);
+            if (!symbol_tables.get(scope).containsKey(id) && !symbol_tables.get("GLOBAL").containsKey(id)) {
+                System.out.println("Line " + t.line + ": VARIABLE " + id + " NOT DECLARED");
+            } else {
+                if (end_expr.equals("") || end_expr.equals("err") || end_expr.equals("inc")) {
+                    System.out.println("Line " + t.line + ": Invalid exit condition");
+                } else if (isNumeric(init_val) && isNumeric(end_expr)) {
+                    symbol_tables.get(scope).get(id).val = init_val.trim();
+                    int a = Integer.parseInt(init_val);
+                    int b = Integer.parseInt(end_expr);
+
+                    if (a < b) {
+                        for (int i = a; i <= b; i++) {
+                            symbol_tables.get(scope).get(id).val = String.valueOf(i);
+                            walk_tree(block);
+                        }
+                    } else if (a >= b) {
+                        for (int i = a; i > b; i--) {
+                            symbol_tables.get(scope).get(id).val = String.valueOf(i);
+                            walk_tree(block);
+                        }
                     }
-                }else if(a >= b){
-                    for(int i=a; i > b ; i--){
-                        symbol_tables.get(scope).get(id).val = String.valueOf(i);
-                        walk_tree(block);
-                    }
+                } else {
+                    System.out.println("Line " + t.line + ": Invalid datatype in loop condition");
+                    error_log("Line " + t.line + ": Invalid datatype in loop condition");
                 }
-
-            }else{
-                System.out.println("Line " + t.line +": Invalid datatype in loop condition");
-                error_log("Line " + t.line +": Invalid datatype in loop condition");
             }
         }
 
@@ -378,27 +393,27 @@ public class Interpreter {
         String log = "";
         for(AST ex: tree.getTreeNode("EXPRESSION_LIST").getNodeList().stream().filter(tr -> tr.rule.equals("EXPRESSION")).collect(Collectors.toList())) {
              if(ex.getTreeNode("STRING") != null){
-                System.out.println("INTERPRETER OUTPUT: " + ex.getTreeNode("STRING").token.lexeme);
-                output_log( ex.getTreeNode("STRING").token.lexeme + "\n" );
+                 String label = ex.getTreeNode("STRING").token.lexeme.replace("'", "");
+                System.out.println("INTERPRETER OUTPUT: "  + label);
+                if(ide != null){
+                    ide.txtOutput.append(label);
+                }//output_log( ex.getTreeNode("STRING").token.lexeme + "\n" );
             }else if(ex.getTreeNode("IDENTIFIER") != null){
-                Scanner sc = new Scanner(System.in);
+
                 String id = ex.getTreeNode("IDENTIFIER").token.lexeme;
+                String value = "";
+                if(ide == null){
+                    Scanner sc = new Scanner(System.in);
+                    value = sc.nextLine();
+                }else {
+                    value = JOptionPane.showInputDialog("Please input a value");
+                    ide.txtOutput.append(value + "\n");
+                }
 
                 if(symbol_tables.get(current_scope.peek()).containsKey(id)){
-                    if( symbol_tables.get(current_scope.peek()).get(id).type.equals("INTEGER") && sc.hasNextInt()){
-                        symbol_tables.get(current_scope.peek()).get(id).val = String.valueOf(sc.nextInt());
-                    }else if( symbol_tables.get(current_scope.peek()).get(id).type.equals("REAL")  && sc.hasNextDouble() ){
-                        symbol_tables.get(current_scope.peek()).get(id).val = String.valueOf(sc.nextDouble());
-                    }else
-                        symbol_tables.get(current_scope.peek()).get(id).val = sc.nextLine();
-
+                    symbol_tables.get(current_scope.peek()).get(id).val = value;
                 }else if(symbol_tables.get("GLOBAL").containsKey(id)){
-                    if( symbol_tables.get("GLOBAL").get(id).type.equals("INTEGER") && sc.hasNextInt()){
-                        symbol_tables.get("GLOBAL").get(id).val = String.valueOf(sc.nextInt());
-                    }else if( symbol_tables.get("GLOBAL").get(id).type.equals("REAL") && sc.hasNextDouble()){
-                        symbol_tables.get("GLOBAL").get(id).val = String.valueOf(sc.nextDouble());
-                    }else
-                        symbol_tables.get("GLOBAL").get(id).val = sc.nextLine();
+                    symbol_tables.get("GLOBAL").get(id).val = value;
                 }else{
                     System.out.println("Line " + ex.getTreeNode("IDENTIFIER").token.line + " : variable " + id + " not declared");
                     error_log("Line " + ex.getTreeNode("IDENTIFIER").token.line + " : variable " + id + " not declared");

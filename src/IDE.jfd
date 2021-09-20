@@ -1,0 +1,38 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.8" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {comp scrollPane1:::p:418:p, space :::p, par l {comp brnRun::::203:x, comp scrollPane3::l:::x, comp scrollPane2::l::203:x}, space :::p}}"
+			"$verticalGroup": "par l {comp scrollPane1:::::x, seq {comp brnRun:::p::p, space :::p, comp scrollPane3:::p:178:p, space :::p, comp scrollPane2::::288:x}}"
+		} ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane1"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "txtCode"
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane2"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "txtError"
+				} )
+			} )
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "scrollPane3"
+				add( new FormComponent( "javax.swing.JTextArea" ) {
+					name: "txtOutput"
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "brnRun"
+				"text": "Run"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 115, 10 )
+			"size": new java.awt.Dimension( 635, 540 )
+		} )
+	}
+}

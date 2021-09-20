@@ -1,0 +1,19 @@
+program sample ;
+
+var
+value, nextValue : real;
+y : boolean;
+z , p , input : integer;
+
+function testFour( x: integer;  y:integer; z: integer ): void
+var sum: integer;
+begin
+  sum := x + y + z;
+  writeln('SUM = ', sum);
+end;
+
+begin
+
+    testFour( 1, 1, 4);
+
+end.

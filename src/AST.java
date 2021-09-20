@@ -1,5 +1,6 @@
 import java.util.ArrayList;
-
+// abstract syntax tree
+// recursive descent
 public class AST {
     String rule;
     Token token;
