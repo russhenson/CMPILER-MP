@@ -1807,9 +1807,11 @@ public class Parser2 {
     	String beftoken, beftype;
         Boolean isValid = false;
         isValid = this.simpleExpression(mode);
+        System.out.println("TENZ WAS HERE " + tokenLookAhead);
         if (this.tokenLookAhead.equals(">") || this.tokenLookAhead.equals("<>") || this.tokenLookAhead.equals("<")  || this.tokenLookAhead.equals("=")  || this.tokenLookAhead.equals(">=")  || this.tokenLookAhead.equals("<=") || tokenLookAhead.equals("and:") || tokenLookAhead.equals("or:")) {
         	this.burstfunc();
         	isValid = this.simpleExpression(mode);
+        	System.out.println("AND: SO " + tokenLookAhead);
         	
         }
         //old code
@@ -1963,6 +1965,7 @@ public class Parser2 {
         		System.out.println("GOING FUCTION ASD");
         		
         		isValid = this.funcDeclare();
+        		System.out.println("NOW WHAT " + tokenLookAhead);
         	}
         	else {
         		
@@ -1977,7 +1980,10 @@ public class Parser2 {
             	}
             	else {
             		//expected close paren
+            		
             		notthrown = false;
+            		newcount++;
+            		errparser.error_checker(22, "error.txt" , newcount, tokenLookAhead);
             	}
         	}
         	
