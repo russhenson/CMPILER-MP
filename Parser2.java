@@ -13,7 +13,7 @@ public class Parser2 {
     private ErrorParser errparser;
     private String tokenLookAhead;
     private String typeLookAhead;
-    private ArrayList<String> token_name, type_name;
+    private ArrayList<String> token_name, type_name, errorlistinterp;
     private int newcount = 0;
     private int statemode = 0;
     private boolean shouldpopsemi = true;
@@ -22,6 +22,7 @@ public class Parser2 {
     private int instamod = 0;
     private boolean cangostruct = true;
     private ArrayList<String> tokenn, typee;
+    
     public Parser2(ArrayList<String> tokens, ArrayList<String> tokenType, int counter) {
         tokenn = tokens;
         typee = tokenType;
@@ -125,6 +126,7 @@ public class Parser2 {
                     	if (num == 0) {
                     		
                     		semanticanalyzer sem4 = new semanticanalyzer(this.tokenn, this.typee, newcount);
+                    		
                     		
                     	}
                     }

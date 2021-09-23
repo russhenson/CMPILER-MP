@@ -2,8 +2,12 @@ package semanticanalyzer;
 
 import java.math.BigDecimal;
 import java.util.*;
-
+import javax.swing.*;
+import java.awt.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import com.udojava.evalex.Expression;
+import javax.swing.border.EmptyBorder;
 import com.udojava.evalex.Expression.ExpressionException;
 //this here is the main semantic analyzer
 //so I want to show you first on how I stored the global variables
@@ -57,6 +61,7 @@ public class semanticanalyzer {
 	private String searchedtype = "";
 	private int searchind = 0;
 	private boolean foundinlocal = false;
+	private String inputrec = "";
 	private int numexpr = 0;
 	
 	void revertexpbool() {
@@ -155,7 +160,7 @@ public class semanticanalyzer {
 						
 					}
 					if (notthrown) {
-						printvariablelocal();
+						//printvariablelocal();
 					}
 					
 					if (notthrown) {
@@ -1527,6 +1532,7 @@ public class semanticanalyzer {
 
 	boolean factor(int mode, String exprdata) {
 		boolean isValid = false;
+		System.out.println("SUMMING " + tokenLookAhead + " BEACH " + typeLookAhead + "check " + canstarteval);
 		if (canstarteval) {
 		
 		if (tokenLookAhead.equals("not:")) {
@@ -1612,10 +1618,12 @@ public class semanticanalyzer {
 			}
 			
 		}
+		System.out.println("ZIP ");
+		System.out.println("SUMMING " + tokenLookAhead + " BEACH " + typeLookAhead + "check");
 		if ( typeLookAhead.equals("REAL") || typeLookAhead.equals("INTEGER")
 				) {
 			//this should be direct values such as 67, true 2.0
-			
+			System.out.println("WHAT IS IT FOR REAL " + tokenLookAhead);
 			this.checkexpress(0, tokenLookAhead);
 			int num = expb.size();
 			if (num == 0) {
@@ -1753,21 +1761,31 @@ public class semanticanalyzer {
 					
 					this.searchFunc(sam);
 					if (notthrown) {
-						
+						int expres = 0;
+						String expect = "";
+						if (explister.size() >= 1) {
+							 expres = this.explister.size() - 1;
+							 expect = explister.get(expres).getExpectedtype();
+						}
 						
 						
 						int index = this.funcind;
 						this.countparam(index);
 						this.newfunccall(sam, index);
-						
-						isValid = this.funcDeclare(exprdata);
-						
-						if (notthrown) {
-							
-							this.evalfunc(sam, index);
-							this.removefunccall();
-							this.paramnoexpect = 0;
+						if (explister.size() >= 1) {
+							confirmfunc(expect, index, sam);
 						}
+						if (notthrown) {
+							isValid = this.funcDeclare(exprdata);
+							
+							if (notthrown) {
+								
+								this.evalfunc(sam, index);
+								this.removefunccall();
+								this.paramnoexpect = 0;
+							}
+						}
+						
 						
 					}
 					
@@ -1986,7 +2004,7 @@ public class semanticanalyzer {
 			}
 		}
 		
-		this.printvarglob();
+	
 
 		
 		return isValid;
@@ -1997,54 +2015,89 @@ public class semanticanalyzer {
 		boolean isValid = false;
 		boolean islocal = false;
 		int index = 0, expectedend = 0;
-		
-		expectedend = this.arrayend;
-		if (tokenLookAhead.equals("[")) {
-			// only checks for expression GET BACK SINCE THERE IS FUNCTIONS TOO
-			this.searchedtype = "integer";
-			this.new_express_assign();
-			this.burstfunc();
-			expressionbools ex = new expressionbools();
-			this.expb.add(ex);
-			isValid = this.expression(0, exprdata);
-		
-			if (notthrown) {
-				int num = this.expb.size();
-				if (expb.size() == 0) {
-					this.revertexpbool();
-				}
-				else {
-					int num1 = num - 1;
-					this.expb.remove(num1);
-				}
-				int arrayn = this.array_result();
-				
-				if (arrayn >= 1 && arrayn <= expectedend) {
-					this.arraychose = arrayn;
-					if (tokenLookAhead.equals("]")) {
-						isValid = true;
-						this.burstfunc();
-					} else {
-						// expected ]
+		if (canstarteval) {
+			expectedend = this.arrayend;
+			if (tokenLookAhead.equals("[")) {
+				// only checks for expression GET BACK SINCE THERE IS FUNCTIONS TOO
+				this.searchedtype = "integer";
+				this.new_express_assign();
+				this.burstfunc();
+				expressionbools ex = new expressionbools();
+				this.expb.add(ex);
+				isValid = this.expression(0, exprdata);
+				System.out.println("NOW EXPLISTER " + this.explister.size() + notthrown);
+				if (notthrown) {
+					System.out.println("NOW EXPLISTER DOUB " + this.explister.size());
+					int num = this.expb.size();
+					int arrayn = this.array_result();
+					if (expb.size() == 0) {
+						this.revertexpbool();
+					}
+					else {
+						int num1 = num - 1;
+						this.expb.remove(num1);
+					}
+					
+					
+					
+					if (notthrown) {if (arrayn >= 1 && arrayn <= expectedend) {
+						this.arraychose = arrayn;
+						if (tokenLookAhead.equals("]")) {
+							isValid = true;
+							this.burstfunc();
+						} else {
+							// expected ]
 
+							notthrown = false;
+							newcount++;
+							errparser.error_checker(36, "error.txt", newcount, tokenLookAhead);
+						}
+					}
+					else {
 						notthrown = false;
 						newcount++;
-						errparser.error_checker(36, "error.txt", newcount, tokenLookAhead);
+						System.out.println("Array exceeded bounds " + arrayn);
 					}
 				}
-				else {
-					notthrown = false;
-					newcount++;
-					System.out.println("Array exceeded bounds " + tokenLookAhead);
+					
 				}
-				
-				
+			} else {
+				// expected [
+				notthrown = false;
+				newcount++;
+				errparser.error_checker(35, "error.txt", newcount, tokenLookAhead);
 			}
-		} else {
-			// expected [
-			notthrown = false;
-			newcount++;
-			errparser.error_checker(35, "error.txt", newcount, tokenLookAhead);
+		}
+		else {
+			if (tokenLookAhead.equals("[")) {
+	    		//only checks for expression GET BACK SINCE THERE IS FUNCTIONS TOO
+				this.backupfunc();
+	    		this.burstfunc();
+	    		isValid = this.expression(0, exprdata);
+	    		System.out.println("arrays2 " + tokenLookAhead);
+	    		if (notthrown) {
+	    		
+	    			System.out.println("arraysa " + tokenLookAhead);
+	    			if (tokenLookAhead.equals("]")) {
+	    				isValid = true;
+	    				this.backupfunc();
+	    				this.burstfunc(); 
+	    			}
+	    			else {
+	    				//expected ]
+	    				
+	    				notthrown = false;
+	    	        	newcount++;
+	    				errparser.error_checker(36, "error.txt" , newcount, tokenLookAhead);
+	    			}
+	    		}
+	    	}
+	    	else {
+	    		//expected [
+	    		notthrown = false;
+	        	newcount++;
+				errparser.error_checker(35, "error.txt" , newcount, tokenLookAhead);
+	    	}
 		}
 		return isValid;
 	}
@@ -2065,7 +2118,7 @@ public class semanticanalyzer {
 		ArrayList<String> tokenLook, typeLook;
 		int paramnum = 0;
 				if (canstarteval) {
-		if (tokenLookAhead.equals("(")) {System.out.println("SHAKE12");
+		if (tokenLookAhead.equals("(")) {
 			this.burstfunc();
 			if (tokenLookAhead.equals(")")) {
 				//if no parameters
@@ -2084,6 +2137,7 @@ public class semanticanalyzer {
 				else if (typeLookAhead.equals("IDENTIFIER")) {
 					String tokn = tokenLookAhead, toktype = typeLookAhead;
 					this.burstfunc();
+					System.out.println("Looking at func declare " + tokenLookAhead);
 					if (tokenLookAhead.equals("(")) {
 						this.tokenStack.push(tokn);
 						this.tokenTypeStack.push(toktype);
@@ -2108,6 +2162,7 @@ public class semanticanalyzer {
 						this.tokenStack.push(tokn);
 						this.tokenTypeStack.push(toktype);
 						this.peeker();
+						System.out.println("SEARCHING ARRAY IN FUNCTION");
 						this.searcharray(tokn);
 						if (notthrown) {
 							boolean isloc = this.foundinlocal;
@@ -2658,16 +2713,21 @@ public class semanticanalyzer {
 						index = this.searchind;
 						islocal = this.foundinlocal;
 						if (notthrown) {
+							System.out.println("BEFORE GOE ARAY");
 							isValid = this.arrayDeclare(exprdata);
 							arrind = this.arraychose;
 							if (notthrown) {
-								
+								System.out.println("BUNNYY");
 								this.removeexprarray();
 								exprdata = "";
 								this.searchedtype = toktype;
 			        			isValid = this.assignment(1);
-			        			int suppind = arrind - 1;
-			        			this.shunting_array(tokname, toktype, islocal, index, suppind);
+			        			
+			        			if (notthrown) {
+			        				int suppind = arrind - 1;
+			        				this.shunting_array(tokname, toktype, islocal, index, suppind);
+			        			}
+			        			
 			        		}
 						}
 						
@@ -2709,6 +2769,7 @@ public class semanticanalyzer {
 								this.string_insert(tokname, toktype, islocal, index);
 							}
 							else {
+								
 								this.shunting_yard(tokname, toktype, islocal, index);
 							}
 							
@@ -3132,6 +3193,8 @@ public class semanticanalyzer {
 							
 							flocal = this.identiffound;
 							if (flocal) {
+								int fnum = this.fm.size() - 1;
+								vartype = this.fm.get(fnum).getVl().get(ind).getVartype();
 								
 							}
 							else {
@@ -3154,7 +3217,7 @@ public class semanticanalyzer {
 						
 						if (notthrown) {
 
-							
+							int fnum2 = 0;
 							if (tokenLookAhead.equals(")")) {
 								Scanner sc = new Scanner(System.in);
 								if (vartype.equals("string")) {
@@ -3163,10 +3226,13 @@ public class semanticanalyzer {
 										String inp = sc.nextLine();
 										inp = inp + ender;
 										if (flocal) {
-											
+											fnum2 = this.fm.size() - 1;
+											this.fm.get(fnum2).getVl().get(fnum2).setStringval(inp);
+											this.fm.get(fnum2).getVl().get(fnum2).setHasval(true);
 										}
 										else {
 											this.varGlobal.get(ind).setStringval(inp);
+											this.varGlobal.get(ind).setHasval(true);
 										}
 									}
 									catch(Exception e) {
@@ -3181,10 +3247,13 @@ public class semanticanalyzer {
 										char c = sc.next().charAt(0);
 										String inp = Character.toString(c);
 										if (flocal) {
-											
+											fnum2 = this.fm.size() - 1;
+											this.fm.get(fnum2).getVl().get(fnum2).setCharval(inp);
+											this.fm.get(fnum2).getVl().get(fnum2).setHasval(true);
 										}
 										else {
 											this.varGlobal.get(ind).setCharval(inp);
+											this.varGlobal.get(ind).setHasval(true);
 										}
 									}
 									catch(Exception e) {
@@ -3198,10 +3267,13 @@ public class semanticanalyzer {
 										
 										int inp = sc.nextInt();
 										if (flocal) {
-											
+											fnum2 = this.fm.size() - 1;
+											this.fm.get(fnum2).getVl().get(fnum2).setIntval(inp);
+											this.fm.get(fnum2).getVl().get(fnum2).setHasval(true);
 										}
 										else {
 											this.varGlobal.get(ind).setIntval(inp);
+											this.varGlobal.get(ind).setHasval(true);
 										}
 									}
 									catch(Exception e) {
@@ -3215,10 +3287,13 @@ public class semanticanalyzer {
 										
 										float inp = sc.nextFloat();
 										if (flocal) {
-											
+											fnum2 = this.fm.size() - 1;
+											this.fm.get(fnum2).getVl().get(fnum2).setFloatval(inp);
+											this.fm.get(fnum2).getVl().get(fnum2).setHasval(true);
 										}
 										else {
 											this.varGlobal.get(ind).setFloatval(inp);
+											this.varGlobal.get(ind).setHasval(true);
 										}
 										
 									}
@@ -3233,10 +3308,13 @@ public class semanticanalyzer {
 										
 										boolean inp = sc.nextBoolean();
 										if (flocal) {
-											
+											fnum2 = this.fm.size() - 1;
+											this.fm.get(fnum2).getVl().get(fnum2).setBoolval(inp);
+											this.fm.get(fnum2).getVl().get(fnum2).setHasval(true);
 										}
 										else {
 											this.varGlobal.get(ind).setBoolval(inp);
+											this.varGlobal.get(ind).setHasval(true);
 										}
 										
 									}
@@ -4328,7 +4406,7 @@ public class semanticanalyzer {
 			//error: not found variable exception
 			notthrown = false;
 			newcount++;
-			System.out.println("Not found variable");
+			System.out.println("Not found variable " + identif);
 		}
 		
 	}
@@ -4670,7 +4748,7 @@ public class semanticanalyzer {
 		int expnum = this.explister.size() - 1;
 		String datassign = explister.get(expnum).getExpectedtype();
 		String exprorder = "exporder ";
-		
+		System.out.println("WHAT DATAASSIGN " + datassign);
 		if (notthrown) {
 			//if it is integer
 			if (datassign.equals("integer")) {
@@ -4762,7 +4840,7 @@ public class semanticanalyzer {
 							
 						}
 						else if (typeLookAhead.equals("INTEGER")) {
-							
+							System.out.println("GOING INTEGER MODE");
 							int explistn = this.explister.size() - 1;
 							String expresscurr = explister.get(explistn).getExpr();
 							String newexpres = expresscurr + tokenLookAhead + " ";
@@ -4788,7 +4866,7 @@ public class semanticanalyzer {
 							//data type mismatch
 							notthrown = false;
 							newcount++;
-							System.out.println("Data type mismatch " + tokenLookAhead);
+							System.out.println("Data type mismatch " + tokenLookAhead + " for " + datassign);
 						}
 					}
 				}
@@ -4952,7 +5030,7 @@ public class semanticanalyzer {
 							//data type mismatch
 							notthrown = false;
 							newcount++;
-							System.out.println("Data type mismatch " + tokenLookAhead);
+							System.out.println("Data type mismatch " + tokenLookAhead + " for " + datassign);
 						}
 					}
 				}
@@ -5214,7 +5292,7 @@ public class semanticanalyzer {
 							//data type mismatch
 							notthrown = false;
 							newcount++;
-							System.out.println("Data type mismatch " + tokenLookAhead);
+							System.out.println("Data type mismatch " + tokenLookAhead + " for " + datassign);
 						}
 					}
 				}
@@ -5313,11 +5391,28 @@ public class semanticanalyzer {
 										System.out.println("No value of string " + tokenLookAhead);
 									}
 								}
+								else if (dattype.equals("char")) {
+									int lam = this.fm.size() - 1;
+									boolean valhas = this.varGlobal.get(indnum).isHasval();
+									if (valhas) {
+										int explistn = explister.size() - 1;
+										String val = varGlobal.get(indnum).getCharval();
+										String expresscurr = explister.get(explistn).getExpr();
+										String newexpres = expresscurr + val;
+										 explister.get(explistn).setExpr(newexpres);
+									}
+									else {
+										//no value of integer
+										notthrown = false;
+										newcount++;
+										System.out.println("No value of string " + tokenLookAhead);
+									}
+								}
 								else {
 									//mismatching identifier
 									notthrown = false;
 									newcount++;
-									System.out.println("Mismatching identifier 6 " + tokenLookAhead);
+									System.out.println("Mismatching identifier 6 " + tokenLookAhead + " " + dattype + "meguc");
 								}
 							}
 						}
@@ -5555,11 +5650,11 @@ public class semanticanalyzer {
 			int num = this.explister.size() - 1;
 			
 		String exp = this.explister.get(num).getExpr();
-		
+		System.out.println("LETS SEE HERE");
 		BigDecimal result = null;
     	Expression expression = new Expression(exp);
     	result = expression.setPrecision(33).eval();
-    	
+    	boolean op1 = this.explister.get(num).isIsbool();
     	if (type.equals("integer")) {
     		int val = result.intValue();
     		this.forindnum = val;
@@ -5577,7 +5672,9 @@ public class semanticanalyzer {
     	else if (type.equals("real")) {
     		float val = result.floatValue();
     		if (islocal) {
-    			
+    			int num2 = this.fm.size() - 1;
+    			this.fm.get(num2).getVl().get(index).setHasval(true);
+    			this.fm.get(num2).getVl().get(index).setFloatval(val);
     		}
     		else {
     			
@@ -5586,18 +5683,28 @@ public class semanticanalyzer {
     		}
     	}
     	else if (type.equals("boolean")) {
-    		int val = result.intValue();
-    		boolean booln = false;
-    		if (val == 1) {
-    			booln = true;
-    		}
-    		if (islocal) {
-    			
+    		if (op1) {
+    			int val = result.intValue();
+        		boolean booln = false;
+        		if (val == 1) {
+        			booln = true;
+        		}
+        		if (islocal) {
+        			int num2 = this.fm.size() - 1;
+        			this.fm.get(num2).getVl().get(index).setHasval(true);
+        			this.fm.get(num2).getVl().get(index).setBoolval(booln);
+        		}
+        		else {
+        			this.varGlobal.get(index).setHasval(true);
+        			this.varGlobal.get(index).setBoolval(booln);
+        		}
     		}
     		else {
-    			this.varGlobal.get(index).setHasval(true);
-    			this.varGlobal.get(index).setBoolval(booln);
+    			newcount++;
+    			notthrown = false;
+    			System.out.println("Invalid boolean expression for assignment ");
     		}
+    		
     		
     	}
     	else if (type.equals("string")) {
@@ -5643,6 +5750,7 @@ public class semanticanalyzer {
 			String varval = "";
 			if (isarray) {
 				int datmode = varGlobal.get(i).getArraymode();
+				String vartn = varGlobal.get(i).getVariablename();
 				int arrnum = 0;
 				if (datmode == 1) {
 					arrnum = varGlobal.get(i).getArv().size();
@@ -5650,7 +5758,7 @@ public class semanticanalyzer {
 				else if (datmode == 2) {
 					arrnum = varGlobal.get(i).getArv().size();
 				}
-				System.out.println("Array number is " + arrnum );
+				System.out.println("Array number is " + arrnum + " for " + datmode + " is " +  vartn );
 			}
 			if (hasval && !(!isarray)) {
 				if (vartype.equals("integer")) {
@@ -5759,7 +5867,7 @@ public class semanticanalyzer {
 			//error: not found variable exception
 			notthrown = false;
 			newcount++;
-			System.out.println("Not found variable");
+			System.out.println("Not found variable " + identif);
 		}
 	}
 	void search_array(String identif) {
@@ -6006,7 +6114,7 @@ public class semanticanalyzer {
 				break;
 			}
 		}
-		
+		System.out.println("IS IT VOID " + funcsign);
 		if (datassign.equals("integer")) {
 		
 			if (funcsign.equals("integer")) {
@@ -6017,6 +6125,7 @@ public class semanticanalyzer {
 					this.explister.get(expnum).setExpr(exp);
 				}
 				else {
+					System.out.println("ORE NO TURN");
 					newcount++;
 					notthrown = false;
 					System.out.println("No value assigned for function integer " + funcname);
@@ -6199,7 +6308,10 @@ public class semanticanalyzer {
 			vartyping = fm.get(fnum).getVl().get(i).getVartype();
 			isitarray = fm.get(fnum).getVl().get(i).isIslist();
 			datatype = fm.get(fnum).getVl().get(i).getVartype();
-			datanum = fm.get(fnum).getVl().get(i).getArv().size();
+			if (isitarray) {
+				datanum = fm.get(fnum).getVl().get(i).getArv().size();
+			}
+			
 			if (identif.equals(varnaming) && isitarray) {
 				hasnolocal = false;
 				hasfound = true;
@@ -6217,8 +6329,13 @@ public class semanticanalyzer {
 				vartyping = varGlobal.get(i).getVartype();
 				isitarray = varGlobal.get(i).isIslist();
 				datatype = varGlobal.get(i).getVartype();
-				datanum = varGlobal.get(i).getArv().size();
+				System.out.println("Checking for var " + varnaming);
+				if (isitarray) {
+					datanum = varGlobal.get(i).getArv().size();
+				}
+				
 				if (identif.equals(varnaming) && isitarray) {
+					System.out.println("Challenged");
 					hasfound = true;
 					ind = i;
 					this.set_AssignData(vartyping, false);
@@ -6241,12 +6358,13 @@ public class semanticanalyzer {
 		}
 	}
 	int array_result() {
+		String exp = "";
 		int res = 0;
 		try
 		{
 			int num = this.explister.size() - 1;
-			
-		String exp = this.explister.get(num).getExpr();
+			System.out.println("NUM FOR ARRAY_RESULT IS " + num);
+		 exp = this.explister.get(num).getExpr();
 		
 		BigDecimal result = null;
     	Expression expression = new Expression(exp);
@@ -6260,17 +6378,18 @@ public class semanticanalyzer {
 	}catch (ExpressionException f) {
 		newcount++;
 		notthrown = false;
-		System.out.println("Invalid Array Number" + tokenLookAhead);
+		System.out.println("Invalid Array Number" + tokenLookAhead + " expr " + exp);
 	}
 		return  res;
 	}
 	void eval_array(String identif, int arrnum, boolean isloc, int searchind) {
 		int num = this.explister.size() - 1;
 		String datassign = this.explister.get(num).getExpectedtype();
-		
+		System.out.println("EVAL_ARRAY EXPECTED " + datassign);
 		if (datassign.equals("integer")) {
 			if (isloc) {
 				//local
+				System.out.println("LOCAL ARRAY FOR INTEGER");
 				int numf = this.fm.size() - 1;
 				String datatype = this.fm.get(numf).getVl().get(searchind).getVartype();
 				boolean hasval = this.fm.get(numf).getVl().get(searchind).getArv().get(arrnum).isHasval();
@@ -6294,6 +6413,7 @@ public class semanticanalyzer {
 			}
 			else {
 				//global
+				System.out.println("GLOBAL ARRAY FOR INTEGER");
 				String datatype = this.varGlobal.get(searchind).getVartype();
 				boolean hasval = this.varGlobal.get(searchind).getArv().get(arrnum).isHasval();
 				if (datatype.equals("integer")) {
@@ -6346,6 +6466,80 @@ public class semanticanalyzer {
 						System.out.println("No array real value " + identif);
 					}
 				}
+				else {
+					notthrown = false;
+					newcount++;
+					System.out.println("Array datatype mismatch for real " + identif);
+				}
+			}
+			else {
+				//global
+				String datatype = this.varGlobal.get(searchind).getVartype();
+				boolean hasval = this.varGlobal.get(searchind).getArv().get(arrnum).isHasval();
+				if (datatype.equals("integer")) {
+					if (hasval) {
+						int val = this.varGlobal.get(searchind).getArv().get(arrnum).getIntval();
+						String exp = this.explister.get(num).getExpr() + val + " ";
+						this.explister.get(num).setExpr(exp);
+					}
+					else {
+						notthrown = false;
+						newcount++;
+						System.out.println("No array integer value " + identif);
+					}
+				}
+				else if (datatype.equals("real")) {
+					if (hasval) {
+						float val = this.varGlobal.get(searchind).getArv().get(arrnum).getFloatval();
+						String exp = this.explister.get(num).getExpr() + val + " ";
+						this.explister.get(num).setExpr(exp);
+					}
+					else {
+						notthrown = false;
+						newcount++;
+						System.out.println("No array real value " + identif);
+					}
+				}
+				else {
+					notthrown = false;
+					newcount++;
+					System.out.println("Array datatype mismatch for integer " + identif);
+				}
+				
+			}
+		}
+		else if (datassign.equals("boolean")) {
+			if (isloc) {
+				//local
+				int numf = this.fm.size() - 1;
+				String datatype = this.fm.get(numf).getVl().get(searchind).getVartype();
+				boolean hasval = this.fm.get(numf).getVl().get(searchind).getArv().get(arrnum).isHasval();
+				if (datatype.equals("integer")) {
+					if (hasval) {
+						int val = this.fm.get(numf).getVl().get(searchind).getArv().get(arrnum).getIntval();
+						String exp = this.explister.get(num).getExpr() + val + " ";
+						this.explister.get(num).setExpr(exp);
+					}
+					else {
+						notthrown = false;
+						newcount++;
+						System.out.println("No array integer value " + identif);
+					}
+				}
+				else if (datatype.equals("real")) {
+					if (hasval) {
+						float val = this.fm.get(numf).getVl().get(searchind).getArv().get(arrnum).getFloatval();
+						String exp = this.explister.get(num).getExpr() + val + " ";
+						this.explister.get(num).setExpr(exp);
+					}
+					else {
+						notthrown = false;
+						newcount++;
+						System.out.println("No array real value " + identif);
+						errparser.error_checker(50, "error.txt", newcount, tokenLookAhead);
+					}
+				}
+				
 				else {
 					notthrown = false;
 					newcount++;
@@ -6455,4 +6649,101 @@ public class semanticanalyzer {
 		System.out.println("Invalid int expression for 'do' statement" + tokenLookAhead);
 	}
 	}
+	void confirmfunc(String expect, int index, String var) {
+		String vartype = this.functioncall.get(index).getFunctype();
+		System.out.println("CONFIRM FUNC " + expect + " expect " + vartype);
+		if (expect.equals("integer")) {
+			if (vartype.equals("integer")) {
+				
+			}
+			else {
+				notthrown = false;
+				newcount++;
+				System.out.println("Mismatching function values for " + expect +  " was received " + vartype);
+			}
+		}
+		else if (expect.equals("real")) {
+			if (vartype.equals("integer") || vartype.equals("real")) {
+				
+			}
+			else {
+				notthrown = false;
+				newcount++;
+				System.out.println("Mismatching function values for " + expect +  " was received " + vartype);
+			}
+		}
+		else if (expect.equals("boolean")) {
+			if (vartype.equals("integer") || vartype.equals("real") || vartype.equals("boolean")) {
+				
+			}
+			else {
+				notthrown = false;
+				newcount++;
+				System.out.println("Mismatching function values for " + expect +  " was received " + vartype);
+			}
+		}
+		else if (expect.equals("string")) {
+			if (vartype.equals("string") || vartype.equals("char")) {
+				
+			}
+			else {
+				notthrown = false;
+				newcount++;
+				System.out.println("Mismatching function values for " + expect +  " was received " + vartype);
+			}
+		}
+		else if (expect.equals("char")) {
+			if (vartype.equals("string") || vartype.equals("char")) {
+				
+			}
+			else {
+				notthrown = false;
+				newcount++;
+				System.out.println("Mismatching function values for " + expect +  " was received " + vartype);
+			}
+		}
+	}
+	private void createAndShowGui() {
+        JFrame frame = new JFrame("TestApp");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        JLabel labelM = new JLabel("Enter input ");
+        JTextField textField = new JTextField();
+        
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                checkForInput();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                checkForInput();
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                checkForInput();
+            }
+
+            public void checkForInput() {
+                if (textField.getText().toLowerCase().equals("true")) {
+                	inputrec = textField.getText();
+                    labelM.setVisible(false);
+                } else {
+                    labelM.setVisible(true);
+                }
+            }
+        });
+
+        panel.add(labelM, BorderLayout.NORTH);
+        panel.add(textField, BorderLayout.CENTER);
+
+        frame.add(panel);
+        frame.pack();
+        frame.setVisible(true);
+    }
 	}

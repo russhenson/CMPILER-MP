@@ -56,13 +56,16 @@ public class functionmove {
 		
 	}
 	public void insertparam(ArrayList<String> token, ArrayList<String> type, int param, int newcount, boolean notthrown) {
-		
+		String exp = "";
+		String typen ="";
+		int ind = 0;
 		try
 		{
 			for (int i = 0; i < param; i++) {
-				String typen = type.get(i);
-				String exp = token.get(i);
-				System.out.println("TOKEN " + exp + "type " + typen + " FROM FUNCTION MOVE");
+				ind = i;
+				typen = type.get(i);
+				exp = token.get(i);
+				
 		    	
 		    	if (typen.equals("string")) {
 		    		this.vl.get(i).setHasval(true);
@@ -77,6 +80,7 @@ public class functionmove {
 			    	Expression expression = new Expression(exp);
 			    	result = expression.setPrecision(33).eval();
 			    	if (typen.equals("integer")) {
+			    		System.out.println(exp + " jun");
 			    		int val = result.intValue();
 			    		this.vl.get(i).setIntval(val);
 			    		this.vl.get(i).setHasval(true);
@@ -102,7 +106,7 @@ public class functionmove {
 		newcount++;
 		this.notthrown = false;
 		this.newcounter = newcount;
-		System.out.println("Invalid boolean expression FUNCTION MOVE");
+		System.out.println("Invalid boolean expression FUNCTION MOVE " + exp + " type " + typen + " at index " + ind);
 	}
 	}
 }
