@@ -43,3 +43,7 @@
 43 Expected ":="
 44 Expected "while"
 45 Anonymous after "("
+46 Start of array should start at 1
+47 End of index should be greater than or equals to 1
+48 Expected "="
+49 Invalid const value

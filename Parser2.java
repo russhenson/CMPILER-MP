@@ -97,9 +97,9 @@ public class Parser2 {
                     tokenTypePopper();
                     peeker();
                     isValid = true;
-                    if (tokenLookAhead.equals("var")) {
+                    if (tokenLookAhead.equals("var") || tokenLookAhead.equals("const")) {
                     	//if starts with var
-                    	while (tokenLookAhead.equals("var") && notthrown) {
+                    	while ((tokenLookAhead.equals("var") || tokenLookAhead.equals("const")) && notthrown) {
                     		isValid = this.variableDeclaration();
                     	}
                     	
@@ -1037,7 +1037,7 @@ public class Parser2 {
     boolean variableDeclaration(){
     	boolean isGoing = true;
         boolean isValid = false;
-
+        int pastnum = 0;
 		boolean colonPopped = false;
 		boolean startAgain = true;
 		boolean hasarray = false;
@@ -1083,12 +1083,31 @@ public class Parser2 {
 									this.burstfunc();
 									//if integer or identifier
 									if (typeLookAhead.equals("INTEGER")) {
+										if (tokenLookAhead.equals("1")) {
+											
+										}
+										else {
+											notthrown = false;
+											newcount++;
+											errparser.error_checker(46, "error.txt" , newcount, tokenLookAhead);
+										}
+										if (notthrown) {
 										this.burstfunc();
 										//if up until data type
 										if (typeLookAhead.equals("UP_UNTIL")) {
 											this.burstfunc();
 											//if identifier or integer
 											if (typeLookAhead.equals("INTEGER")) {
+												int numf = Integer.parseInt(tokenLookAhead);
+												if (numf >= 1) {
+													
+												}
+												else {
+													notthrown = false;
+										            newcount++;
+										        	errparser.error_checker(47, "error.txt" , newcount, tokenLookAhead);
+												}
+												if (notthrown){
 												this.burstfunc();
 												//expected close bracket
 												if (tokenLookAhead.equals("]")) {
@@ -1112,6 +1131,7 @@ public class Parser2 {
 										        	errparser.error_checker(36, "error.txt" , newcount, tokenLookAhead);
 												}
 											}
+											}
 											else {
 												//expected integer
 												notthrown = false;
@@ -1126,6 +1146,8 @@ public class Parser2 {
 								        	errparser.error_checker(38, "error.txt" , newcount, tokenLookAhead);
 								        	
 										}
+									}
+										
 									}
 									else {
 										//expected integer
@@ -1198,6 +1220,44 @@ public class Parser2 {
 			}
 			else {
 				//expected identifier
+				notthrown = false;
+	            newcount++;
+	        	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
+			}
+		}
+		else if (tokenLookAhead.equals("const")) {
+			this.burstfunc();
+			if (typeLookAhead.equals("IDENTIFIER")) {
+				while (typeLookAhead.equals("IDENTIFIER") && notthrown) {
+					this.burstfunc();
+					if (tokenLookAhead.equals("=")) {
+						this.burstfunc();
+						if (typeLookAhead.equals("INTEGER") || typeLookAhead.equals("REAL") || typeLookAhead.equals("STRING") || tokenLookAhead.equals("true") || tokenLookAhead.equals("false")) {
+							this.burstfunc();
+							if (tokenLookAhead.equals(";")) {
+								this.burstfunc();
+							}
+							else {
+								notthrown = false;
+					            newcount++;
+					        	errparser.error_checker(7, "error.txt" , newcount, tokenLookAhead);
+							}
+						}
+						else {
+							notthrown = false;
+				            newcount++;
+				        	errparser.error_checker(49, "error.txt" , newcount, tokenLookAhead);
+						}
+					}
+					else {
+						notthrown = false;
+			            newcount++;
+			        	errparser.error_checker(48, "error.txt" , newcount, tokenLookAhead);
+					}
+				}
+				
+			}
+			else {
 				notthrown = false;
 	            newcount++;
 	        	errparser.error_checker(5, "error.txt" , newcount, tokenLookAhead);
@@ -1358,7 +1418,7 @@ public class Parser2 {
             	if (notthrown) {
             	
             		System.out.println("IS IT TO " + tokenLookAhead);
-            		if (tokenLookAhead.equals("to")) {
+            		if (tokenLookAhead.equals("to") || tokenLookAhead.equals("downto")) {
             			this.burstfunc();
             			isValid = this.expression(0);
             			if (notthrown) {
@@ -2576,9 +2636,9 @@ public class Parser2 {
 								if (tokenLookAhead.equals(";")) {
 									isValid = true;
 									this.burstfunc();
-									if (tokenLookAhead.equals("var")) {
+									if (tokenLookAhead.equals("var") || tokenLookAhead.equals("const")) {
 										//if var
-										while (tokenLookAhead.equals("var") && notthrown) {
+										while ((tokenLookAhead.equals("var") || tokenLookAhead.equals("const")) && notthrown) {
 											isValid = this.variableDeclaration();
 										}
 										

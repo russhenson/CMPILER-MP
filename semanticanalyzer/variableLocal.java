@@ -12,6 +12,13 @@ public class variableLocal {
 	private String fromfunc = "";
 	private boolean isnotparam = true;
 	private boolean hasval = false;
+	private boolean isFinal = false;
+	public boolean isFinal() {
+		return isFinal;
+	}
+	public void setFinal(boolean isFinal) {
+		this.isFinal = isFinal;
+	}
 	public boolean isHasval() {
 		return hasval;
 	}
@@ -83,7 +90,13 @@ public class variableLocal {
 	public void setFromfunc(String fromfunc) {
 		this.fromfunc = fromfunc;
 	}
-	
+	private ArrayList<arrayvar> arv;
+	public ArrayList<arrayvar> getArv() {
+		return arv;
+	}
+	public void setArv(ArrayList<arrayvar> arv) {
+		this.arv = arv;
+	}
 	public ArrayList<String> getBoollist() {
 		return boollist;
 	}
@@ -127,6 +140,22 @@ public class variableLocal {
 	}
 	public void setCharval(String charval) {
 		this.charval = charval;
+	}
+	public void initializeList(int mode) {
+		this.arraymode = mode;
+		if (mode == 1) {
+			this.intlist = new ArrayList<Integer>(arraynum);
+		}
+		else if (mode == 2) {
+			this.floatlist = new ArrayList<Float>(arraynum);
+		}
+	}
+	private int arraymode = 0;
+	public int getArraymode() {
+		return arraymode;
+	}
+	public void setArraymode(int arraymode) {
+		this.arraymode = arraymode;
 	}
 	
 }

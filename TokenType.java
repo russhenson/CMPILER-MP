@@ -136,9 +136,9 @@ public class TokenType {
 	            token = Type.DOUBLE_QUOTE;
 	        else if(lexeme.startsWith("\""))
 	            token = Type.STRING;
-	        else if(lexeme.matches("[0-9]+"))
+	        else if(lexeme.matches("[0-9]+") || lexeme.matches("-[0-9]+"))
 	            token = Type.INTEGER;
-	        else if(lexeme.matches("[0-9]*.[0-9]+"))
+	        else if(lexeme.matches("[0-9]*.[0-9]+") || lexeme.matches("-[0-9]*.[0-9]+"))
 	            token = Type.REAL;
 	        else if(lexeme.matches("and:"))
 	            token = Type.BOOL_AND;

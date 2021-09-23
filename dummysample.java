@@ -19,7 +19,9 @@ public class dummysample {
 	    	String inp = sc.next();
 	    	inp = inp + "\n";
 	    	System.out.print(inp + " hun");
-	    	int value = 2;
+	    	int value = 1 - -2;
+	    	System.out.println(value);
+	    	/*
 	    	float val2 = 2.032f;
 	    	if (value == Math.round(value)) {
 	    		  System.out.println("Integer");
@@ -42,7 +44,7 @@ public class dummysample {
 	    	catch (ExpressionException f) {
 	    		System.out.println("ZSHANG");
 	    	}
-	    	
+	    	*/
 	    	/*if (result == Math.round(result)) {
 	    		
 	    	}*/

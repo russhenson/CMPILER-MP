@@ -42,4 +42,12 @@ public class expressionbools {
 	public void setHascloseparen(boolean hascloseparen) {
 		this.hascloseparen = hascloseparen;
 	}
+	public void reverbool() {
+hasnum = false; 
+		
+		hassign = true; 
+		hasopenparen = false;
+		hascloseparen = false;
+		this.numexpr = 0;
+	}
 }

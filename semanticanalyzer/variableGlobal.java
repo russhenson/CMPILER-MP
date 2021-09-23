@@ -4,7 +4,21 @@ import java.util.ArrayList;
 //this here will be the class setup for the storing of class variables for global variables
 public class variableGlobal {
 	private String variablename = "";
+	private ArrayList<arrayvar> arv;
+	public ArrayList<arrayvar> getArv() {
+		return arv;
+	}
+	public void setArv(ArrayList<arrayvar> arv) {
+		this.arv = arv;
+	}
 	private float floatval = 0;
+	private int arraymode = 0;
+	public int getArraymode() {
+		return arraymode;
+	}
+	public void setArraymode(int arraymode) {
+		this.arraymode = arraymode;
+	}
 	private int intval = 0;
 	private boolean boolval = false;
 	private String stringval = "";
@@ -19,6 +33,13 @@ public class variableGlobal {
 	private ArrayList<String> boollist, stringlist, charlist;
 	private ArrayList<Integer> intlist;
 	private ArrayList<Float> floatlist;
+	private boolean isFinal = false;
+	public boolean isFinal() {
+		return isFinal;
+	}
+	public void setFinal(boolean isFinal) {
+		this.isFinal = isFinal;
+	}
 	private boolean islist = false;
 	private int arraynum = 0;
 	private boolean hasval = false;
@@ -113,6 +134,22 @@ public class variableGlobal {
 	public void setIslist(boolean islist) {
 		this.islist = islist;
 	}
-	
+	public void initializeList(int mode) {
+		this.arv = new ArrayList<arrayvar>();
+		
+		this.arraymode = mode;
+		int num = this.arraynum;
+		for (int i = 0; i < num ; i++) {
+			arrayvar av = new arrayvar();
+			if (mode == 1) {
+				av.setIntval(0);
+			}
+			else if (mode == 2) {
+				av.setFloatval(0);
+			}
+			arv.add(av);
+		}
+		
+	}
 	
 }

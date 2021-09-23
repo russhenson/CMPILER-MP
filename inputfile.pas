@@ -1,21 +1,26 @@
-
 program parserTest ;
-var value , nextValue : real ;
-	blue : integer ;
-function testOne ( num1 , num2 : integer ; val1 , val2 : string ) : integer ;
+const gun = 5 ;
+var x : integer ;
+
+function testOne ( y , z : integer ; gun : string ) : void ;
 var 
-	x , y , z , value  : integer ;
-	blue , red : real ;
+	g : string ;
 
 begin
-	value := 5 ;
-	writeln ( "Hyuga tiger" , value ) ;
-	testOne := 24 ;
+	g := gun ;
+	writeln ( 'Gun 2 ' , g ) ;
+	writeln ( 'Y is ' , y ) ;
+	writeln ( 'z is ' , z ) ; 	
+		
+end ;
+function testTwo ( ) : integer ;
+
+begin
+	testTwo := 2 ;
 end ;
 
-
 begin
-	value := 20 ;
-	blue := testOne ( 1 , 5 , "hello" , "world" )  ;
-	writeln ( " Value " ,  blue ) ;
+	
+	testOne ( testTwo ( ) , 3 + 1 , 'banzai' ) ;
+	
 end .
