@@ -21,6 +21,15 @@ public class dummysample {
 	    	System.out.print(inp + " hun");
 	    	int value = 1 - -2;
 	    	System.out.println(value);
+	    	BigDecimal result = null;
+	    	try {
+	    		Expression expression = new Expression(" not ( true ) ");
+		    	result = expression.eval();
+		    	System.out.println(result);
+	    	}
+	    	catch (ExpressionException f) {
+	    		System.out.println("ZSHANG");
+	    	}
 	    	/*
 	    	float val2 = 2.032f;
 	    	if (value == Math.round(value)) {

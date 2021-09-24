@@ -1812,6 +1812,11 @@ public class Parser2 {
         	this.burstfunc();
         	isValid = this.simpleExpression(mode);
         	System.out.println("AND: SO " + tokenLookAhead);
+        	if (tokenLookAhead.equals("and:") || tokenLookAhead.equals("or:")) {
+        		this.burstfunc();
+        		isValid = this.expression(mode);
+        		
+        	}
         	
         }
         //old code
